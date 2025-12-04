@@ -26,6 +26,8 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     float[] btnYPositions = {45, 30, 15};
     float btnW = 20;
     float btnH = 10;
+    int windowWidth = 1;
+    int windowHeight = 1;
 
     int xM = 700;
     int yM = 700;
@@ -165,6 +167,8 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     }
     @Override
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
+        windowWidth = i2;
+        windowHeight = i3;
     }
     @Override
     public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {
@@ -321,18 +325,34 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        double convertedX = ((double)e.getX() / xM) * maxWidth;
-        double convertedY = ((double)(yM - e.getY()) / yM) * maxHeight;
+        // 🔥 1. Convert Screen → Game Coordinates
+        double convertedX = ((double)e.getX() / windowWidth) * maxWidth;
+        double convertedY = ((double)(windowHeight - e.getY()) / windowHeight) * maxHeight;
+
+        // 🔥 DEBUG: print actual click for testing
+        System.out.println("Click X=" + convertedX + "  Y=" + convertedY);
+
         for (int i = 0; i < btnYPositions.length; i++) {
-            float btnY = btnYPositions[i];
 
-            float btnXStart = btnX - btnW/2.0f;
-            float btnXEnd = btnX + btnW/2.0f;
-            float btnYStart = btnY - btnH/2.0f;
-            float btnYEnd = btnY + btnH/2.0f;
+            float centerX = btnX;
+            float centerY = btnYPositions[i];
 
-            if (convertedX >= btnXStart && convertedX <= btnXEnd &&
-                    convertedY >= btnYStart && convertedY <= btnYEnd) {
+            float left   = centerX - (btnW / 2.0f);
+            float right  = centerX + (btnW / 2.0f);
+            float bottom = centerY - (btnH / 2.0f);
+            float top    = centerY + (btnH / 2.0f);
+
+            // DEBUG
+            System.out.println(
+                    "BTN " + i + " => left=" + left +
+                            " right=" + right + " bottom=" + bottom + " top=" + top
+            );
+
+            if (convertedX >= left && convertedX <= right &&
+                    convertedY >= bottom && convertedY <= top) {
+
+                System.out.println("BUTTON " + i + " PRESSED");
+
                 switch(i) {
                     case 0: GameState = Game; break;
                     case 1: GameState = Instructions; break;
