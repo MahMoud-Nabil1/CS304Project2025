@@ -14,7 +14,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     double roadOffsetY = 0.0f;
     double speed = 0.01f;
 
-    String[] textureNames = {"background-1.png"};
+    String[] textureNames = {"BackGroundTest.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
 
@@ -89,6 +89,9 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         if(roadOffsetY <= -2.0f){
             roadOffsetY = 0.0f;
         }
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textures.length-1]);
 
         gl.glPushMatrix();
         gl.glTranslated(0.0f, roadOffsetY, 0.0f);
