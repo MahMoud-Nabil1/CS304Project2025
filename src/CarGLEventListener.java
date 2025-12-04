@@ -32,7 +32,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     int xM = 700;
     int yM = 700;
 
-    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png"
+    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png"
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -48,10 +48,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     int score = 0;
     int xScore =10;
     int yScore=90;
-
-
-
-    public BitSet keyBits = new BitSet(256);
     int maxWidth =  100;
     int maxHeight = 100;
     float x = maxWidth/2.0f ;
@@ -61,10 +57,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     PlayerCar player;
     float curX = maxWidth/2.0f;
     float curY = maxHeight/2.0f;
-    float playerSpeed = 0.5f;
-    float movementScale = 2.0f;
-
-
 
 
     @Override
@@ -90,8 +82,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
                 System.out.println(e);
             }
         }
-
-
         // -------------------For Shehab ScoreTexture------------------------------------
         gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);
 
@@ -111,7 +101,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
                 System.out.println(e);
             }
         }
-
         player = new PlayerCar((int)curX, (int)curY);
     }
 
@@ -126,7 +115,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         gl.glLoadIdentity();
 
         if(GameState == Menu) {
-            DrawBackground(gl);
+            DrawBackground(gl , 2);
             for(int i = 0; i < btnYPositions.length; i++) {
                 MakeButton(gl, i);
             }
@@ -142,8 +131,12 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
 
         }else if(GameState == Pause) {
+            DrawBackground(gl , 3);
+            MakeButton(gl, 2);
         }else if(GameState == End) {
+
         } else if (GameState == Instructions) {
+
         }
     }
     @Override
@@ -174,15 +167,14 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {
 
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
-    public void DrawBackground(GL gl){
+    public void DrawBackground(GL gl , int index){
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[2]);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
         gl.glPushMatrix();
         gl.glBegin(GL.GL_QUADS);
@@ -235,7 +227,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     public void MakeButton(GL gl, int index){
         float btnY = btnYPositions[index];
-        int TexturePosition = index + 3;
+        int TexturePosition = index + 4;
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[TexturePosition]);
         gl.glPushMatrix();
@@ -260,10 +252,12 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         }
     }
 
+
+    public BitSet keyBits = new BitSet(256);
+
     public void updateMovement() {
 
             float currentSpeed = player.getSpeed();
-
             if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
                 curY += currentSpeed;
                 curX += currentSpeed;
@@ -285,7 +279,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
                 curX += currentSpeed;
             player.setPosX((int) curX);
             player.setPosY((int) curY);
-
             if(isKeyPressed(KeyEvent.VK_Z)){
                 player.nitroOn();
             }
@@ -325,40 +318,39 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (GameState == Menu) {
+            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
+            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
 
-        double convertedX = ((double)e.getX() / windowWidth) * maxWidth;
-        double convertedY = ((double)(windowHeight - e.getY()) / windowHeight) * maxHeight;
+            for (int i = 0; i < btnYPositions.length; i++) {
 
-
-        System.out.println("Click X=" + convertedX + "  Y=" + convertedY);
-
-        for (int i = 0; i < btnYPositions.length; i++) {
-
-            float centerX = btnX;
-            float centerY = btnYPositions[i];
-
-            float left   = centerX - (btnW / 2.0f);
-            float right  = centerX + (btnW / 2.0f);
-            float bottom = centerY - (btnH / 2.0f);
-            float top    = centerY + (btnH / 2.0f);
-
-            // DEBUG
-            System.out.println(
-                    "BTN " + i + " => left=" + left +
-                            " right=" + right + " bottom=" + bottom + " top=" + top
-            );
-
-            if (convertedX >= left && convertedX <= right &&
-                    convertedY >= bottom && convertedY <= top) {
-
-                System.out.println("BUTTON " + i + " PRESSED");
-
-                switch(i) {
-                    case 0: GameState = Game; break;
-                    case 1: GameState = Instructions; break;
-                    case 2: System.exit(0); break;
+                float centerX = btnX;
+                float centerY = btnYPositions[i];
+                float left = centerX - (btnW / 2.0f);
+                float right = centerX + (btnW / 2.0f);
+                float bottom = centerY - (btnH / 2.0f);
+                float top = centerY + (btnH / 2.0f);
+                if (convertedX >= left && convertedX <= right &&
+                        convertedY >= bottom && convertedY <= top) {
+                    switch (i) {
+                        case 0:
+                            GameState = Game;
+                            break;
+                        case 1:
+                            GameState = Instructions;
+                            break;
+                        case 2:
+                            System.exit(0);
+                            break;
+                    }
                 }
             }
+        }else if(GameState == Game){
+
+        }else if(GameState == Pause){
+
+        }else if(GameState == End){
+
         }
     }
 
@@ -384,7 +376,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
 
     // ----------------------------------Score-----------------------
-
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
         frameCounter++;
