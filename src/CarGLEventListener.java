@@ -133,12 +133,8 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
             // Score
             score(gl , xScore , yScore);
         }else if(GameState == Pause) {
-
         }else if(GameState == End) {
-
-
         } else if (GameState == Instructions) {
-
         }
     }
     @Override
