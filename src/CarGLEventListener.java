@@ -23,7 +23,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     final int Pause = 2;
     final int End   = 3;
 
-    String[] textureNames = {"BackGroundTest.png" , "Man1.png"};
+    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     public BitSet keyBits = new BitSet(256);
@@ -71,7 +71,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         DrawSprite(gl,x,y,1,1f);
 
         if(GameState == Menu) {
-
+            DrawBackground(gl);
 
         }else if(GameState == Game) {
 
