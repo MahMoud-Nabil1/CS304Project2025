@@ -5,14 +5,17 @@ import java.util.ArrayList;
 
 public class PlayerCar extends Car{
     protected int nitro=100;
-    ArrayList<Bullet> bullets;
+    public ArrayList<Bullet> bullets;
     boolean doubleBulletActive;
     int score=0;
+    public int firerate = 0;
     public PlayerCar(int posX, int posY) {
         super(posX,posY,0.1,20,100);
+        bullets=new ArrayList<>();
     }
     PlayerCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
+        bullets=new ArrayList<>();
     }
     private boolean nitroActive = false;
 
@@ -40,11 +43,14 @@ public class PlayerCar extends Car{
         }
     }
     public void shoot() {
-        if(doubleBulletActive) {
-            bullets.add(new Bullet(posX - 5, posY, damage));
-            bullets.add(new Bullet(posX + 5, posY, damage));
-        } else {
-            bullets.add(new Bullet(posX, posY, damage));
+        if (firerate<=0) {
+            if(doubleBulletActive) {
+                bullets.add(new Bullet(posX - 5, posY, damage));
+                bullets.add(new Bullet(posX + 5, posY, damage));
+            } else {
+                bullets.add(new Bullet(posX, posY, damage));
+            }
+            firerate=60;
         }
     }
 }

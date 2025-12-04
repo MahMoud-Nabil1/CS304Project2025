@@ -1,3 +1,4 @@
+import GameObjects.Bullet;
 import GameObjects.LightCar;
 import GameObjects.Obstacles;
 import GameObjects.PlayerCar;
@@ -36,7 +37,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int yM = 700;
 
     String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png" , "PauseMenu.png"
-            , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png"
+            , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
@@ -70,6 +71,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     ArrayList<Obstacles> obstaclesList = new ArrayList<>();
     int numberOfObstacles = 5;
     int obstacleTextureIndex = 7;
+
+
 
 
     @Override
@@ -149,10 +152,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             gl.glDisable(GL.GL_BLEND);
 
         } else if (GameState == Game) {
-            background_loop(gl, gameSpeed);
+            background_loop(gl);
             drawAndMoveObstacles(gl);
-            DrawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1f);
+            drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1f);
             updateMovement();
+            drawBullets(gl);
 
             score(gl , xScore , yScore);
 
@@ -201,15 +205,27 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     public void actionPerformed(ActionEvent e) {
 
     }
-
+    public void drawBullets(GL gl) {
+            for (Bullet bullet : player.bullets) {
+                if (bullet != null) {
+                    if (bullet.timer>=0) {
+                        drawSprite(gl, (float) bullet.posX, (float) bullet.posY, 8, 0.3f);
+                        bullet.posY += 0.5;
+                        bullet.timer--;
+                    }
+                }
+            }
+            if (player.firerate>0)
+                player.firerate--;
+    }
     public void drawAndMoveObstacles(GL gl) {
         for (Obstacles obs : obstaclesList) {
             DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
 
-            obs.setPosY((int) ((int) (obs.getPosY() - 1) * GameController.gameSpeed));
+            obs.setPosY((int) ((int) (obs.getPosY() - 1) - GameController.gameSpeed));
 
             if (obs.getPosY() < -10) {
-                obs.setPosY((int) ((maxHeight + 10)*GameController.gameSpeed));
+                obs.setPosY(maxHeight + 10);
 
                 int newX = (int)(10 + (int)(Math.random() * 80) * GameController.gameSpeed);
                 obs.setPosX(newX);
@@ -237,9 +253,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public void background_loop(GL gl, double gameSpeed) {
+    public void background_loop(GL gl) {
 
-        roadOffsetY -= 0.02f * gameSpeed;
+        roadOffsetY -= 0.02f * GameController.gameSpeed;
 
         if (roadOffsetY <= -2.0f) {
             roadOffsetY = 0.0f;
@@ -349,6 +365,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             if(isKeyPressed(KeyEvent.VK_Z)){
                 player.nitroOn();
             }
+            if (isKeyPressed(KeyEvent.VK_SPACE)) {
+                player.shoot();
+            }
 
     }
     public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
@@ -370,7 +389,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
-    public void DrawSprite(GL gl,float x, float y, int index, float scale){
+    public void drawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
         gl.glPushMatrix();
