@@ -216,12 +216,12 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         }
     }
     public void updateMovement() {
-        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT)){
+        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && y < maxHeight - 10  && x < maxWidth - 18){
             y += playerSpeed;
             x += playerSpeed;
             angle = -45;
         }
-        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT)) {
+        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT ) && y < maxHeight - 18  && x > 7) {
             y += playerSpeed;
             x -= playerSpeed;
             angle = 45;
@@ -232,10 +232,10 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         else if (isKeyPressed(KeyEvent.VK_DOWN) && y > 0)
             y -= playerSpeed;
 
-        else if (isKeyPressed(KeyEvent.VK_LEFT) && x > 0)
+        else if (isKeyPressed(KeyEvent.VK_LEFT) && x > 7)
             x -= playerSpeed;
 
-        else if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 10)
+        else if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 18)
             x += playerSpeed;
     }
 
