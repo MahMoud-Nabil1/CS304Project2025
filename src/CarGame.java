@@ -16,7 +16,7 @@ public class CarGame extends JFrame implements ActionListener {
     }
 
     public CarGame() {
-        super("Car Game");
+        super("GameObjects.Car Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         glcanvas = new GLCanvas();
