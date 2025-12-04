@@ -1,21 +1,26 @@
+import GameObjects.LightCar;
 import Texture.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
     double roadOffsetY = 0.0f;
-
+    String UserName;
 
     String[] textureNames = {"BackGroundTest.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
+    List<LightCar> PowerUp = new ArrayList<LightCar>();
 
     @Override
     public void init(GLAutoDrawable gld) {
@@ -47,7 +52,6 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-
         background_loop(gl);
     }
     @Override
@@ -111,6 +115,15 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
+    }
 
+    public void TakeUserName(){
+        UserName = JOptionPane.showInputDialog(null, "Please enter your name:");
+
+        if (UserName != null && !UserName.trim().isEmpty()) {
+            System.out.println("User entered: " + UserName);
+        } else {
+            System.out.println("User cancelled or entered nothing.");
+        }
     }
 }

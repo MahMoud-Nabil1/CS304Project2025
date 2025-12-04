@@ -1,0 +1,43 @@
+1.base Open-GL code (Mahmoud)
+
+2.main menu -> (3 buttons , background, background music) (Mostafa , Mahmoud)
+
+3.Game ->
+
+1.  Car movement (Mostafa)
+    1) →↓↑← movement
+    2) Movement speed
+2.  Background (Mahmoud)
+3.  Objects in the way (Belal)
+    1.Cars
+			1.Heavy
+			2.Normal
+	2. obstacles
+	3. antiBullet rocket-
+4.  Bullet shooting (Mostafa)
+		1.number of bullets
+5.  Power ups (Belal)
+	1.Magnet
+	2.Double bullet
+	3.nitro(optional)
+	4.repair
+	5. 2X score
+6.  Randomizer
+7.  Score (Shehab)
+8.  Health (Shehab)
+9.  Collisions (Shehab)
+	1.with obstacles
+		1. 50% front
+		2. 25% side
+	2.with antibullet rocket
+10.Background game music (Mahmoud)
+11.Pause button (shehab)
+12.Save highest score(Shehab)
+13.Animation (All)
+
+4.End Game menu -> (Belal , Mahmoud)
+		losers
+1.lose sounds
+2.Retry button
+3.Highest score display
+4.Return to main menu button

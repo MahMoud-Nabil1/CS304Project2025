@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class CarGame extends JFrame  {
     GLCanvas glcanvas;
-    private final FPSAnimator animator;
+    public final FPSAnimator animator;
     private final Map<String, Runnable> buttonActions = new HashMap<>();
     public static void main(String[] args) {
         new CarGame().animator.start();
