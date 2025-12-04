@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
@@ -20,6 +21,14 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     String[] textureNames = {"BackGroundTest.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
+    public BitSet keyBits = new BitSet(256);
+    int maxWidth =  100;
+    int maxHeight = 100;
+     int x = maxWidth/2 ;
+     int y =maxHeight/2 ;
+     float playerSpeed = 0.5f;
+
+
 
     @Override
     public void init(GLAutoDrawable gld) {
@@ -52,20 +61,32 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
         background_loop(gl);
+
+        updateMovement();
+        DrawSprite(gl,x,y,1,0.1f);
+
+
     }
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
-
+    // see what key is pressed and insert it into the bitset
     @Override
     public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        keyBits.set(keyCode);
 
     }
-
+    //clear the  keybits
     @Override
     public void keyReleased(KeyEvent e) {
-
+        int keyCode = e.getKeyCode();
+        keyBits.clear(keyCode);
+    }
+    //check if the key pressed
+    public boolean isKeyPressed(final int keyCode) {
+        return keyBits.get(keyCode);
     }
 
     @Override
@@ -123,5 +144,44 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         } else {
             System.out.println("User cancelled or entered nothing.");
         }
+    }
+    //update the movement of the player
+    public void updateMovement() {
+
+        if (isKeyPressed(KeyEvent.VK_UP) && y < maxHeight - 10)
+            y += playerSpeed;
+
+        if (isKeyPressed(KeyEvent.VK_DOWN) && y > 0)
+            y -= playerSpeed;
+
+        if (isKeyPressed(KeyEvent.VK_LEFT) && x > 0)
+            x -= playerSpeed;
+
+        if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 10)
+            x += playerSpeed;
+    }
+
+    public void DrawSprite(GL gl,int x, int y, int index, float scale){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);	// Turn Blending On
+
+        gl.glPushMatrix();
+        gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
+        gl.glScaled(0.1*scale, 0.1*scale, 1);
+        //System.out.println(x +" " + y);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
     }
 }
