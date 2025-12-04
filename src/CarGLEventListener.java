@@ -1,4 +1,5 @@
 import GameObjects.LightCar;
+import GameObjects.PlayerCar;
 import Texture.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -53,12 +54,14 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     int maxHeight = 100;
     float x = maxWidth/2.0f ;
     float y =maxHeight/2.0f ;
-    float playerSpeed = 0.5f;
     int angle = 0;
-    buttons[] menu;
-    buttons[] pause;
-    buttons[] endgame;
-    buttons[] game;
+
+    PlayerCar player;
+    float curX = maxWidth/2.0f;
+    float curY = maxHeight/2.0f;
+    float playerSpeed = 0.5f;
+    float movementScale = 2.0f;
+
 
 
 
@@ -106,6 +109,8 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
                 System.out.println(e);
             }
         }
+
+        player = new PlayerCar((int)curX, (int)curY);
     }
 
     @Override
@@ -128,10 +133,12 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
         }else if(GameState == Game) {
             background_loop(gl);
+            DrawSprite(gl, player.getPosX(), player.getPosY(), 1, 1f);
             updateMovement();
-            DrawSprite(gl,x,y,1,1f);
             // Score
             score(gl , xScore , yScore);
+
+
         }else if(GameState == Pause) {
         }else if(GameState == End) {
         } else if (GameState == Instructions) {
@@ -156,11 +163,9 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
     }
-
     @Override
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
     }
-
     @Override
     public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {
 
@@ -170,6 +175,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public void actionPerformed(ActionEvent e) {
 
     }
+
     public void DrawBackground(GL gl){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[2]);
@@ -189,6 +195,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
         gl.glDisable(GL.GL_BLEND);
     }
+
     public void background_loop(GL gl){
 
         roadOffsetY -= 0.02f;
@@ -248,34 +255,42 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
             System.out.println("User cancelled or entered nothing.");
         }
     }
+
     public void updateMovement() {
-        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && y < maxHeight - 10  && x < maxWidth - 18){
-            y += playerSpeed;
-            x += playerSpeed;
-            angle = -45;
-        }
-        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT ) && y < maxHeight - 18  && x > 7) {
-            y += playerSpeed;
-            x -= playerSpeed;
-            angle = 45;
-        }
-        else if (isKeyPressed(KeyEvent.VK_UP) && y < maxHeight - 10)
-            y += playerSpeed;
 
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && y > 0)
-            y -= playerSpeed;
+            float currentSpeed = player.getSpeed();
 
-        else if (isKeyPressed(KeyEvent.VK_LEFT) && x > 7)
-            x -= playerSpeed;
+            if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
+                curY += currentSpeed;
+                curX += currentSpeed;
+                angle = -45;
+            } else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
+                curY += currentSpeed;
+                curX -= currentSpeed;
+                angle = 45;
+            } else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10)
+                curY += currentSpeed;
 
-        else if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 18)
-            x += playerSpeed;
+            else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0)
+                curY -= currentSpeed;
+
+            else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7)
+                curX -= currentSpeed;
+
+            else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18)
+                curX += currentSpeed;
+            player.setPosX((int) curX);
+            player.setPosY((int) curY);
+
+            if(isKeyPressed(KeyEvent.VK_Z)){
+                player.nitroOn();
+            }
+
     }
 
     public void DrawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
-
         gl.glPushMatrix();
         gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
         gl.glScaled(0.1*scale, 0.1*scale, 1);
@@ -291,7 +306,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         gl.glVertex3f(-1.0f, 1.0f, -1.0f);
         gl.glEnd();
         gl.glPopMatrix();
-
         gl.glDisable(GL.GL_BLEND);
     }
 
@@ -352,44 +366,33 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     // ----------------------------------Score-----------------------
 
     public void score(GL gl, int x, int y) {
-        // 1. Update logic (Keep your frame counter logic)
+        // 1. Update logic (Keep your frame counter-logic)
         frameCounter++;
         if (frameCounter > 10) {
             score++;
             System.out.println(score);
             frameCounter = 0;
         }
-
         // 2. Convert Score to String to get individual digits
-        // Example: 15 -> "15"
         String scoreString = Integer.toString(score);
-
         // 3. Drawing Logic
         gl.glEnable(GL.GL_BLEND);
         gl.glColor3f(1.0f, 1.0f, 1.0f);
-
         // Iterate through every digit in the string
         for (int i = 0; i < scoreString.length(); i++) {
-
             // Get the character (e.g., '1') and convert to int (1)
             char c = scoreString.charAt(i);
             int digit = Character.getNumericValue(c);
-
             gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);
-
             gl.glPushMatrix();
-
             // MATH CONVERSION
             // xOffset: multiply index 'i' by a spacing value (e.g., 10 pixels) so digits don't overlap
             int digitWidth = 4; // Adjust this based on how wide your numbers are
             int currentX = x + (i * digitWidth);
-
             double glX = currentX / 50.0 - 1.0;
             double glY = y / 50.0 - 1.0;
-
             gl.glTranslated(glX, glY, 0);
             gl.glScaled(0.13, 0.13, 1); // Reduced scale slightly so numbers fit better
-
             gl.glBegin(GL.GL_QUADS);
             gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
             gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);

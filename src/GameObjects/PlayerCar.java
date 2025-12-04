@@ -7,7 +7,7 @@ public class PlayerCar extends Car{
     ArrayList<Bullet> bullets;
     boolean doubleBulletActive;
     int score=0;
-    PlayerCar(int posX, int posY) {
+    public PlayerCar(int posX, int posY) {
         super(posX,posY,100,20,100);
     }
     PlayerCar(int posX, int posY, int speed, int damage, int health) {
@@ -17,7 +17,7 @@ public class PlayerCar extends Car{
 
     public void nitroOn() {
         if(nitro > 0 && !nitroActive) {
-            this.speed += 50;
+            this.speed += (int) (this.getSpeed()*1.1);
             this.damage += 50;
             damageFactor = 1.5;
             nitro--;
@@ -43,6 +43,4 @@ public class PlayerCar extends Car{
             bullets.add(new Bullet(posX, posY, damage));
         }
     }
-
-
 }
