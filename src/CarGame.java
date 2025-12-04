@@ -25,6 +25,7 @@ public class CarGame extends JFrame  {
         pack();
         setLocationRelativeTo(this);
         setVisible(true);
+        glcanvas.addMouseListener(listener);
         glcanvas.addKeyListener(listener);
         glcanvas.setFocusable(true);
         glcanvas.requestFocus();

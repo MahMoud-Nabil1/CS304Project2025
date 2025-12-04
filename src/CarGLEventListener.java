@@ -5,23 +5,29 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
+public class CarGLEventListener extends CarListener implements MouseListener , GLEventListener, KeyListener , ActionListener , MouseMotionListener {
     double roadOffsetY = 0.0f;
     String UserName;
+    boolean UserNameEntered = false;
     int GameState   = 0;
     final int Menu  = 0;
     final int Game  = 1;
     final int Pause = 2;
     final int End   = 3;
+
+    float btnX = 40;
+    float btnY = 50;
+    float btnW = 20;
+    float btnH = 10;
+
+    int xM = 700;
+    int yM = 700;
 
     String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -32,6 +38,10 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     float x = maxWidth/2.0f ;
     float y =maxHeight/2.0f ;
     float playerSpeed = 0.5f;
+    buttons[] menu;
+    buttons[] pause;
+    buttons[] endgame;
+    buttons[] game;
 
 
 
@@ -62,6 +72,10 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
+        if(!UserNameEntered) {
+            TakeUserName();
+            UserNameEntered = true;
+        }
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
@@ -72,6 +86,9 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
         if(GameState == Menu) {
             DrawBackground(gl);
+            MakeButton(gl);
+            gl.glEnable(GL.GL_TEXTURE_2D); // Re-enable textures for the rest of the game
+            gl.glDisable(GL.GL_BLEND);
 
         }else if(GameState == Game) {
 
@@ -102,7 +119,6 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     @Override
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
-
     }
 
     @Override
@@ -166,6 +182,27 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         gl.glDisable(GL.GL_BLEND);
     }
 
+    public void MakeButton(GL gl){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glDisable(GL.GL_TEXTURE_2D);
+
+        gl.glPushMatrix();
+        gl.glTranslated( btnX/(maxWidth/2.0) - 0.9, btnY/(maxHeight/2.0) - 0.9, 0);
+        gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glColor3f(0.0f, 1.0f, 0.0f); // Green Color
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+
+        gl.glPopMatrix();
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+    }
+
     public void TakeUserName(){
         UserName = JOptionPane.showInputDialog(null, "Please enter your name:");
 
@@ -192,7 +229,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     public void DrawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
         gl.glPushMatrix();
         gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
@@ -210,5 +247,45 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+            double convertedX = ((double)e.getX() / xM) * maxWidth;
+            double convertedY = ((double)(yM - e.getY()) / yM) * maxHeight;
+            if(convertedX >= (btnX - 5) && convertedX <= (btnX + 35) &&
+                    convertedY >= (btnY - 5) && convertedY <= (btnY + 15)) {
+                GameState = Game;
+            }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
