@@ -34,6 +34,20 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
+
+    //---------------------- For Shehab Score 0 1 2 3 4 5 6 7 8 9 ----------------------------
+    String[] scoreTextureNames = {"0.png" , "1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png"};
+    TextureReader.Texture[] scoreTexture = new TextureReader.Texture[scoreTextureNames.length];
+    int[] scoreTextures = new int[scoreTextureNames.length];
+
+    // Score Variables
+    int frameCounter = 0;
+    int score = 0;
+    int xScore =10;
+    int yScore=90;
+
+
+
     public BitSet keyBits = new BitSet(256);
     int maxWidth =  100;
     int maxHeight = 100;
@@ -71,6 +85,27 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
                 System.out.println(e);
             }
         }
+
+
+        // -------------------For Shehab ScoreTexture------------------------------------
+        gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);
+
+        for(int i = 0; i < scoreTextureNames.length; i++){
+            try {
+                scoreTexture[i] = TextureReader.readTexture(assetsFolderName + "//Score" + "//" + scoreTextureNames[i] , true);
+                gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[i]);
+                new GLU().gluBuild2DMipmaps(
+                        GL.GL_TEXTURE_2D,
+                        GL.GL_RGBA,
+                        scoreTexture[i].getWidth(), scoreTexture[i].getHeight(),
+                        GL.GL_RGBA,
+                        GL.GL_UNSIGNED_BYTE,
+                        scoreTexture[i].getPixels()
+                );
+            } catch( IOException e ) {
+                System.out.println(e);
+            }
+        }
     }
 
     @Override
@@ -95,6 +130,8 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
             background_loop(gl);
             updateMovement();
             DrawSprite(gl,x,y,1,1f);
+            // Score
+            score(gl , xScore , yScore);
         }else if(GameState == Pause) {
 
         }else if(GameState == End) {
@@ -314,4 +351,60 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public void mouseExited(MouseEvent e) {
 
     }
+
+
+    // ----------------------------------Score-----------------------
+
+    public void score(GL gl, int x, int y) {
+        // 1. Update logic (Keep your frame counter logic)
+        frameCounter++;
+        if (frameCounter > 10) {
+            score++;
+            System.out.println(score);
+            frameCounter = 0;
+        }
+
+        // 2. Convert Score to String to get individual digits
+        // Example: 15 -> "15"
+        String scoreString = Integer.toString(score);
+
+        // 3. Drawing Logic
+        gl.glEnable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+        // Iterate through every digit in the string
+        for (int i = 0; i < scoreString.length(); i++) {
+
+            // Get the character (e.g., '1') and convert to int (1)
+            char c = scoreString.charAt(i);
+            int digit = Character.getNumericValue(c);
+
+            gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);
+
+            gl.glPushMatrix();
+
+            // MATH CONVERSION
+            // xOffset: multiply index 'i' by a spacing value (e.g., 10 pixels) so digits don't overlap
+            int digitWidth = 4; // Adjust this based on how wide your numbers are
+            int currentX = x + (i * digitWidth);
+
+            double glX = currentX / 50.0 - 1.0;
+            double glY = y / 50.0 - 1.0;
+
+            gl.glTranslated(glX, glY, 0);
+            gl.glScaled(0.13, 0.13, 1); // Reduced scale slightly so numbers fit better
+
+            gl.glBegin(GL.GL_QUADS);
+            gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
+            gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+            gl.glEnd();
+
+            gl.glPopMatrix();
+        }
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
 }
