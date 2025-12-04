@@ -20,7 +20,6 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     String[] textureNames = {"BackGroundTest.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
-    List<LightCar> PowerUp = new ArrayList<LightCar>();
 
     @Override
     public void init(GLAutoDrawable gld) {
@@ -90,7 +89,6 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         if(roadOffsetY <= -2.0f){
             roadOffsetY = 0.0f;
         }
-
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textures.length-1]);
 
