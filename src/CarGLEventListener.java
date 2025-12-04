@@ -1,4 +1,3 @@
-import GameObjects.LightCar;
 import Texture.TextureReader;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -52,6 +51,8 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
         background_loop(gl);
+
+
     }
     @Override
     public void keyTyped(KeyEvent e) {
