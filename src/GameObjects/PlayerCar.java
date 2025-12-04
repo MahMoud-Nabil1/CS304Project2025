@@ -1,4 +1,5 @@
 package GameObjects;
+import GameController.GameController;
 
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ public class PlayerCar extends Car{
     boolean doubleBulletActive;
     int score=0;
     public PlayerCar(int posX, int posY) {
-        super(posX,posY,100,20,100);
+        super(posX,posY,0.1,20,100);
     }
     PlayerCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
@@ -17,13 +18,14 @@ public class PlayerCar extends Car{
 
     public void nitroOn() {
         if(nitro > 0 && !nitroActive) {
-            this.speed += (int) (this.getSpeed()*1.1);
             this.damage += 50;
+            GameController.gameSpeed = 2 ;
             damageFactor = 1.5;
             nitro--;
             nitroActive = true;
         }
         if (nitro<=0&&!nitroActive) {
+            GameController.gameSpeed =1;
             nitroOff();
         }
     }
@@ -33,6 +35,7 @@ public class PlayerCar extends Car{
             this.speed -= 50;
             this.damage -= 50;
             nitroActive = false;
+
         }
     }
     public void shoot() {

@@ -1,11 +1,11 @@
 package GameObjects;
 
 public class Car extends GameObject {
-    protected int speed;
+    protected double speed;
     protected int damage;
     protected int health;
     protected  double damageFactor;
-    Car(int posX,int posY,int speed, int damage, int health) {
+    Car(double posX, double posY, double speed, int damage, int health) {
         super(posX, posY);
         this.speed = speed;
         this.damage = damage;
@@ -13,11 +13,11 @@ public class Car extends GameObject {
         this.damageFactor = 1;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

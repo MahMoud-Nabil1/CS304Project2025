@@ -1,14 +1,14 @@
 package GameObjects;
 
 public class GameObject {
-    int posX;
-    int posY;
-    GameObject(int posX, int posY){
+    public double posX;
+    public double posY;
+    GameObject(double posX, double posY){
         this.posX = posX;
         this.posY = posY;
     }
 
-    public int getPosX() {
+    public double getPosX() {
         return posX;
     }
 
@@ -16,7 +16,7 @@ public class GameObject {
         this.posX = posX;
     }
 
-    public int getPosY() {
+    public double getPosY() {
         return posY;
     }
 

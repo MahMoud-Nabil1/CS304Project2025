@@ -1,11 +1,9 @@
 package GameObjects;
 
 public class Bullet extends GameObject {
-    int x;
-    int y;
     int speed;
     int damage;
-    public Bullet(int posX,int posY,int damage) {
+    public Bullet(double posX,double posY,int damage) {
         super(posX,posY);
         this.posX = posX;
         this.posY = posY;
