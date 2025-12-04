@@ -12,7 +12,6 @@ public class PlayerCar extends Car{
     }
     PlayerCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
-
     }
     private boolean nitroActive = false;
 

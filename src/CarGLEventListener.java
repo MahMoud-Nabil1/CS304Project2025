@@ -17,8 +17,13 @@ import java.util.List;
 public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
     double roadOffsetY = 0.0f;
     String UserName;
+    int GameState   = 0;
+    final int Menu  = 0;
+    final int Game  = 1;
+    final int Pause = 2;
+    final int End   = 3;
 
-    String[] textureNames = {"BackGroundTest.png"};
+    String[] textureNames = {"BackGroundTest.png" , "Man1.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     public BitSet keyBits = new BitSet(256);
@@ -63,9 +68,18 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         background_loop(gl);
 
         updateMovement();
-//        DrawSprite(gl,x,y,1,0.1f);
+        DrawSprite(gl,x,y,1,1f);
+
+        if(GameState == Menu) {
 
 
+        }else if(GameState == Game) {
+
+        }else if(GameState == Pause) {
+
+        }else if(GameState == End) {
+
+        }
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -100,6 +114,25 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     public void actionPerformed(ActionEvent e) {
 
     }
+    public void DrawBackground(GL gl){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[2]);
+
+        gl.glPushMatrix();
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
     public void background_loop(GL gl){
 
         roadOffsetY -= 0.02f;
@@ -108,7 +141,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
             roadOffsetY = 0.0f;
         }
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textures.length-1]);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[0]);
 
         gl.glPushMatrix();
         gl.glTranslated(0.0f, roadOffsetY, 0.0f);
@@ -157,16 +190,14 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
             x += playerSpeed;
     }
 
-    public void DrawSprite(GL gl,int x, int y, int index, float scale){
+    public void DrawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);	// Turn Blending On
 
         gl.glPushMatrix();
         gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
         gl.glScaled(0.1*scale, 0.1*scale, 1);
-        //System.out.println(x +" " + y);
         gl.glBegin(GL.GL_QUADS);
-        // Front Face
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, -1.0f);
         gl.glTexCoord2f(1.0f, 0.0f);
