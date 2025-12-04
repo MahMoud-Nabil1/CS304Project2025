@@ -25,13 +25,13 @@
 6.  Randomizer (Mahmoud)
 7.  Score (Shehab) #Done
 8.  Health (Shehab)
-9.  Collisions (Shehab)
+9.  Collisions (Shehab , Belal)
 	1.with obstacles
 		1. 50% front
 		2. 25% side
 	2.with antibullet rocket
 10.Background game music (Mahmoud)
-11.Pause button (shehab)
+11.Pause button (Mostafa)
 12.Save highest score(Shehab)
 13.Animation (All)
 
@@ -39,5 +39,6 @@
         losers
         1.lose sounds
         2.Retry button
-        3.Highest score display
-        4.Return to main menu button
+        3.this run score display
+        4.Highest score display
+        5.Return to main menu button

@@ -19,14 +19,14 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     double roadOffsetY = 0.0f;
     String UserName;
     boolean UserNameEntered = false;
-    int GameState = 0;
+    int GameState = 2;
     final int Menu = 0;
     final int Game = 1;
     final int Pause = 2;
     final int End = 3;
     final int Instructions = 4;
     float btnX = 45;
-    float[] btnYPositions = {45, 30, 15};
+    float[] menuBtnsY = {45, 30, 15};
     float[] pauseBtnY = {30, 15};
     float btnW = 20;
     float btnH = 10;
@@ -145,7 +145,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         if (GameState == Menu) {
             DrawBackground(gl,2);
-            for (int i = 0; i < btnYPositions.length; i++) {
+            for (int i = 0; i < menuBtnsY.length; i++) {
                 MakeButton(gl, i);
             }
             gl.glEnable(GL.GL_TEXTURE_2D);
@@ -209,7 +209,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             for (Bullet bullet : player.bullets) {
                 if (bullet != null) {
                     if (bullet.timer>=0) {
-                        drawSprite(gl, (float) bullet.posX, (float) bullet.posY, 8, 0.3f);
+                        DrawSpriteWall(gl, (float) bullet.posX, (float) bullet.posY, 8, 0.3f);
                         bullet.posY += 0.5;
                         bullet.timer--;
                     }
@@ -222,7 +222,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         for (Obstacles obs : obstaclesList) {
             DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
 
-            obs.setPosY((int) ((int) (obs.getPosY() - 1) - GameController.gameSpeed));
+            obs.setPosY(((int) (obs.getPosY() - 1 - GameController.gameSpeed)));
 
             if (obs.getPosY() < -10) {
                 obs.setPosY(maxHeight + 10);
@@ -287,7 +287,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
     public void MakeButton(GL gl, int index){
-        float btnY = btnYPositions[index];
+        float btnY = menuBtnsY[index];
         int TexturePosition = index + 4;
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[TexturePosition]);
@@ -339,35 +339,46 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
     public void updateMovement() {
 
+       if(isKeyPressed(KeyEvent.VK_Z)){
+                player.nitroOn();
+       }
+       if (isKeyPressed(KeyEvent.VK_SPACE)) {
+                player.shoot();
+       }
+
         float currentSpeed = (float) player.getSpeed();
 
         if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
             curY += currentSpeed;
             curX += currentSpeed;
             angle = -45;
+            player.setPosY(curY);
+            player.setPosX(curX);
         } else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
             curY += currentSpeed;
             curX -= currentSpeed;
             angle = 45;
-        } else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10)
+            player.setPosY(curY);
+            player.setPosX(curX);
+        } else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){
             curY += currentSpeed;
-
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0)
+            player.setPosY(curY);
+        }
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
             curY -= currentSpeed;
+            player.setPosY(curY);
+        }
+        else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
+            curX -= currentSpeed;
+            player.setPosX(curX);
+        }
+        else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {
+            curX += currentSpeed;
+            player.setPosX(curX);
+        }
 
-            else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7)
-                curX -= currentSpeed;
 
-            else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18)
-                curX += currentSpeed;
-            player.setPosX((int) curX);
-            player.setPosY((int) curY);
-            if(isKeyPressed(KeyEvent.VK_Z)){
-                player.nitroOn();
-            }
-            if (isKeyPressed(KeyEvent.VK_SPACE)) {
-                player.shoot();
-            }
+
 
     }
     public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
@@ -426,10 +437,10 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
             double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
 
-            for (int i = 0; i < btnYPositions.length; i++) {
+            for (int i = 0; i < menuBtnsY.length; i++) {
 
                 float centerX = btnX;
-                float centerY = btnYPositions[i];
+                float centerY = menuBtnsY[i];
                 float left = centerX - (btnW / 2.0f);
                 float right = centerX + (btnW / 2.0f);
                 float bottom = centerY - (btnH / 2.0f);

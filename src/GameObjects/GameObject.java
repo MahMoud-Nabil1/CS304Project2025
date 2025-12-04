@@ -12,7 +12,7 @@ public class GameObject {
         return posX;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX(float posX) {
         this.posX = posX;
     }
 
@@ -20,7 +20,7 @@ public class GameObject {
         return posY;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY(float posY) {
         this.posY = posY;
     }
 }

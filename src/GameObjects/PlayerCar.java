@@ -9,11 +9,11 @@ public class PlayerCar extends Car{
     boolean doubleBulletActive;
     int score=0;
     public int firerate = 0;
-    public PlayerCar(int posX, int posY) {
-        super(posX,posY,0.1,20,100);
+    public PlayerCar(float posX, float posY) {
+        super(posX,posY,.7,20,100);
         bullets=new ArrayList<>();
     }
-    PlayerCar(int posX, int posY, int speed, int damage, int health) {
+    PlayerCar(float posX, float posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
         bullets=new ArrayList<>();
     }
@@ -50,7 +50,7 @@ public class PlayerCar extends Car{
             } else {
                 bullets.add(new Bullet(posX, posY, damage));
             }
-            firerate=60;
+            firerate=30;
         }
     }
 }
