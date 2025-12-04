@@ -23,14 +23,15 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     final int Instructions = 4;
     float btnX = 45;
     float[] btnYPositions = {45, 30, 15};
-   // String[] btnLabels = {"Start Game", "Instructions", "Exit"};
     float btnW = 20;
     float btnH = 10;
 
     int xM = 700;
     int yM = 700;
 
-    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png"};
+    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png"
+            , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png"
+    };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
     public BitSet keyBits = new BitSet(256);
@@ -39,6 +40,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     float x = maxWidth/2.0f ;
     float y =maxHeight/2.0f ;
     float playerSpeed = 0.5f;
+    int angle = 0;
     buttons[] menu;
     buttons[] pause;
     buttons[] endgame;
@@ -73,33 +75,26 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
-        if(!UserNameEntered) {
-            TakeUserName();
-            UserNameEntered = true;
-        }
+//        if(!UserNameEntered) {
+//            TakeUserName();
+//            UserNameEntered = true;
+//        }
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-        background_loop(gl);
-
-        updateMovement();
-        DrawSprite(gl,x,y,1,1f);
 
         if(GameState == Menu) {
             DrawBackground(gl);
             for(int i = 0; i < btnYPositions.length; i++) {
                 MakeButton(gl, i);
             }
-            gl.glEnable(GL.GL_TEXTURE_2D); // Re-enable textures for the rest of the game
+            gl.glEnable(GL.GL_TEXTURE_2D);
             gl.glDisable(GL.GL_BLEND);
 
         }else if(GameState == Game) {
             background_loop(gl);
-
             updateMovement();
             DrawSprite(gl,x,y,1,1f);
-
-
         }else if(GameState == Pause) {
 
         }else if(GameState == End) {
@@ -123,6 +118,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyBits.clear(keyCode);
+        angle = 0;
     }
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
@@ -195,25 +191,19 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     public void MakeButton(GL gl, int index){
         float btnY = btnYPositions[index];
-
+        int TexturePosition = index + 3;
         gl.glEnable(GL.GL_BLEND);
-        gl.glDisable(GL.GL_TEXTURE_2D);
-
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[TexturePosition]);
         gl.glPushMatrix();
         gl.glTranslated(btnX/(maxWidth/2.0) - 0.9, btnY/(maxHeight/2.0) - 0.9, 0);
         gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);
-
         gl.glBegin(GL.GL_QUADS);
-        gl.glColor3f(0.0f, 1.0f, 0.0f);
-        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glVertex3f(1.0f, -1.0f, -1.0f);
-        gl.glVertex3f(1.0f, 1.0f, -1.0f);
-        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
         gl.glEnd();
-
         gl.glPopMatrix();
-
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
     }
 
     public void TakeUserName(){
@@ -226,17 +216,26 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         }
     }
     public void updateMovement() {
-
-        if (isKeyPressed(KeyEvent.VK_UP) && y < maxHeight - 10)
+        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT)){
+            y += playerSpeed;
+            x += playerSpeed;
+            angle = -45;
+        }
+        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT)) {
+            y += playerSpeed;
+            x -= playerSpeed;
+            angle = 45;
+        }
+        else if (isKeyPressed(KeyEvent.VK_UP) && y < maxHeight - 10)
             y += playerSpeed;
 
-        if (isKeyPressed(KeyEvent.VK_DOWN) && y > 0)
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && y > 0)
             y -= playerSpeed;
 
-        if (isKeyPressed(KeyEvent.VK_LEFT) && x > 0)
+        else if (isKeyPressed(KeyEvent.VK_LEFT) && x > 0)
             x -= playerSpeed;
 
-        if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 10)
+        else if (isKeyPressed(KeyEvent.VK_RIGHT) && x < maxWidth - 10)
             x += playerSpeed;
     }
 
@@ -247,6 +246,7 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
         gl.glPushMatrix();
         gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
         gl.glScaled(0.1*scale, 0.1*scale, 1);
+        gl.glRotated(angle, 0, 0, 1);
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2f(0.0f, 0.0f);
         gl.glVertex3f(-1.0f, -1.0f, -1.0f);
@@ -276,7 +276,6 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
     public void mouseClicked(MouseEvent e) {
         double convertedX = ((double)e.getX() / xM) * maxWidth;
         double convertedY = ((double)(yM - e.getY()) / yM) * maxHeight;
-
         for (int i = 0; i < btnYPositions.length; i++) {
             float btnY = btnYPositions[i];
 

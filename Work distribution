@@ -1,11 +1,11 @@
 1.base Open-GL code (Mahmoud) Done
 
-2.main menu -> (3 buttons , background, background music) (Mostafa , Mahmoud)
+2.main menu -> (3 buttons , background, background music) (Mostafa , Mahmoud) Done
 
 3.Game ->
 
 1.  Car movement (Mostafa)
-    1) →↓↑← movement
+    1) →↓↑← movement #Done
     2) Movement speed
 2.  Background (Mahmoud) Done
 3.  Objects in the way (Belal)
@@ -22,7 +22,7 @@
 	3.nitro(optional)
 	4.repair
 	5. 2X score
-6.  Randomizer
+6.  Randomizer (Mahmoud)
 7.  Score (Shehab)
 8.  Health (Shehab)
 9.  Collisions (Shehab)
@@ -35,9 +35,9 @@
 12.Save highest score(Shehab)
 13.Animation (All)
 
-4.End Game menu -> (Belal , Mahmoud)
-		losers
-1.lose sounds
-2.Retry button
-3.Highest score display
-4.Return to main menu button
+4.End Game menu -> (Belal , Mahmoud , NoMostafa)
+        losers
+        1.lose sounds
+        2.Retry button
+        3.Highest score display
+        4.Return to main menu button
