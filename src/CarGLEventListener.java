@@ -325,11 +325,11 @@ public class CarGLEventListener extends CarListener implements MouseListener , G
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // 🔥 1. Convert Screen → Game Coordinates
+
         double convertedX = ((double)e.getX() / windowWidth) * maxWidth;
         double convertedY = ((double)(windowHeight - e.getY()) / windowHeight) * maxHeight;
 
-        // 🔥 DEBUG: print actual click for testing
+
         System.out.println("Click X=" + convertedX + "  Y=" + convertedY);
 
         for (int i = 0; i < btnYPositions.length; i++) {
