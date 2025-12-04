@@ -1,9 +1,15 @@
 package GameObjects;
 
 public class Bullet extends GameObject {
-    public Bullet(int posX,int posY,int speed, int damage) {
+    int x;
+    int y;
+    int speed;
+    int damage;
+    public Bullet(int posX,int posY,int damage) {
         super(posX,posY);
         this.posX = posX;
         this.posY = posY;
+        this.speed = 20;
+        this.damage = damage;
     }
 }

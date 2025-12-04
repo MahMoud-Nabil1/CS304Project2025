@@ -1,7 +1,12 @@
 package GameObjects;
 
+import java.util.ArrayList;
+
 public class PlayerCar extends Car{
     protected int nitro=100;
+    ArrayList<Bullet> bullets;
+    boolean doubleBulletActive;
+    int score=0;
     PlayerCar(int posX, int posY) {
         super(posX,posY,100,20,100);
     }
@@ -31,5 +36,14 @@ public class PlayerCar extends Car{
             nitroActive = false;
         }
     }
+    public void shoot() {
+        if(doubleBulletActive) {
+            bullets.add(new Bullet(posX - 5, posY, damage));
+            bullets.add(new Bullet(posX + 5, posY, damage));
+        } else {
+            bullets.add(new Bullet(posX, posY, damage));
+        }
+    }
+
 
 }

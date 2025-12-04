@@ -1,7 +1,8 @@
 package GameObjects;
 
 public class LightCar extends Car{
-    protected int nitro=100;
+    int x;
+    int y;
     LightCar(int posX, int posY) {
         super(posX,posY,100,20,100);
     }
