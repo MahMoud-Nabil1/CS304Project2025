@@ -2,7 +2,7 @@ package GameObjects;
 
 public class Obstacles extends GameObject {
     int damage;
-    Obstacles(int posX, int posY) {
+    public Obstacles(int posX, int posY) {
         super(posX, posY);
         damage = 100;
     }

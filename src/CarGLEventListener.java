@@ -1,4 +1,5 @@
 import GameObjects.LightCar;
+import GameObjects.Obstacles;
 import GameObjects.PlayerCar;
 import Texture.TextureReader;
 import GameController.GameController;
@@ -35,7 +36,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int yM = 700;
 
     String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png" , "PauseMenu.png"
-            , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png"
+            , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png"
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
@@ -64,6 +65,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     float curY = maxHeight / 2.0f;
     float playerSpeed = 0.5f;
     float movementScale = 2.0f;
+
+
+    ArrayList<Obstacles> obstaclesList = new ArrayList<>();
+    int numberOfObstacles = 5;
+    int obstacleTextureIndex = 7;
 
 
     @Override
@@ -112,6 +118,14 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         }
 
         player = new PlayerCar((int) curX, (int) curY);
+
+        obstaclesList.clear();
+        for (int i = 0; i < numberOfObstacles; i++) {
+            int randomX = 10 + (int)(Math.random() * 80);
+            int startY = maxHeight + (i * 30);
+            Obstacles obs = new Obstacles(randomX, startY);
+            obstaclesList.add(obs);
+        }
     }
 
     @Override
@@ -136,6 +150,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         } else if (GameState == Game) {
             background_loop(gl, gameSpeed);
+            drawAndMoveObstacles(gl);
             DrawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1f);
             updateMovement();
 
@@ -185,6 +200,21 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public void drawAndMoveObstacles(GL gl) {
+        for (Obstacles obs : obstaclesList) {
+            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
+
+            obs.setPosY((int) ((int) (obs.getPosY() - 1) * GameController.gameSpeed));
+
+            if (obs.getPosY() < -10) {
+                obs.setPosY((int) ((maxHeight + 10)*GameController.gameSpeed));
+
+                int newX = (int)(10 + (int)(Math.random() * 80) * GameController.gameSpeed);
+                obs.setPosX(newX);
+            }
+        }
     }
 
     public void DrawBackground(GL gl , int index){
@@ -321,7 +351,25 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             }
 
     }
-
+    public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
+        gl.glPushMatrix();
+        gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
+        gl.glScaled(0.1*scale, 0.1*scale, 1);
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
     public void DrawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
