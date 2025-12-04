@@ -27,6 +27,7 @@ public class PlayerCar extends Car{
         if (nitro<=0&&!nitroActive) {
             GameController.gameSpeed =1;
             nitroOff();
+            System.out.println("nitroOff");
         }
     }
 
