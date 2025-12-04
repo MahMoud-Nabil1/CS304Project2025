@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.media.opengl.GLCanvas;
 import javax.swing.*;
 
-public class CarGame extends JFrame implements ActionListener {
+public class CarGame extends JFrame  {
     GLCanvas glcanvas;
     private final FPSAnimator animator;
     private final Map<String, Runnable> buttonActions = new HashMap<>();
@@ -18,7 +18,6 @@ public class CarGame extends JFrame implements ActionListener {
     public CarGame() {
         super("Car Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         glcanvas = new GLCanvas();
         CarGLEventListener listener = new CarGLEventListener();
         glcanvas.addGLEventListener(listener);
@@ -31,13 +30,5 @@ public class CarGame extends JFrame implements ActionListener {
         glcanvas.addKeyListener(listener);
         glcanvas.setFocusable(true);
         glcanvas.requestFocus();
-    }
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        Runnable action = buttonActions.get(command);
-        if (action != null) {
-            action.run();
-            glcanvas.repaint();
-        }
     }
 }

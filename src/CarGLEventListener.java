@@ -3,11 +3,13 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener {
+public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
 
     String[] textureNames = {};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -64,6 +66,11 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     @Override
     public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
     }
 }
