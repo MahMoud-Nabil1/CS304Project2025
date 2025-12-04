@@ -63,7 +63,7 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
         background_loop(gl);
 
         updateMovement();
-        DrawSprite(gl,x,y,1,0.1f);
+//        DrawSprite(gl,x,y,1,0.1f);
 
 
     }
