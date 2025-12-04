@@ -11,7 +11,10 @@ import java.io.IOException;
 
 public class CarGLEventListener extends CarListener implements GLEventListener, KeyListener , ActionListener {
 
-    String[] textureNames = {};
+    double roadOffsetY = 0.0f;
+    double speed = 0.01f;
+
+    String[] textureNames = {"background-1.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int[] textures = new int[textureNames.length];
 
@@ -42,6 +45,11 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
+        GL gl = glAutoDrawable.getGL();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        gl.glLoadIdentity();
+
+        background_loop(gl);
 
     }
     @Override
@@ -71,6 +79,38 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+    }
+
+    public void background_loop(GL gl){
+
+        roadOffsetY -= 0.02f;
+
+        if(roadOffsetY <= -2.0f){
+            roadOffsetY = 0.0f;
+        }
+
+        gl.glPushMatrix();
+        gl.glTranslated(0.0f, roadOffsetY, 0.0f);
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslated(0.0f, roadOffsetY + 2.0f, 0.0f);
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
 
     }
 }

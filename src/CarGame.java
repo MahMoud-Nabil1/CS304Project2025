@@ -1,7 +1,5 @@
 import com.sun.opengl.util.FPSAnimator;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.media.opengl.GLCanvas;
@@ -23,7 +21,7 @@ public class CarGame extends JFrame  {
         glcanvas.addGLEventListener(listener);
         animator = new FPSAnimator(glcanvas, 60);
         add(glcanvas, BorderLayout.CENTER);
-        glcanvas.setPreferredSize(new Dimension(1280, 720));
+        glcanvas.setPreferredSize(new Dimension(800, 600));
         pack();
         setLocationRelativeTo(this);
         setVisible(true);
