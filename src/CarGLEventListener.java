@@ -24,9 +24,9 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     public BitSet keyBits = new BitSet(256);
     int maxWidth =  100;
     int maxHeight = 100;
-     int x = maxWidth/2 ;
-     int y =maxHeight/2 ;
-     float playerSpeed = 0.5f;
+    float x = maxWidth/2.0f ;
+    float y =maxHeight/2.0f ;
+    float playerSpeed = 0.5f;
 
 
 
@@ -71,20 +71,17 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
     public void keyTyped(KeyEvent e) {
 
     }
-    // see what key is pressed and insert it into the bitset
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyBits.set(keyCode);
 
     }
-    //clear the  keybits
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyBits.clear(keyCode);
     }
-    //check if the key pressed
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
     }
@@ -145,7 +142,6 @@ public class CarGLEventListener extends CarListener implements GLEventListener, 
             System.out.println("User cancelled or entered nothing.");
         }
     }
-    //update the movement of the player
     public void updateMovement() {
 
         if (isKeyPressed(KeyEvent.VK_UP) && y < maxHeight - 10)
