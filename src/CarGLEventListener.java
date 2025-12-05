@@ -312,42 +312,51 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         }
 
         float currentSpeed = (float) player.getSpeed();
+        if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
+            curY -= currentSpeed;
+            curX += currentSpeed;
+            angle = 10;
 
-        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
+            curY -= currentSpeed;
+            curX -= currentSpeed;
+            angle = -10;
+
+        }
+        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
             curY += currentSpeed;
             curX += currentSpeed;
-            angle = -45;
-            player.setPosY(curY);
-            player.setPosX(curX);
+            angle = -10;
         }
 
         else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
             curY += currentSpeed;
             curX -= currentSpeed;
-            angle = 45;
-            player.setPosY(curY);
-            player.setPosX(curX);
+            angle = 10;
         }
 
         else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){
             curY += currentSpeed;
-            player.setPosY(curY);
         }
 
         else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
-            curY -= currentSpeed+.2;
-            player.setPosY(curY);
+            curY -= (float) (currentSpeed+.2);
         }
 
         else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
             curX -= currentSpeed;
-            player.setPosX(curX);
+            angle = 10;
         }
 
         else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {
             curX += currentSpeed;
-            player.setPosX(curX);
+            angle = -10;
         }
+
+        player.setPosY(curY);
+        player.setPosX(curX);
     }
 
 
