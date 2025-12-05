@@ -39,6 +39,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     float inGamePauseBtnY = 90;
     float inGamePauseBtnW = 80;
     float inGamePauseBtnH = 80;
+    ArrayList<buttons> menuButtons = new ArrayList<>();
+    ArrayList<buttons> pauseButtons = new ArrayList<>();
+    buttons inGamePauseBtn;
 
     int inGamePauseTextureIndex = 7;
 
@@ -201,6 +204,14 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             Obstacles obs = new Obstacles(randomX, startY);
             obstaclesList.add(obs);
         }
+        menuButtons.add(new buttons(45, 45, 20, 10, 4));
+        menuButtons.add(new buttons(45, 30, 20, 10, 5));
+        menuButtons.add(new buttons(45, 15, 20, 10, 6));
+
+        pauseButtons.add(new buttons(45, 30, 20, 10, 4));
+        pauseButtons.add(new buttons(45, 15, 20, 10, 6));
+
+        inGamePauseBtn = new buttons(85, 85, 15, 10, 4);
 
 
 
@@ -219,8 +230,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         if (GameState == Menu) {
             DrawBackground(gl,2);
-            for (int i = 0; i < menuBtnsY.length; i++) {
-                MakeButton(gl, i);
+            for (buttons btn : menuButtons){
+                btn.draw(gl, textures, maxWidth, maxHeight);
             }
             gl.glEnable(GL.GL_TEXTURE_2D);
             gl.glDisable(GL.GL_BLEND);
@@ -234,15 +245,15 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
             //-------Score---HealthBar  Related
             healthBarPlayer(gl, 100,xHealthBar,yHealthBar );
-            DrawInGamePauseButton(gl);
+            inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
             drawScoreText(glAutoDrawable);
 
 
         }else if(GameState == Pause) {
             DrawBackground(gl , 3);
 
-            for(int i = 0; i < pauseBtnY.length; i++){
-                DrawPauseButton(gl, i);
+            for (buttons btn : pauseButtons) {
+                btn.draw(gl, textures, maxWidth, maxHeight);
             }
         }else if(GameState == End) {
 
@@ -521,85 +532,56 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     public void mouseMoved(MouseEvent e) {
 
     }
+    private void handleButton(int id) {
+
+        switch (id) {
+
+
+            case 0: GameState = Game; break;
+            case 1: GameState = Instructions; break;
+            case 2: System.exit(0); break;
+
+
+            case 3: GameState = Game; break;
+            case 4: System.exit(0); break;
+
+
+            case 5: GameState = Pause; break;
+
+        }
+    }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        double mouseX = ((double) e.getX() / windowWidth) * maxWidth;
+        double mouseY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
+
+
         if (GameState == Menu) {
-            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
-            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
-
-            for (int i = 0; i < menuBtnsY.length; i++) {
-
-                float centerX = btnX;
-                float centerY = menuBtnsY[i];
-                float left = centerX - (btnW / 2.0f);
-                float right = centerX + (btnW / 2.0f);
-                float bottom = centerY - (btnH / 2.0f);
-                float top = centerY + (btnH / 2.0f);
-                if (convertedX >= left && convertedX <= right &&
-                        convertedY >= bottom && convertedY <= top) {
-                    switch (i) {
-                        case 0:
-                            GameState = Game;
-                            break;
-                        case 1:
-                            GameState = Instructions;
-                            break;
-                        case 2:
-                            System.exit(0);
-                            break;
-                    }
+            for (int i = 0; i < menuButtons.size(); i++) {
+                if (menuButtons.get(i).isClicked(mouseX, mouseY)) {
+                    handleButton(i);
+                    return;
                 }
             }
-        }else if(GameState == Game){
-            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
-            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
+        }
 
 
-            float centerX = 90;
-            float centerY = 90;
+        if (GameState == Pause) {
+            for (int i = 0; i < pauseButtons.size(); i++) {
+                if (pauseButtons.get(i).isClicked(mouseX, mouseY)) {
+                    handleButton(i + 3);   // Resume أو Quit
+                    return;
+                }
+            }
+        }
 
-            float halfWidth = 0.20f * 50 / 2.0f;
-            float halfHeight = 0.15f * 50 / 2.0f;
 
-            float left   = centerX - halfWidth;
-            float right  = centerX + halfWidth;
-            float bottom = centerY - halfHeight;
-            float top    = centerY + halfHeight;
-
-            if(convertedX >= left && convertedX <= right &&
-                    convertedY >= bottom && convertedY <= top){
+        if (GameState == Game) {
+            if (inGamePauseBtn.isClicked(mouseX, mouseY)) {
                 GameState = Pause;
-                System.out.println("Game Paused!");
             }
-
-        }else if(GameState == Pause){
-            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
-            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
-
-            for(int i = 0; i < pauseBtnY.length; i++){
-
-                float centerX = btnX;
-                float centerY = pauseBtnY[i];
-
-                float left   = centerX - (btnW / 2.0f);
-                float right  = centerX + (btnW / 2.0f);
-                float bottom = centerY - (btnH / 2.0f);
-                float top    = centerY + (btnH / 2.0f);
-
-                if(convertedX >= left && convertedX <= right &&
-                        convertedY >= bottom && convertedY <= top){
-
-                    if(i == 0){
-                        GameState = Game;   // Resume
-                    }
-                    else if(i == 1){
-                        System.exit(0);     // Exit
-                    }
-                }
-            }
-        }else if(GameState == End){
-
         }
     }
 
