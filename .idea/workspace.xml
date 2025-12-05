@@ -5,34 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Score System">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib65.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/3_4State1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/3_4State2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/FullState1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/HalfState1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/HalfState2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/HealthReceviedFull.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/LowState1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/HealthBar/LowState2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/HeavyCar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/CS304Project2025.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS304Project2025.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/Bullet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/car.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/bullet.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/obstacle.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/obstacle.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Bullet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Bullet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/GameObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/GameObject.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/HeavytCar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/LightCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/LightCar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bullet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Car.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/HeavytCar.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/LightCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/LightCar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +57,8 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/shehab/Desktop/Copy/Mycopy",
+    "last_opened_file_path": "C:/Users/MAHMO/Documents/GitHub/CS304Project2025/assets",
+    "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -87,8 +67,13 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
+      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\Bullet" />
     </key>
   </component>
   <component name="RunManager">
@@ -119,6 +104,17 @@
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Score System" />

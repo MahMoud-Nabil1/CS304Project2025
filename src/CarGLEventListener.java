@@ -45,7 +45,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int xM = 700;
     int yM = 700;
 
-    String[] textureNames = {"BackGroundTest.png" , "Man1.png" , "MenuBackGround.png" , "PauseMenu.png"
+    String[] textureNames = {"BackGroundTest.png" , "car.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -228,13 +228,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         } else if (GameState == Game) {
             background_loop(gl);
             drawAndMoveObstacles(gl);
-            drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1f);
+            drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f);
             updateMovement();
             drawBullets(gl);
 
             //-------Score---HealthBar  Related
-            score(gl , xScore , yScore);
-            healthBarPlayer(gl, 75,xHealthBar,yHealthBar );
+            healthBarPlayer(gl, 100,xHealthBar,yHealthBar );
             DrawInGamePauseButton(gl);
             drawScoreText(glAutoDrawable);
 
@@ -287,7 +286,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             for (Bullet bullet : player.bullets) {
                 if (bullet != null) {
                     if (bullet.timer>=0) {
-                        DrawSpriteWall(gl, (float) bullet.posX, (float) bullet.posY, 8, 0.3f);
+                        DrawSpriteWall(gl, (float) bullet.posX, (float) bullet.posY, 8, 1.0f);
                         bullet.posY += 0.5;
                         bullet.timer--;
                     }
@@ -300,9 +299,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         for (Obstacles obs : obstaclesList) {
             DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
 
-            obs.setPosY(((int) (obs.getPosY() - 1 - GameController.gameSpeed)));
+            obs.setPosY(((int) ((obs.getPosY() - GameController.gameSpeed))));
 
-            if (obs.getPosY() < -10) {
+            if (obs.getPosY() < -2) {
                 obs.setPosY(maxHeight + 10);
 
                 int newXPos = (int)(Math.random() * 5);
@@ -460,7 +459,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             player.setPosY(curY);
         }
         else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
-            curY -= currentSpeed;
+            curY -= currentSpeed+.2;
             player.setPosY(curY);
         }
         else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
@@ -471,10 +470,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             curX += currentSpeed;
             player.setPosX(curX);
         }
-
-
-
-
     }
     public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
@@ -790,6 +785,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
     }
 
 
@@ -821,6 +817,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         renderer.draw(textToDraw, 10, height - 50);
 
         renderer.endRendering();
+        GL gl = drawable.getGL();
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
     }
 
 
