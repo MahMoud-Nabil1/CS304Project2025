@@ -69,8 +69,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
 
     ArrayList<Obstacles> obstaclesList = new ArrayList<>();
-    int numberOfObstacles = 5;
+    int numberOfObstacles = 3;
     int obstacleTextureIndex = 7;
+    int[] obstaclesPositions = {13, 29, 45, 62, 79};
 
 
 
@@ -124,7 +125,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         obstaclesList.clear();
         for (int i = 0; i < numberOfObstacles; i++) {
-            int randomX = 10 + (int)(Math.random() * 80);
+            int randomX = obstaclesPositions[(int) (Math.random() * 5)];
             int startY = maxHeight + (i * 30);
             Obstacles obs = new Obstacles(randomX, startY);
             obstaclesList.add(obs);
@@ -227,8 +228,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             if (obs.getPosY() < -10) {
                 obs.setPosY(maxHeight + 10);
 
-                int newX = (int)(10 + (int)(Math.random() * 80) * GameController.gameSpeed);
-                obs.setPosX(newX);
+                int newXPos = (int)(Math.random() * 5);
+                obs.setPosX(obstaclesPositions[newXPos]);
             }
         }
     }
@@ -306,23 +307,17 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         float centerX = btnX;
         float centerY = pauseBtnY[index];
         int textureIndex = (index == 0) ? 4 : 6;
-
-
-
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureIndex]);
-
         gl.glPushMatrix();
         gl.glTranslated(centerX/(maxWidth/2.0) - 0.9, centerY/(maxHeight/2.0) - 0.9, 0);
         gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);
-
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2f(0,0); gl.glVertex3f(-1,-1,-1);
         gl.glTexCoord2f(1,0); gl.glVertex3f( 1,-1,-1);
         gl.glTexCoord2f(1,1); gl.glVertex3f( 1, 1,-1);
         gl.glTexCoord2f(0,1); gl.glVertex3f(-1, 1,-1);
         gl.glEnd();
-
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
@@ -400,6 +395,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+
     public void drawSprite(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
