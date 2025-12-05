@@ -5,6 +5,7 @@ public class Car extends GameObject {
     protected int damage;
     protected int health;
     protected  double damageFactor;
+
     Car(double posX, double posY, double speed, int damage, int health) {
         super(posX, posY);
         this.speed = speed;

@@ -1,12 +1,12 @@
-IDE - IntelliJ IDEA
+### IDE - IntelliJ IDEA ###
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
 
-Build Systems
-Maven
+### Build Systems ###
+# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -15,17 +15,17 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 
-Gradle
+# Gradle
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
-Java
+### Java ###
 *.class
 *.log
 *.ctxt
 .mtj.tmp/
 
-OS System Files
+### OS System Files ###
 .DS_Store
 Thumbs.db

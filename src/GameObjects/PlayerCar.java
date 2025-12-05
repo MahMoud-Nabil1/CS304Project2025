@@ -16,6 +16,9 @@ public class PlayerCar extends Car{
     PlayerCar(float posX, float posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
         bullets=new ArrayList<>();
+        //
+        this.width = 50;
+        this.height = 100;
     }
     private boolean nitroActive = false;
 
@@ -36,7 +39,7 @@ public class PlayerCar extends Car{
 
     public void nitroOff() {
         if(nitroActive) {
-            this.speed -= 50;
+            this.speed -= 50;   // Be careful, you are modifying speed here, but speed is 0.7 above?
             this.damage -= 50;
             nitroActive = false;
 

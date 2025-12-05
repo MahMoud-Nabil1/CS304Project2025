@@ -1,19 +1,22 @@
-import GameObjects.Bullet;
-import GameObjects.LightCar;
-import GameObjects.Obstacles;
-import GameObjects.PlayerCar;
+import GameObjects.*;
+import ScoreRelated.ScoreEntry;
 import Texture.TextureReader;
 import GameController.GameController;
+import com.sun.opengl.util.j2d.TextRenderer;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.*;
 import java.util.List;
+import GameObjects.*;
 
 public class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
     double roadOffsetY = 0.0f;
@@ -58,6 +61,33 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int score = 0;
     int xScore = 10;
     int yScore = 90;
+
+    // Inside Class Variables
+    int healthAnimCounter = 0; // Counts frames for the health bar
+    TextRenderer renderer;
+
+    //---------------------- For Shehab HealthBar ----------------------------------------
+
+    String[] healthTextureNames = {
+            "FullState1.png" ,"HealthReceviedFull.png" //100
+            ,"3_4State1.png","3_4State2.png"            //75
+            ,"HalfState1.png","HalfState2.png"
+            ,"LowState1.png","LowState2.png"
+    };
+
+    TextureReader.Texture[] healthTexture = new TextureReader.Texture[healthTextureNames.length];
+    int[] healthTextures = new int[healthTextureNames.length];
+
+
+
+    int xHealthBar=10;
+    int yHealthBar=90;
+
+    //--------------------------For Shehab Collegians-----------------------------------------------------------
+    public static ArrayList<GameObject> allObjects = new ArrayList<>();
+
+
+    //-------------------------------------------------------------------------------------
 
 
     public BitSet keyBits = new BitSet(256);
@@ -127,6 +157,41 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             }
         }
 
+        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
+        // ---------------------------Mahmoud UserName Taking---------------------------------
+
+        TakeUserName();
+
+
+        //---------------------------- For Shehab Health Bar ---------------------------------
+
+        gl.glGenTextures(healthTextureNames.length, healthTextures, 0);
+        for(int i = 0; i < healthTextureNames.length; i++){
+            try {
+                healthTexture[i] = TextureReader.readTexture(assetsFolderName + "//HealthBar" + "//" + healthTextureNames[i] , true);
+                gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[i]);
+                new GLU().gluBuild2DMipmaps(
+                        GL.GL_TEXTURE_2D,
+                        GL.GL_RGBA,
+                        healthTexture[i].getWidth(), healthTexture[i].getHeight(),
+                        GL.GL_RGBA,
+                        GL.GL_UNSIGNED_BYTE,
+                        healthTexture[i].getPixels()
+                );
+            } catch( IOException e ) {
+                System.out.println(e);
+            }
+        }
+
+        //-----------------------------Belal All Objects Taking-------------------------------------------
+        allObjects.clear();
+
+
+
+
+
+
+
         player = new PlayerCar((int) curX, (int) curY);
 
         obstaclesList.clear();
@@ -136,16 +201,18 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             Obstacles obs = new Obstacles(randomX, startY);
             obstaclesList.add(obs);
         }
+
+
+
+
+
     }
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
         double gameSpeed = GameController.gameSpeed;
 
-//        if(!UserNameEntered) {
-//            TakeUserName();
-//            UserNameEntered = true;
-//        }
+
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
@@ -165,8 +232,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             updateMovement();
             drawBullets(gl);
 
+            //-------Score---HealthBar  Related
             score(gl , xScore , yScore);
+            healthBarPlayer(gl, 75,xHealthBar,yHealthBar );
             DrawInGamePauseButton(gl);
+            drawScoreText(glAutoDrawable);
 
 
         }else if(GameState == Pause) {
@@ -361,15 +431,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public void TakeUserName(){
-        UserName = JOptionPane.showInputDialog(null, "Please enter your name:");
-
-        if (UserName != null && !UserName.trim().isEmpty()) {
-            System.out.println("User entered: " + UserName);
-        } else {
-            System.out.println("User cancelled or entered nothing.");
-        }
-    }
 
     public void updateMovement() {
 
@@ -609,5 +670,253 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         gl.glDisable(GL.GL_BLEND);
     }
+
+
+    public void saveAndSortScore(String userName, int userScore) {
+        ArrayList<ScoreEntry> allScores = new ArrayList<>();
+        File file = new File("highscores.txt");
+
+        // 1. READ EXISTING SCORES
+        if (file.exists()) {
+            try {
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    // We expect format: "Name:Score"
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        String name = parts[0];
+                        int score = Integer.parseInt(parts[1]);
+                        allScores.add(new ScoreEntry(name, score));
+                    }
+                }
+                scanner.close();
+            } catch (Exception e) {
+                System.out.println("Error reading scores: " + e.getMessage());
+            }
+        }
+
+        // 2. ADD CURRENT USER
+        allScores.add(new ScoreEntry(userName, userScore));
+
+        // 3. SORT (Highest first)
+        Collections.sort(allScores);
+
+        // 4. WRITE BACK TO FILE
+        try {
+            FileWriter writer = new FileWriter(file); // Overwrite file
+            for (ScoreEntry entry : allScores) {
+                writer.write(entry.toString() + "\n");
+            }
+            writer.close();
+            System.out.println("Score saved successfully!");
+        } catch (IOException e) {
+            System.out.println("Error writing scores: " + e.getMessage());
+        }
+    }
+
+
+    public void TakeUserName() {
+        // Keep asking as long as UserName is null (Cancel) or Empty
+        while (UserName == null || UserName.trim().isEmpty()) {
+
+            UserName = JOptionPane.showInputDialog(null, "Please enter your name (Required):");
+
+            // If they try to be sneaky and click Cancel or leave it empty...
+            if (UserName == null || UserName.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "You must enter a name to play!");
+            }
+        }
+
+        System.out.println("User entered: " + UserName);
+    }
+
+    //----------------------------------Health Bar ----------------------------------
+
+    public void healthBarPlayer(GL gl, double currentHealth, int x, int y) {
+        // 1. Update Animation Counter
+        healthAnimCounter++;
+        if (healthAnimCounter > 20) {
+            healthAnimCounter = 0; // Reset every 20 frames
+        }
+
+        // 2. Determine Base Index (The starting image for this health level)
+        int baseIndex = -1;
+
+        if (currentHealth >= 100) {
+            baseIndex = 0; // 100% starts at index 0
+        } else if (currentHealth >= 75) {
+            baseIndex = 2; // 75% starts at index 2
+        } else if (currentHealth >= 50) {
+            baseIndex = 4; // 50% starts at index 4
+        } else if (currentHealth > 0) {
+            baseIndex = 6; // 25% starts at index 6
+        } else {
+            return; // Dead
+        }
+
+        // 3. Determine Animation Frame (0 or 1)
+        // If counter is 0-10: use Offset 0 (Normal)
+        // If counter is 11-20: use Offset 1 (Glow)
+        int animationOffset = 0;
+        if (healthAnimCounter > 10) {
+            animationOffset = 1;
+        }
+
+        // Final Texture Index = Base + Offset
+        int finalTextureIndex = baseIndex + animationOffset;
+
+        // 4. Draw
+        gl.glEnable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+        gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[finalTextureIndex]);
+
+        gl.glPushMatrix();
+
+        double glX = x / 50.0 - 1.0;
+        double glY = y / 50.0 - 1.0;
+
+        gl.glTranslated(glX, glY, 0);
+        gl.glScaled(0.2, 0.2, 1);
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
+        gl.glEnd();
+
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
+
+    public void drawScoreText(GLAutoDrawable drawable) {
+        // 1. Update Score Logic (Keep your existing frame counter)
+        frameCounter++;
+        if (frameCounter > 10) {
+            score++;
+            System.out.println(score);
+            frameCounter = 0;
+        }
+
+        // 2. Prepare the text
+        String textToDraw = "Score: " + score;
+
+        // 3. Draw the text
+        // We need the width and height of the window to position text correctly
+        int width = drawable.getWidth();
+        int height = drawable.getHeight();
+
+        renderer.beginRendering(width, height);
+
+        // Set Color (R, G, B, Alpha) - This is Yellow
+        renderer.setColor(1.0f, 1.0f, 0.0f, 1.0f);
+
+        // Draw the string
+        // x = 10 pixels from left
+        // y = height - 50 pixels (Top left corner)
+        renderer.draw(textToDraw, 10, height - 50);
+
+        renderer.endRendering();
+    }
+
+
+    //------------------------------------Collisons---------------------------------
+
+    public void checkCollision(GameObject obj1, GameObject obj2) {
+        if (obj1.getBounds().intersects(obj2.getBounds())) {
+
+            // Check: Is one of them the Player?
+            if (obj1 instanceof PlayerCar || obj2 instanceof PlayerCar) {
+
+                PlayerCar player = (obj1 instanceof PlayerCar) ? (PlayerCar)obj1 : (PlayerCar)obj2;
+                GameObject other = (obj1 instanceof PlayerCar) ? obj2 : obj1;
+
+                // 1. Player hits Obstacle
+                if (other instanceof Obstacles) {
+                    Obstacles obs = (Obstacles) other;
+                    player.takeDamage(obs.damage);
+                    // Obstacle does NOT die (invincible)
+                    System.out.println("Hit Obstacle!");
+                }
+                // 2. Player hits LightCar
+                else if (other instanceof LightCar) {
+                    player.takeDamage(20);  // Less damage
+                    other.takeDamage(100);  // Enemy dies
+                    System.out.println("Hit LightCar!");
+                }
+                // 3. Player hits HeavyCar
+                else if (other instanceof HeavyCar) {
+                    player.takeDamage(50);  // MORE damage
+                    other.takeDamage(50);   // Heavy car takes damage (might not die immediately)
+                    System.out.println("Hit HeavyCar!");
+                }
+            }
+
+            // You can add Bullet collision logic here later
+        }
+    }
+
+    // Helper method to keep code clean
+    private void handlePlayerCollision(PlayerCar player, GameObject other) {
+
+        // SCENARIO A: Player hits Obstacle (Invincible)
+        if (other instanceof Obstacles) {
+            // Player takes massive damage (or dies instantly)
+            player.takeDamage(50);
+            System.out.println("Hit Obstacle! Player hurt.");
+            // We DO NOT call other.takeDamage(), so Obstacle stays alive (Invincible)
+        }
+
+        // SCENARIO B: Player hits Light Car
+        else if (other instanceof LightCar) {
+            int crashDamage = 20;
+
+            player.takeDamage(crashDamage); // Player takes normal damage
+            other.takeDamage(100);          // Light car gets destroyed (or takes damage)
+            System.out.println("Crashed into Light Car!");
+        }
+
+        // SCENARIO C: Player hits Weight Car (Assuming you have a class named WeightCar)
+        // Note: You didn't provide WeightCar class, but here is the logic:
+    /* else if (other instanceof WeightCar) {
+        int crashDamage = 50; // Player takes MORE damage
+
+        player.takeDamage(crashDamage);
+        other.takeDamage(50); // Weight car takes damage too
+        System.out.println("Crashed into Heavy Car!");
+    }
+    */
+    }
+
+    public void updateGameLogic() {
+        // --- PART 1: CHECK COLLISIONS ---
+        // Loop through every pair of objects
+        for (int i = 0; i < allObjects.size(); i++) {
+            GameObject obj1 = allObjects.get(i);
+
+            for (int j = i + 1; j < allObjects.size(); j++) {
+                GameObject obj2 = allObjects.get(j);
+
+                // Only check if both exist (are alive)
+                if (obj1.alive && obj2.alive) {
+                    checkCollision(obj1, obj2);
+                }
+            }
+        }
+
+        // --- PART 2: REMOVE DEAD OBJECTS ---
+        // Iterate backwards to safely remove items from the list
+        for (int i = allObjects.size() - 1; i >= 0; i--) {
+            if (!allObjects.get(i).alive) {
+                allObjects.remove(i);
+                // Optional: System.out.println("Object removed!");
+            }
+        }
+    }
+
 
 }
