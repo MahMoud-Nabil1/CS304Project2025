@@ -19,7 +19,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     double roadOffsetY = 0.0f;
     String UserName;
     boolean UserNameEntered = false;
-    int GameState = 2;
+    int GameState = 0;
     final int Menu = 0;
     final int Game = 1;
     final int Pause = 2;
@@ -32,6 +32,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     float btnH = 10;
     int windowWidth = 1;
     int windowHeight = 1;
+    float inGamePauseBtnX = 60;
+    float inGamePauseBtnY = 90;
+    float inGamePauseBtnW = 80;
+    float inGamePauseBtnH = 80;
+
+    int inGamePauseTextureIndex = 7;
 
     int xM = 700;
     int yM = 700;
@@ -160,6 +166,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             drawBullets(gl);
 
             score(gl , xScore , yScore);
+            DrawInGamePauseButton(gl);
 
 
         }else if(GameState == Pause) {
@@ -321,6 +328,38 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
+    public void DrawInGamePauseButton(GL gl) {
+
+
+
+        int xPos = 90;
+        int yPos = 90;
+        int textureIndex =4 ;
+
+        double glX = xPos / 50.0 - 1.0;
+        double glY = yPos / 50.0 - 1.0;
+
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureIndex]);
+
+
+        gl.glPushMatrix();
+        gl.glTranslated(glX, glY, 0);
+        gl.glScaled(0.20, 0.15, 1);
+
+        gl.glBegin(GL.GL_QUADS);
+
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
 
     public void TakeUserName(){
         UserName = JOptionPane.showInputDialog(null, "Please enter your name:");
@@ -457,6 +496,26 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 }
             }
         }else if(GameState == Game){
+            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
+            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
+
+
+            float centerX = 90;
+            float centerY = 90;
+
+            float halfWidth = 0.20f * 50 / 2.0f;
+            float halfHeight = 0.15f * 50 / 2.0f;
+
+            float left   = centerX - halfWidth;
+            float right  = centerX + halfWidth;
+            float bottom = centerY - halfHeight;
+            float top    = centerY + halfHeight;
+
+            if(convertedX >= left && convertedX <= right &&
+                    convertedY >= bottom && convertedY <= top){
+                GameState = Pause;
+                System.out.println("Game Paused!");
+            }
 
         }else if(GameState == Pause){
             double convertedX = ((double) e.getX() / windowWidth) * maxWidth;
