@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
 import GameObjects.*;
@@ -43,6 +44,13 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
 
     int[] textures = new int[textureNames.length];
+    //--------------------- POWERUP TEXTURE----------------------------------------------------------
+    String[] powerUpTextureNames={"blue 1","blue 2","blue 3","blue 4","blue 5","blue 6"
+            ,"green 1","green 2","green 3","green 4","green 5","green 6"
+            ,"red 1","red 2","red 3","red 4","red 5","red 6"
+            ,"yellow 1","yellow 2","yellow 3","yellow 4","yellow 5","yellow 6"};
+    TextureReader.Texture[] powerUpTexture = new TextureReader.Texture[powerUpTextureNames.length];
+    int[] powerUpTextures = new int[powerUpTextureNames.length];
 
 
     //---------------------- For Shehab Score 0 1 2 3 4 5 6 7 8 9 ----------------------------
@@ -102,6 +110,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int obstacleTextureIndex = 7;
     int[] obstaclesPositions = {13, 29, 45, 62, 79};
 
+
+    int PowerUPTimer=0;
+
+
+
     //---------init-func---------
     @Override
     public void init(GLAutoDrawable gld) {
@@ -125,6 +138,43 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                         texture[i].getPixels()
                 );
             } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+
+        //--------------------For PowerUps Textures---------------------------------------
+        gl.glGenTextures(powerUpTextureNames.length, powerUpTextures, 0);
+
+        for (int i = 0; i < powerUpTextureNames.length; i++) {
+            try {
+                if (i>=18 && i<24){
+                    powerUpTexture[i] = TextureReader.readTexture(assetsFolderName + "//PowerUps"+"//Yellow" + "//" + powerUpTextureNames[i]+".png", true);
+                    gl.glBindTexture(GL.GL_TEXTURE_2D, powerUpTextures[i]);
+                }
+                if (i >= 12 && i<18) {
+                    powerUpTexture[i] = TextureReader.readTexture(assetsFolderName + "//PowerUps" + "//Red" + "//" + powerUpTextureNames[i] + ".png", true);
+                    gl.glBindTexture(GL.GL_TEXTURE_2D, powerUpTextures[i]);
+                }
+                if (i >= 6 && i < 12){
+                    powerUpTexture[i] = TextureReader.readTexture(assetsFolderName + "//PowerUps" + "//Green" + "//" + powerUpTextureNames[i] + ".png", true);
+                    gl.glBindTexture(GL.GL_TEXTURE_2D, powerUpTextures[i]);
+                }
+                if (i < 6) {
+                    powerUpTexture[i] = TextureReader.readTexture(assetsFolderName + "//PowerUps" + "//Blue" + "//" + powerUpTextureNames[i] + ".png", true);
+                    gl.glBindTexture(GL.GL_TEXTURE_2D, powerUpTextures[i]);
+                }
+
+
+
+                new GLU().gluBuild2DMipmaps(
+                        GL.GL_TEXTURE_2D,
+                        GL.GL_RGBA,
+                        powerUpTexture[i].getWidth(), powerUpTexture[i].getHeight(),
+                        GL.GL_RGBA,
+                        GL.GL_UNSIGNED_BYTE,
+                        powerUpTexture[i].getPixels()
+                );
+            } catch (Exception e){
                 System.out.println(e);
             }
         }
@@ -201,7 +251,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-
         if (GameState == Menu) {
             DrawBackground(gl,2);
 
@@ -222,6 +271,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             healthBarPlayer(gl, 100,xHealthBar,yHealthBar );
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
             drawScoreText(glAutoDrawable);
+            drawPowerUps(gl);
 
 
         }else if(GameState == Pause) {
@@ -358,16 +408,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         player.setPosY(curY);
         player.setPosX(curX);
     }
-
-
-    // Handling Game Objects
-
     public void drawBullets(GL gl) {
             for (Bullet bullet : player.bullets) {
                 if (bullet != null) {
                     if (bullet.timer>=0) {
-                        DrawSpriteWall(gl, (float) bullet.posX, (float) bullet.posY, 8, 1.0f);
-                        bullet.posY += 0.5;
+                        DrawSpriteWall(gl, (float) bullet.posX, (float) (bullet.posY+10), 8, 1.0f);
+                        bullet.posY += 2+GameController.gameSpeed;
                         bullet.timer--;
                     }
                 }
@@ -376,9 +422,78 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 player.firerate--;
     }
 
+    public void powerUpsSpawn(GL gl) {
+
+        float minX = 15;
+        float maxX = 85;
+        float spawnX = minX + (float)(Math.random() * ((maxX - minX) + 1));
+        float spawnY = 100;
+        int randomizer = (int) (Math.random()*4);
+
+        int duration = 300;
+
+        switch (randomizer) {
+            case 0:
+                GameController.powerUpsList.add(new Nitro(spawnX, spawnY));
+                break;
+
+            case 1:
+                GameController.powerUpsList.add(new Repair(spawnX, spawnY));
+                break;
+
+            case 2:
+                GameController.powerUpsList.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
+                break;
+
+            case 3:
+                GameController.powerUpsList.add(new DoubleBullets(spawnX, spawnY, duration));
+                break;
+        }
+    }
+    public void drawPowerUps(GL gl) {
+        if (GameController.powerUpsList.size() < 6 && PowerUPTimer <= 0) {
+            powerUpsSpawn(gl);
+            PowerUPTimer = 500;
+        }
+
+        try {
+            for (int i = 0; i < GameController.powerUpsList.size(); i++) {
+                PowerUp p = GameController.powerUpsList.get(i);
+
+                p.update(player);
+
+                int baseIndex = 0;
+                if (p instanceof Nitro) {
+                    baseIndex = 0;
+                } else if (p instanceof Repair) {
+                    baseIndex = 6;
+                } else if (p instanceof DoubleBullets) {
+                    baseIndex = 12;
+                } else if (p instanceof DoubleScore) {
+                    baseIndex = 18;
+                }
+
+                int animationOffset = (frameCounter  / 3) % 6;
+
+                int finalTexIndex = baseIndex + animationOffset;
+
+                drawSpriteTexture(gl, p.x, p.y, finalTexIndex, 0.7f, powerUpTextures);
+
+                if (p.y <= -6) {
+                    GameController.powerUpsList.remove(i);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        PowerUPTimer--;
+    }
+
     public void drawAndMoveObstacles(GL gl) {
         for (Obstacles obs : obstaclesList) {
-            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
+            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.3f);
 
             obs.setPosY(((int) ((obs.getPosY() - GameController.gameSpeed))));
 
@@ -443,6 +558,27 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
 
+
+
+    public void drawSpriteTexture(GL gl,float x, float y, int index, float scale,int[] textures){
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
+        gl.glPushMatrix();
+        gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);
+        gl.glScaled(0.1*scale, 0.1*scale, 1);
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
     public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
@@ -505,7 +641,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         frameCounter++;
         if (frameCounter > 10) {
             score++;
-            System.out.println(score);
+//            System.out.println(score);
             frameCounter = 0;
         }
         // 2. Convert Score to String to get individual digits
