@@ -312,14 +312,14 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         }
 
         float currentSpeed = (float) player.getSpeed();
-        if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
+        if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_RIGHT) && curY > 0 && curX < maxWidth - 18) {
             curY -= currentSpeed;
             curX += currentSpeed;
             angle = 10;
 
         }
 
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY > 0 && curX > 0) {
             curY -= currentSpeed;
             curX -= currentSpeed;
             angle = -10;
