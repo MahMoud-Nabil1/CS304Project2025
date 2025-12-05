@@ -21,42 +21,36 @@ import GameObjects.*;
 public class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
     double roadOffsetY = 0.0f;
     String UserName;
-    boolean UserNameEntered = false;
     int GameState = 0;
     final int Menu = 0;
     final int Game = 1;
     final int Pause = 2;
     final int End = 3;
     final int Instructions = 4;
-    float btnX = 45;
-    float[] menuBtnsY = {45, 30, 15};
-    float[] pauseBtnY = {30, 15};
-    float btnW = 20;
-    float btnH = 10;
     int windowWidth = 1;
     int windowHeight = 1;
-    float inGamePauseBtnX = 60;
-    float inGamePauseBtnY = 90;
-    float inGamePauseBtnW = 80;
-    float inGamePauseBtnH = 80;
     ArrayList<buttons> menuButtons = new ArrayList<>();
     ArrayList<buttons> pauseButtons = new ArrayList<>();
     buttons inGamePauseBtn;
+    int mx = 0, my = 0;
+    boolean clicked = false;
 
-    int inGamePauseTextureIndex = 7;
-
-    int xM = 700;
-    int yM = 700;
 
     String[] textureNames = {"BackGroundTest.png" , "car.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
     };
+
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
+
     int[] textures = new int[textureNames.length];
 
+
     //---------------------- For Shehab Score 0 1 2 3 4 5 6 7 8 9 ----------------------------
-    String[] scoreTextureNames = {"0.png" , "1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png"};
+    String[] scoreTextureNames = {"0.png" , "1.png","2.png","3.png","4.png","5.png"
+            ,"6.png","7.png","8.png","9.png"};
+
     TextureReader.Texture[] scoreTexture = new TextureReader.Texture[scoreTextureNames.length];
+
     int[] scoreTextures = new int[scoreTextureNames.length];
 
     // Score Variables
@@ -81,44 +75,40 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     TextureReader.Texture[] healthTexture = new TextureReader.Texture[healthTextureNames.length];
     int[] healthTextures = new int[healthTextureNames.length];
 
-
-
     int xHealthBar=10;
     int yHealthBar=90;
 
     //--------------------------For Shehab Collegians-----------------------------------------------------------
     public static ArrayList<GameObject> allObjects = new ArrayList<>();
-
-
     //-------------------------------------------------------------------------------------
 
 
     public BitSet keyBits = new BitSet(256);
+
+    //---------Borders---------
     int maxWidth = 100;
     int maxHeight = 100;
-    float x = maxWidth / 2.0f;
-    float y = maxHeight / 2.0f;
-    int angle = 0;
 
+    //---------initial-coordinates---------
+    int angle = 0;
     PlayerCar player;
     float curX = maxWidth / 2.0f;
     float curY = maxHeight / 2.0f;
-    float playerSpeed = 0.5f;
-    float movementScale = 2.0f;
 
 
+    //---------Obstacles---------
     ArrayList<Obstacles> obstaclesList = new ArrayList<>();
     int numberOfObstacles = 3;
     int obstacleTextureIndex = 7;
     int[] obstaclesPositions = {13, 29, 45, 62, 79};
 
-
-
-
+    //---------init-func---------
     @Override
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+        //---------------------------- MainGame TextureHandling ---------------------------
         gl.glEnable(GL.GL_TEXTURE_2D);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glGenTextures(textureNames.length, textures, 0);
@@ -139,10 +129,18 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             }
         }
 
+        //---------------------------- Mostafa Button-initialization ----------------------------------
 
-        // -------------------For Shehab ScoreTexture------------------------------------
+        menuButtons.add(new buttons(45, 45, 20, 10, 4));
+        menuButtons.add(new buttons(45, 30, 20, 10, 5));
+        menuButtons.add(new buttons(45, 15, 20, 10, 6));
+        inGamePauseBtn = new buttons(85, 85, 15, 10, 4);
+        pauseButtons.add(new buttons(45, 30, 20, 10, 4));
+        pauseButtons.add(new buttons(45, 15, 20, 10, 6));
+
+
+        // --------------------------- Shehab Score Texture  ------------------------------------
         gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);
-
         for (int i = 0; i < scoreTextureNames.length; i++) {
             try {
                 scoreTexture[i] = TextureReader.readTexture(assetsFolderName + "//Score" + "//" + scoreTextureNames[i], true);
@@ -159,14 +157,15 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 System.out.println(e);
             }
         }
-
         renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
-        // ---------------------------Mahmoud UserName Taking---------------------------------
-
-        TakeUserName();
 
 
-        //---------------------------- For Shehab Health Bar ---------------------------------
+        // --------------------------- Mahmoud UserName Taking ---------------------------------
+
+//        TakeUserName();
+
+
+        //---------------------------- For Shehab Health Bar   ---------------------------------
 
         gl.glGenTextures(healthTextureNames.length, healthTextures, 0);
         for(int i = 0; i < healthTextureNames.length; i++){
@@ -185,18 +184,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 System.out.println(e);
             }
         }
-
         //-----------------------------Belal All Objects Taking-------------------------------------------
         allObjects.clear();
-
-
-
-
-
-
-
         player = new PlayerCar((int) curX, (int) curY);
-
         obstaclesList.clear();
         for (int i = 0; i < numberOfObstacles; i++) {
             int randomX = obstaclesPositions[(int) (Math.random() * 5)];
@@ -204,32 +194,17 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             Obstacles obs = new Obstacles(randomX, startY);
             obstaclesList.add(obs);
         }
-        menuButtons.add(new buttons(45, 45, 20, 10, 4));
-        menuButtons.add(new buttons(45, 30, 20, 10, 5));
-        menuButtons.add(new buttons(45, 15, 20, 10, 6));
-
-        pauseButtons.add(new buttons(45, 30, 20, 10, 4));
-        pauseButtons.add(new buttons(45, 15, 20, 10, 6));
-
-        inGamePauseBtn = new buttons(85, 85, 15, 10, 4);
-
-
-
-
-
     }
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
-        double gameSpeed = GameController.gameSpeed;
-
-
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
 
         if (GameState == Menu) {
             DrawBackground(gl,2);
+
             for (buttons btn : menuButtons){
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
@@ -252,6 +227,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         }else if(GameState == Pause) {
             DrawBackground(gl , 3);
 
+
             for (buttons btn : pauseButtons) {
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
@@ -261,38 +237,122 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         }
     }
-    @Override
-    public void keyTyped(KeyEvent e) {
 
-    }
+    //---------------------------- KeyBoardHandling ---------------------------
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyBits.set(keyCode);
-
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keyBits.clear(keyCode);
         angle = 0;
     }
+
     public boolean isKeyPressed(final int keyCode) {
         return keyBits.get(keyCode);
     }
+
+    //---------------------------- MouseHandling ---------------------------
     @Override
+    public void mouseClicked(MouseEvent e) {
+        double mouseX = ((double) e.getX() / windowWidth) * maxWidth;
+        double mouseY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
+
+
+        if (GameState == Menu) {
+            for (int i = 0; i < menuButtons.size(); i++) {
+                if (menuButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
+                    handleButton(i);
+                    return;
+                }
+            }
+        }
+
+        else
+        if (GameState == Pause) {
+            for (int i = 0; i < pauseButtons.size(); i++) {
+                if (pauseButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
+                    handleButton(i + 3);// Resume أو Quit
+                    return;
+                }
+            }
+        }
+
+        else
+        if (GameState == Game) {
+            if (inGamePauseBtn.isClicked(mouseX, mouseY ,  maxWidth , maxHeight)) {
+                GameState = Pause;
+            }
+        }
+    }
+    @Override
+    public void mousePressed(MouseEvent e) {
+        mx = e.getX();
+        my = e.getY();
+        clicked = true;
+    }
+
     public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {
         windowWidth = i2;
         windowHeight = i3;
     }
-    @Override
-    public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {
 
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    // Player Movement
+    public void updateMovement() {
 
+        if(isKeyPressed(KeyEvent.VK_Z)){
+            player.nitroOn();
+        }
+        if (isKeyPressed(KeyEvent.VK_SPACE)) {
+            player.shoot();
+        }
+
+        float currentSpeed = (float) player.getSpeed();
+
+        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
+            curY += currentSpeed;
+            curX += currentSpeed;
+            angle = -45;
+            player.setPosY(curY);
+            player.setPosX(curX);
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
+            curY += currentSpeed;
+            curX -= currentSpeed;
+            angle = 45;
+            player.setPosY(curY);
+            player.setPosX(curX);
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){
+            curY += currentSpeed;
+            player.setPosY(curY);
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
+            curY -= currentSpeed+.2;
+            player.setPosY(curY);
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
+            curX -= currentSpeed;
+            player.setPosX(curX);
+        }
+
+        else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {
+            curX += currentSpeed;
+            player.setPosX(curX);
+        }
     }
+
+
+    // Handling Game Objects
+
     public void drawBullets(GL gl) {
             for (Bullet bullet : player.bullets) {
                 if (bullet != null) {
@@ -306,6 +366,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             if (player.firerate>0)
                 player.firerate--;
     }
+
     public void drawAndMoveObstacles(GL gl) {
         for (Obstacles obs : obstaclesList) {
             DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);
@@ -342,9 +403,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
     public void background_loop(GL gl) {
-
         roadOffsetY -= 0.02f * GameController.gameSpeed;
-
         if (roadOffsetY <= -2.0f) {
             roadOffsetY = 0.0f;
         }
@@ -374,114 +433,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glDisable(GL.GL_BLEND);
     }
 
-    public void MakeButton(GL gl, int index){
-        float btnY = menuBtnsY[index];
-        int TexturePosition = index + 4;
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[TexturePosition]);
-        gl.glPushMatrix();
-        gl.glTranslated(btnX/(maxWidth/2.0) - 0.9, btnY/(maxHeight/2.0) - 0.9, 0);
-        gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
-        gl.glEnd();
-        gl.glPopMatrix();
-    }
-    public void DrawPauseButton(GL gl, int index){
-        float centerX = btnX;
-        float centerY = pauseBtnY[index];
-        int textureIndex = (index == 0) ? 4 : 6;
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureIndex]);
-        gl.glPushMatrix();
-        gl.glTranslated(centerX/(maxWidth/2.0) - 0.9, centerY/(maxHeight/2.0) - 0.9, 0);
-        gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0,0); gl.glVertex3f(-1,-1,-1);
-        gl.glTexCoord2f(1,0); gl.glVertex3f( 1,-1,-1);
-        gl.glTexCoord2f(1,1); gl.glVertex3f( 1, 1,-1);
-        gl.glTexCoord2f(0,1); gl.glVertex3f(-1, 1,-1);
-        gl.glEnd();
-        gl.glPopMatrix();
-        gl.glDisable(GL.GL_BLEND);
-    }
-    public void DrawInGamePauseButton(GL gl) {
 
-
-
-        int xPos = 90;
-        int yPos = 90;
-        int textureIndex =4 ;
-
-        double glX = xPos / 50.0 - 1.0;
-        double glY = yPos / 50.0 - 1.0;
-
-
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureIndex]);
-
-
-        gl.glPushMatrix();
-        gl.glTranslated(glX, glY, 0);
-        gl.glScaled(0.20, 0.15, 1);
-
-        gl.glBegin(GL.GL_QUADS);
-
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
-        gl.glEnd();
-
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
-
-
-    public void updateMovement() {
-
-       if(isKeyPressed(KeyEvent.VK_Z)){
-                player.nitroOn();
-       }
-       if (isKeyPressed(KeyEvent.VK_SPACE)) {
-                player.shoot();
-       }
-
-        float currentSpeed = (float) player.getSpeed();
-
-        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
-            curY += currentSpeed;
-            curX += currentSpeed;
-            angle = -45;
-            player.setPosY(curY);
-            player.setPosX(curX);
-        } else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
-            curY += currentSpeed;
-            curX -= currentSpeed;
-            angle = 45;
-            player.setPosY(curY);
-            player.setPosX(curX);
-        } else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){
-            curY += currentSpeed;
-            player.setPosY(curY);
-        }
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
-            curY -= currentSpeed+.2;
-            player.setPosY(curY);
-        }
-        else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
-            curX -= currentSpeed;
-            player.setPosX(curX);
-        }
-        else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {
-            curX += currentSpeed;
-            player.setPosX(curX);
-        }
-    }
     public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
@@ -523,86 +475,18 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glDisable(GL.GL_BLEND);
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
+    // button handling
 
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
-    }
     private void handleButton(int id) {
 
         switch (id) {
-
-
             case 0: GameState = Game; break;
             case 1: GameState = Instructions; break;
             case 2: System.exit(0); break;
-
-
             case 3: GameState = Game; break;
             case 4: System.exit(0); break;
-
-
             case 5: GameState = Pause; break;
-
         }
-    }
-
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        double mouseX = ((double) e.getX() / windowWidth) * maxWidth;
-        double mouseY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
-
-
-        if (GameState == Menu) {
-            for (int i = 0; i < menuButtons.size(); i++) {
-                if (menuButtons.get(i).isClicked(mouseX, mouseY)) {
-                    handleButton(i);
-                    return;
-                }
-            }
-        }
-
-
-        if (GameState == Pause) {
-            for (int i = 0; i < pauseButtons.size(); i++) {
-                if (pauseButtons.get(i).isClicked(mouseX, mouseY)) {
-                    handleButton(i + 3);   // Resume أو Quit
-                    return;
-                }
-            }
-        }
-
-
-        if (GameState == Game) {
-            if (inGamePauseBtn.isClicked(mouseX, mouseY)) {
-                GameState = Pause;
-            }
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
 
@@ -804,7 +688,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
 
-    //------------------------------------Collisons---------------------------------
+    //------------------------------------Collisions---------------------------------
 
     public void checkCollision(GameObject obj1, GameObject obj2) {
         if (obj1.getBounds().intersects(obj2.getBounds())) {
@@ -898,5 +782,22 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         }
     }
 
+
+    @Override
+    public void mouseDragged(MouseEvent e) {}
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {}
+    @Override
+    public void actionPerformed(ActionEvent e) {}
+    @Override
+    public void keyTyped(KeyEvent e) {}
 
 }
