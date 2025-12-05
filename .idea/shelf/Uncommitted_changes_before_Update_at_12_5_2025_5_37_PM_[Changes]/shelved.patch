@@ -1,0 +1,741 @@
+Index: src/GameObjects/Car.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\n\r\npublic class Car extends GameObject {\r\n    protected double speed;\r\n    protected int damage;\r\n    protected int health;\r\n    protected  double damageFactor;\r\n    Car(double posX, double posY, double speed, int damage, int health) {\r\n        super(posX, posY);\r\n        this.speed = speed;\r\n        this.damage = damage;\r\n        this.health = health;\r\n        this.damageFactor = 1;\r\n    }\r\n\r\n    public double getSpeed() {\r\n        return speed;\r\n    }\r\n\r\n    public void setSpeed(double speed) {\r\n        this.speed = speed;\r\n    }\r\n\r\n    public int getHealth() {\r\n        return health;\r\n    }\r\n\r\n    public void setHealth(int health) {\r\n        this.health = health;\r\n    }\r\n\r\n    public int getDamage() {\r\n        return damage;\r\n    }\r\n\r\n    public void setDamage(int damage) {\r\n        this.damage = damage;\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/Car.java b/src/GameObjects/Car.java
+--- a/src/GameObjects/Car.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/Car.java	(date 1764944445611)
+@@ -5,6 +5,7 @@
+     protected int damage;
+     protected int health;
+     protected  double damageFactor;
++
+     Car(double posX, double posY, double speed, int damage, int health) {
+         super(posX, posY);
+         this.speed = speed;
+Index: src/GameObjects/Bullet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\n\r\npublic class Bullet extends GameObject {\r\n    int speed;\r\n    public int damage;\r\n    public int timer=1000;\r\n    public Bullet(double posX,double posY,int damage) {\r\n        super(posX,posY);\r\n        this.posX = posX;\r\n        this.posY = posY;\r\n        this.speed = 20;\r\n        this.damage = damage;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/Bullet.java b/src/GameObjects/Bullet.java
+--- a/src/GameObjects/Bullet.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/Bullet.java	(date 1764944934861)
+@@ -4,11 +4,17 @@
+     int speed;
+     public int damage;
+     public int timer=1000;
++
+     public Bullet(double posX,double posY,int damage) {
+         super(posX,posY);
+         this.posX = posX;
+         this.posY = posY;
+         this.speed = 20;
+         this.damage = damage;
++
++        // CRITICAL: Set specific size for Bullet
++        // If you don't do this, the bullet will have a huge hit-box (50x100)
++        this.width = 10;
++        this.height = 20;
+     }
+ }
+Index: src/GameObjects/LightCar.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\n\r\npublic class LightCar extends Car{\r\n    int x;\r\n    int y;\r\n    LightCar(int posX, int posY) {\r\n        super(posX,posY,100,20,100);\r\n    }\r\n    LightCar(int posX, int posY, int speed, int damage, int health) {\r\n        super(posX,posY,speed, damage, health);\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/LightCar.java b/src/GameObjects/LightCar.java
+--- a/src/GameObjects/LightCar.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/LightCar.java	(date 1764944627918)
+@@ -1,13 +1,21 @@
+ package GameObjects;
+ 
+ public class LightCar extends Car{
+-    int x;
+-    int y;
++
++    //--------------!!!!!!!!!!!!!!!!DONT ADD X AND Y USE posx posy!!!!!!!!!!!!!!!!!!!!!!!--------------------------
++    //int x;
++    //int y;
+     LightCar(int posX, int posY) {
+         super(posX,posY,100,20,100);
++
++        // Set specific size for Light Car
++        this.width = 50;
++        this.height = 100;
+     }
+     LightCar(int posX, int posY, int speed, int damage, int health) {
+         super(posX,posY,speed, damage, health);
++        this.width = 50;
++        this.height = 100;
+ 
+     }
+ }
+Index: src/GameObjects/Obstacles.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\n\r\npublic class Obstacles extends GameObject {\r\n    int damage;\r\n    public int timer=1000;\r\n    public Obstacles(int posX, int posY) {\r\n        super(posX, posY);\r\n        damage = 100;\r\n    }\r\n    Obstacles(int posX, int posY,int damage){\r\n        super(posX, posY);\r\n        this.damage = damage;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/Obstacles.java b/src/GameObjects/Obstacles.java
+--- a/src/GameObjects/Obstacles.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/Obstacles.java	(date 1764947827615)
+@@ -1,14 +1,28 @@
+ package GameObjects;
+ 
+ public class Obstacles extends GameObject {
+-    int damage;
++    public int damage;
+     public int timer=1000;
+     public Obstacles(int posX, int posY) {
+         super(posX, posY);
+         damage = 100;
++
++        this.width = 40;
++        this.height = 40;
+     }
+     Obstacles(int posX, int posY,int damage){
+         super(posX, posY);
+         this.damage = damage;
++
++        // Set size here too
++        this.width = 40;
++        this.height = 40;
+     }
++
++
++    @Override
++    public void takeDamage(int amount) {
++        // Do nothing. I am a rock. I cannot die.
++    }
++
+ }
+Index: src/GameObjects/PlayerCar.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\nimport GameController.GameController;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class PlayerCar extends Car{\r\n    protected int nitro=100;\r\n    public ArrayList<Bullet> bullets;\r\n    boolean doubleBulletActive;\r\n    int score=0;\r\n    public int firerate = 0;\r\n    public PlayerCar(float posX, float posY) {\r\n        super(posX,posY,.7,20,100);\r\n        bullets=new ArrayList<>();\r\n    }\r\n    PlayerCar(float posX, float posY, int speed, int damage, int health) {\r\n        super(posX,posY,speed, damage, health);\r\n        bullets=new ArrayList<>();\r\n    }\r\n    private boolean nitroActive = false;\r\n\r\n    public void nitroOn() {\r\n        if(nitro > 0 && !nitroActive) {\r\n            this.damage += 50;\r\n            GameController.gameSpeed = 2 ;\r\n            damageFactor = 1.5;\r\n            nitro--;\r\n            nitroActive = true;\r\n        }\r\n        if (nitro<=0&&!nitroActive) {\r\n            GameController.gameSpeed =1;\r\n            nitroOff();\r\n            System.out.println(\"nitroOff\");\r\n        }\r\n    }\r\n\r\n    public void nitroOff() {\r\n        if(nitroActive) {\r\n            this.speed -= 50;\r\n            this.damage -= 50;\r\n            nitroActive = false;\r\n\r\n        }\r\n    }\r\n    public void shoot() {\r\n        if (firerate<=0) {\r\n            if(doubleBulletActive) {\r\n                bullets.add(new Bullet(posX - 5, posY, damage));\r\n                bullets.add(new Bullet(posX + 5, posY, damage));\r\n            } else {\r\n                bullets.add(new Bullet(posX, posY, damage));\r\n            }\r\n            firerate=30;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/PlayerCar.java b/src/GameObjects/PlayerCar.java
+--- a/src/GameObjects/PlayerCar.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/PlayerCar.java	(date 1764944807460)
+@@ -16,6 +16,9 @@
+     PlayerCar(float posX, float posY, int speed, int damage, int health) {
+         super(posX,posY,speed, damage, health);
+         bullets=new ArrayList<>();
++        //
++        this.width = 50;
++        this.height = 100;
+     }
+     private boolean nitroActive = false;
+ 
+@@ -36,7 +39,7 @@
+ 
+     public void nitroOff() {
+         if(nitroActive) {
+-            this.speed -= 50;
++            this.speed -= 50;   // Be careful, you are modifying speed here, but speed is 0.7 above?
+             this.damage -= 50;
+             nitroActive = false;
+ 
+Index: src/GameObjects/GameObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package GameObjects;\r\n\r\npublic class GameObject {\r\n    public double posX;\r\n    public double posY;\r\n    GameObject(double posX, double posY){\r\n        this.posX = posX;\r\n        this.posY = posY;\r\n    }\r\n\r\n    public double getPosX() {\r\n        return posX;\r\n    }\r\n\r\n    public void setPosX(float posX) {\r\n        this.posX = posX;\r\n    }\r\n\r\n    public double getPosY() {\r\n        return posY;\r\n    }\r\n\r\n    public void setPosY(float posY) {\r\n        this.posY = posY;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/GameObject.java b/src/GameObjects/GameObject.java
+--- a/src/GameObjects/GameObject.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/GameObject.java	(date 1764944413456)
+@@ -1,8 +1,18 @@
+ package GameObjects;
++import java.awt.Rectangle;
+ 
+ public class GameObject {
+     public double posX;
+     public double posY;
++
++    // --------------------Shehab Colligion Related-------------------------------
++    public int width = 50;
++    public int height = 100;
++
++    public int health = 100; // Default health
++    public boolean alive=true;
++
++    //Constructor
+     GameObject(double posX, double posY){
+         this.posX = posX;
+         this.posY = posY;
+@@ -23,4 +33,20 @@
+     public void setPosY(float posY) {
+         this.posY = posY;
+     }
++
++    // --------------------Shehab Colligion Related-------------------------------
++    // Helper to get the rectangle for collision math
++    public Rectangle getBounds() {
++        return new Rectangle((int)posX, (int)posY, width, height);
++    }
++
++    // General method to take damage
++    public void takeDamage(int amount) {
++        this.health -= amount;
++        if (this.health <= 0) {
++            this.alive = false;
++        }
++    }
++
++
+ }
+Index: src/CarGLEventListener.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import GameObjects.Bullet;\r\nimport GameObjects.LightCar;\r\nimport GameObjects.Obstacles;\r\nimport GameObjects.PlayerCar;\r\nimport Texture.TextureReader;\r\nimport GameController.GameController;\r\nimport javax.media.opengl.GL;\r\nimport javax.media.opengl.GLAutoDrawable;\r\nimport javax.media.opengl.GLEventListener;\r\nimport javax.media.opengl.glu.GLU;\r\nimport javax.swing.*;\r\nimport java.awt.event.*;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.BitSet;\r\nimport java.util.List;\r\n\r\npublic class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {\r\n    double roadOffsetY = 0.0f;\r\n    String UserName;\r\n    boolean UserNameEntered = false;\r\n    int GameState = 2;\r\n    final int Menu = 0;\r\n    final int Game = 1;\r\n    final int Pause = 2;\r\n    final int End = 3;\r\n    final int Instructions = 4;\r\n    float btnX = 45;\r\n    float[] menuBtnsY = {45, 30, 15};\r\n    float[] pauseBtnY = {30, 15};\r\n    float btnW = 20;\r\n    float btnH = 10;\r\n    int windowWidth = 1;\r\n    int windowHeight = 1;\r\n\r\n    int xM = 700;\r\n    int yM = 700;\r\n\r\n    String[] textureNames = {\"BackGroundTest.png\" , \"Man1.png\" , \"MenuBackGround.png\" , \"PauseMenu.png\"\r\n            , \"StartButton.png\" , \"InstructionsButton.png\" , \"QuitButton.png\" , \"obstacle.png\",\"bullet.png\"\r\n    };\r\n    TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];\r\n    int[] textures = new int[textureNames.length];\r\n\r\n    //---------------------- For Shehab Score 0 1 2 3 4 5 6 7 8 9 ----------------------------\r\n    String[] scoreTextureNames = {\"0.png\" , \"1.png\",\"2.png\",\"3.png\",\"4.png\",\"5.png\",\"6.png\",\"7.png\",\"8.png\",\"9.png\"};\r\n    TextureReader.Texture[] scoreTexture = new TextureReader.Texture[scoreTextureNames.length];\r\n    int[] scoreTextures = new int[scoreTextureNames.length];\r\n\r\n    // Score Variables\r\n    int frameCounter = 0;\r\n    int score = 0;\r\n    int xScore = 10;\r\n    int yScore = 90;\r\n\r\n\r\n    public BitSet keyBits = new BitSet(256);\r\n    int maxWidth = 100;\r\n    int maxHeight = 100;\r\n    float x = maxWidth / 2.0f;\r\n    float y = maxHeight / 2.0f;\r\n    int angle = 0;\r\n\r\n    PlayerCar player;\r\n    float curX = maxWidth / 2.0f;\r\n    float curY = maxHeight / 2.0f;\r\n    float playerSpeed = 0.5f;\r\n    float movementScale = 2.0f;\r\n\r\n\r\n    ArrayList<Obstacles> obstaclesList = new ArrayList<>();\r\n    int numberOfObstacles = 5;\r\n    int obstacleTextureIndex = 7;\r\n\r\n\r\n\r\n\r\n    @Override\r\n    public void init(GLAutoDrawable gld) {\r\n        GL gl = gld.getGL();\r\n        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);\r\n        gl.glEnable(GL.GL_TEXTURE_2D);\r\n        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);\r\n        gl.glGenTextures(textureNames.length, textures, 0);\r\n        for (int i = 0; i < textureNames.length; i++) {\r\n            try {\r\n                texture[i] = TextureReader.readTexture(assetsFolderName + \"//\" + textureNames[i], true);\r\n                gl.glBindTexture(GL.GL_TEXTURE_2D, textures[i]);\r\n                new GLU().gluBuild2DMipmaps(\r\n                        GL.GL_TEXTURE_2D,\r\n                        GL.GL_RGBA,\r\n                        texture[i].getWidth(), texture[i].getHeight(),\r\n                        GL.GL_RGBA,\r\n                        GL.GL_UNSIGNED_BYTE,\r\n                        texture[i].getPixels()\r\n                );\r\n            } catch (IOException e) {\r\n                System.out.println(e);\r\n            }\r\n        }\r\n\r\n\r\n        // -------------------For Shehab ScoreTexture------------------------------------\r\n        gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);\r\n\r\n        for (int i = 0; i < scoreTextureNames.length; i++) {\r\n            try {\r\n                scoreTexture[i] = TextureReader.readTexture(assetsFolderName + \"//Score\" + \"//\" + scoreTextureNames[i], true);\r\n                gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[i]);\r\n                new GLU().gluBuild2DMipmaps(\r\n                        GL.GL_TEXTURE_2D,\r\n                        GL.GL_RGBA,\r\n                        scoreTexture[i].getWidth(), scoreTexture[i].getHeight(),\r\n                        GL.GL_RGBA,\r\n                        GL.GL_UNSIGNED_BYTE,\r\n                        scoreTexture[i].getPixels()\r\n                );\r\n            } catch (IOException e) {\r\n                System.out.println(e);\r\n            }\r\n        }\r\n\r\n        player = new PlayerCar((int) curX, (int) curY);\r\n\r\n        obstaclesList.clear();\r\n        for (int i = 0; i < numberOfObstacles; i++) {\r\n            int randomX = 10 + (int)(Math.random() * 80);\r\n            int startY = maxHeight + (i * 30);\r\n            Obstacles obs = new Obstacles(randomX, startY);\r\n            obstaclesList.add(obs);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void display(GLAutoDrawable glAutoDrawable) {\r\n        double gameSpeed = GameController.gameSpeed;\r\n\r\n//        if(!UserNameEntered) {\r\n//            TakeUserName();\r\n//            UserNameEntered = true;\r\n//        }\r\n        GL gl = glAutoDrawable.getGL();\r\n        gl.glClear(GL.GL_COLOR_BUFFER_BIT);\r\n        gl.glLoadIdentity();\r\n\r\n        if (GameState == Menu) {\r\n            DrawBackground(gl,2);\r\n            for (int i = 0; i < menuBtnsY.length; i++) {\r\n                MakeButton(gl, i);\r\n            }\r\n            gl.glEnable(GL.GL_TEXTURE_2D);\r\n            gl.glDisable(GL.GL_BLEND);\r\n\r\n        } else if (GameState == Game) {\r\n            background_loop(gl);\r\n            drawAndMoveObstacles(gl);\r\n            drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1f);\r\n            updateMovement();\r\n            drawBullets(gl);\r\n\r\n            score(gl , xScore , yScore);\r\n\r\n\r\n        }else if(GameState == Pause) {\r\n            DrawBackground(gl , 3);\r\n\r\n            for(int i = 0; i < pauseBtnY.length; i++){\r\n                DrawPauseButton(gl, i);\r\n            }\r\n        }else if(GameState == End) {\r\n\r\n        } else if (GameState == Instructions) {\r\n\r\n        }\r\n    }\r\n    @Override\r\n    public void keyTyped(KeyEvent e) {\r\n\r\n    }\r\n    @Override\r\n    public void keyPressed(KeyEvent e) {\r\n        int keyCode = e.getKeyCode();\r\n        keyBits.set(keyCode);\r\n\r\n    }\r\n    @Override\r\n    public void keyReleased(KeyEvent e) {\r\n        int keyCode = e.getKeyCode();\r\n        keyBits.clear(keyCode);\r\n        angle = 0;\r\n    }\r\n    public boolean isKeyPressed(final int keyCode) {\r\n        return keyBits.get(keyCode);\r\n    }\r\n    @Override\r\n    public void reshape(GLAutoDrawable glAutoDrawable, int i, int i1, int i2, int i3) {\r\n        windowWidth = i2;\r\n        windowHeight = i3;\r\n    }\r\n    @Override\r\n    public void displayChanged(GLAutoDrawable glAutoDrawable, boolean b, boolean b1) {\r\n\r\n    }\r\n    @Override\r\n    public void actionPerformed(ActionEvent e) {\r\n\r\n    }\r\n    public void drawBullets(GL gl) {\r\n            for (Bullet bullet : player.bullets) {\r\n                if (bullet != null) {\r\n                    if (bullet.timer>=0) {\r\n                        DrawSpriteWall(gl, (float) bullet.posX, (float) bullet.posY, 8, 0.3f);\r\n                        bullet.posY += 0.5;\r\n                        bullet.timer--;\r\n                    }\r\n                }\r\n            }\r\n            if (player.firerate>0)\r\n                player.firerate--;\r\n    }\r\n    public void drawAndMoveObstacles(GL gl) {\r\n        for (Obstacles obs : obstaclesList) {\r\n            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.0f);\r\n\r\n            obs.setPosY(((int) (obs.getPosY() - 1 - GameController.gameSpeed)));\r\n\r\n            if (obs.getPosY() < -10) {\r\n                obs.setPosY(maxHeight + 10);\r\n\r\n                int newX = (int)(10 + (int)(Math.random() * 80) * GameController.gameSpeed);\r\n                obs.setPosX(newX);\r\n            }\r\n        }\r\n    }\r\n\r\n    public void DrawBackground(GL gl , int index){\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);\r\n\r\n        gl.glPushMatrix();\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f);\r\n        gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f);\r\n        gl.glVertex3f(1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f);\r\n        gl.glVertex3f(1.0f, 1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f);\r\n        gl.glVertex3f(-1.0f, 1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n\r\n    public void background_loop(GL gl) {\r\n\r\n        roadOffsetY -= 0.02f * GameController.gameSpeed;\r\n\r\n        if (roadOffsetY <= -2.0f) {\r\n            roadOffsetY = 0.0f;\r\n        }\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[0]);\r\n\r\n        gl.glPushMatrix();\r\n        gl.glTranslated(0.0f, roadOffsetY, 0.0f);\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n\r\n        gl.glPushMatrix();\r\n        gl.glTranslated(0.0f, roadOffsetY + 2.0f, 0.0f);\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n\r\n    public void MakeButton(GL gl, int index){\r\n        float btnY = menuBtnsY[index];\r\n        int TexturePosition = index + 4;\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[TexturePosition]);\r\n        gl.glPushMatrix();\r\n        gl.glTranslated(btnX/(maxWidth/2.0) - 0.9, btnY/(maxHeight/2.0) - 0.9, 0);\r\n        gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n    }\r\n    public void DrawPauseButton(GL gl, int index){\r\n        float centerX = btnX;\r\n        float centerY = pauseBtnY[index];\r\n        int textureIndex = (index == 0) ? 4 : 6;\r\n\r\n\r\n\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[textureIndex]);\r\n\r\n        gl.glPushMatrix();\r\n        gl.glTranslated(centerX/(maxWidth/2.0) - 0.9, centerY/(maxHeight/2.0) - 0.9, 0);\r\n        gl.glScaled(0.1 * (btnW/10.0), 0.1 * (btnH/10.0), 1);\r\n\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0,0); gl.glVertex3f(-1,-1,-1);\r\n        gl.glTexCoord2f(1,0); gl.glVertex3f( 1,-1,-1);\r\n        gl.glTexCoord2f(1,1); gl.glVertex3f( 1, 1,-1);\r\n        gl.glTexCoord2f(0,1); gl.glVertex3f(-1, 1,-1);\r\n        gl.glEnd();\r\n\r\n        gl.glPopMatrix();\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n\r\n    public void TakeUserName(){\r\n        UserName = JOptionPane.showInputDialog(null, \"Please enter your name:\");\r\n\r\n        if (UserName != null && !UserName.trim().isEmpty()) {\r\n            System.out.println(\"User entered: \" + UserName);\r\n        } else {\r\n            System.out.println(\"User cancelled or entered nothing.\");\r\n        }\r\n    }\r\n\r\n    public void updateMovement() {\r\n\r\n       if(isKeyPressed(KeyEvent.VK_Z)){\r\n                player.nitroOn();\r\n       }\r\n       if (isKeyPressed(KeyEvent.VK_SPACE)) {\r\n                player.shoot();\r\n       }\r\n\r\n        float currentSpeed = (float) player.getSpeed();\r\n\r\n        if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {\r\n            curY += currentSpeed;\r\n            curX += currentSpeed;\r\n            angle = -45;\r\n            player.setPosY(curY);\r\n            player.setPosX(curX);\r\n        } else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {\r\n            curY += currentSpeed;\r\n            curX -= currentSpeed;\r\n            angle = 45;\r\n            player.setPosY(curY);\r\n            player.setPosX(curX);\r\n        } else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){\r\n            curY += currentSpeed;\r\n            player.setPosY(curY);\r\n        }\r\n        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){\r\n            curY -= currentSpeed;\r\n            player.setPosY(curY);\r\n        }\r\n        else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){\r\n            curX -= currentSpeed;\r\n            player.setPosX(curX);\r\n        }\r\n        else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {\r\n            curX += currentSpeed;\r\n            player.setPosX(curX);\r\n        }\r\n\r\n\r\n\r\n\r\n    }\r\n    public void DrawSpriteWall(GL gl,float x, float y, int index, float scale){\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);\r\n        gl.glPushMatrix();\r\n        gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);\r\n        gl.glScaled(0.1*scale, 0.1*scale, 1);\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f);\r\n        gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f);\r\n        gl.glVertex3f(1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f);\r\n        gl.glVertex3f(1.0f, 1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f);\r\n        gl.glVertex3f(-1.0f, 1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n    public void drawSprite(GL gl,float x, float y, int index, float scale){\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);\r\n        gl.glPushMatrix();\r\n        gl.glTranslated( x/(maxWidth/2.0) - 0.9, y/(maxHeight/2.0) - 0.9, 0);\r\n        gl.glScaled(0.1*scale, 0.1*scale, 1);\r\n        gl.glRotated(angle, 0, 0, 1);\r\n        gl.glBegin(GL.GL_QUADS);\r\n        gl.glTexCoord2f(0.0f, 0.0f);\r\n        gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 0.0f);\r\n        gl.glVertex3f(1.0f, -1.0f, -1.0f);\r\n        gl.glTexCoord2f(1.0f, 1.0f);\r\n        gl.glVertex3f(1.0f, 1.0f, -1.0f);\r\n        gl.glTexCoord2f(0.0f, 1.0f);\r\n        gl.glVertex3f(-1.0f, 1.0f, -1.0f);\r\n        gl.glEnd();\r\n        gl.glPopMatrix();\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n\r\n    @Override\r\n    public void mouseDragged(MouseEvent e) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void mouseMoved(MouseEvent e) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void mouseClicked(MouseEvent e) {\r\n        if (GameState == Menu) {\r\n            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;\r\n            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;\r\n\r\n            for (int i = 0; i < menuBtnsY.length; i++) {\r\n\r\n                float centerX = btnX;\r\n                float centerY = menuBtnsY[i];\r\n                float left = centerX - (btnW / 2.0f);\r\n                float right = centerX + (btnW / 2.0f);\r\n                float bottom = centerY - (btnH / 2.0f);\r\n                float top = centerY + (btnH / 2.0f);\r\n                if (convertedX >= left && convertedX <= right &&\r\n                        convertedY >= bottom && convertedY <= top) {\r\n                    switch (i) {\r\n                        case 0:\r\n                            GameState = Game;\r\n                            break;\r\n                        case 1:\r\n                            GameState = Instructions;\r\n                            break;\r\n                        case 2:\r\n                            System.exit(0);\r\n                            break;\r\n                    }\r\n                }\r\n            }\r\n        }else if(GameState == Game){\r\n\r\n        }else if(GameState == Pause){\r\n            double convertedX = ((double) e.getX() / windowWidth) * maxWidth;\r\n            double convertedY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;\r\n\r\n            for(int i = 0; i < pauseBtnY.length; i++){\r\n\r\n                float centerX = btnX;\r\n                float centerY = pauseBtnY[i];\r\n\r\n                float left   = centerX - (btnW / 2.0f);\r\n                float right  = centerX + (btnW / 2.0f);\r\n                float bottom = centerY - (btnH / 2.0f);\r\n                float top    = centerY + (btnH / 2.0f);\r\n\r\n                if(convertedX >= left && convertedX <= right &&\r\n                        convertedY >= bottom && convertedY <= top){\r\n\r\n                    if(i == 0){\r\n                        GameState = Game;   // Resume\r\n                    }\r\n                    else if(i == 1){\r\n                        System.exit(0);     // Exit\r\n                    }\r\n                }\r\n            }\r\n        }else if(GameState == End){\r\n\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void mousePressed(MouseEvent e) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void mouseReleased(MouseEvent e) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void mouseEntered(MouseEvent e) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void mouseExited(MouseEvent e) {\r\n\r\n    }\r\n\r\n\r\n    // ----------------------------------Score-----------------------\r\n    public void score(GL gl, int x, int y) {\r\n        // 1. Update logic (Keep your frame counter-logic)\r\n        frameCounter++;\r\n        if (frameCounter > 10) {\r\n            score++;\r\n            System.out.println(score);\r\n            frameCounter = 0;\r\n        }\r\n        // 2. Convert Score to String to get individual digits\r\n        String scoreString = Integer.toString(score);\r\n        // 3. Drawing Logic\r\n        gl.glEnable(GL.GL_BLEND);\r\n        gl.glColor3f(1.0f, 1.0f, 1.0f);\r\n        // Iterate through every digit in the string\r\n        for (int i = 0; i < scoreString.length(); i++) {\r\n            // Get the character (e.g., '1') and convert to int (1)\r\n            char c = scoreString.charAt(i);\r\n            int digit = Character.getNumericValue(c);\r\n            gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);\r\n            gl.glPushMatrix();\r\n            // MATH CONVERSION\r\n            // xOffset: multiply index 'i' by a spacing value (e.g., 10 pixels) so digits don't overlap\r\n            int digitWidth = 4; // Adjust this based on how wide your numbers are\r\n            int currentX = x + (i * digitWidth);\r\n            double glX = currentX / 50.0 - 1.0;\r\n            double glY = y / 50.0 - 1.0;\r\n            gl.glTranslated(glX, glY, 0);\r\n            gl.glScaled(0.13, 0.13, 1); // Reduced scale slightly so numbers fit better\r\n            gl.glBegin(GL.GL_QUADS);\r\n            gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);\r\n            gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);\r\n            gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);\r\n            gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);\r\n            gl.glEnd();\r\n\r\n            gl.glPopMatrix();\r\n        }\r\n\r\n        gl.glDisable(GL.GL_BLEND);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/CarGLEventListener.java b/src/CarGLEventListener.java
+--- a/src/CarGLEventListener.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/CarGLEventListener.java	(date 1764947727029)
+@@ -1,19 +1,22 @@
+-import GameObjects.Bullet;
+-import GameObjects.LightCar;
+-import GameObjects.Obstacles;
+-import GameObjects.PlayerCar;
++import GameObjects.*;
++import ScoreRelated.ScoreEntry;
+ import Texture.TextureReader;
+ import GameController.GameController;
++import com.sun.opengl.util.j2d.TextRenderer;
++
+ import javax.media.opengl.GL;
+ import javax.media.opengl.GLAutoDrawable;
+ import javax.media.opengl.GLEventListener;
+ import javax.media.opengl.glu.GLU;
+ import javax.swing.*;
++import java.awt.*;
+ import java.awt.event.*;
++import java.io.File;
++import java.io.FileWriter;
+ import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.BitSet;
++import java.util.*;
+ import java.util.List;
++import GameObjects.*;
+ 
+ public class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
+     double roadOffsetY = 0.0f;
+@@ -53,6 +56,33 @@
+     int xScore = 10;
+     int yScore = 90;
+ 
++    // Inside Class Variables
++    int healthAnimCounter = 0; // Counts frames for the health bar
++    TextRenderer renderer;
++
++    //---------------------- For Shehab HealthBar ----------------------------------------
++
++    String[] healthTextureNames = {
++            "FullState1.png" ,"HealthReceviedFull.png" //100
++            ,"3_4State1.png","3_4State2.png"            //75
++            ,"HalfState1.png","HalfState2.png"
++            ,"LowState1.png","LowState2.png"
++    };
++
++    TextureReader.Texture[] healthTexture = new TextureReader.Texture[healthTextureNames.length];
++    int[] healthTextures = new int[healthTextureNames.length];
++
++
++
++    int xHealthBar=10;
++    int yHealthBar=90;
++
++    //--------------------------For Shehab Collegians-----------------------------------------------------------
++    public static ArrayList<GameObject> allObjects = new ArrayList<>();
++
++
++    //-------------------------------------------------------------------------------------
++
+ 
+     public BitSet keyBits = new BitSet(256);
+     int maxWidth = 100;
+@@ -120,6 +150,41 @@
+             }
+         }
+ 
++        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
++        // ---------------------------Mahmoud UserName Taking---------------------------------
++
++        TakeUserName();
++
++
++        //---------------------------- For Shehab Health Bar ---------------------------------
++
++        gl.glGenTextures(healthTextureNames.length, healthTextures, 0);
++        for(int i = 0; i < healthTextureNames.length; i++){
++            try {
++                healthTexture[i] = TextureReader.readTexture(assetsFolderName + "//HealthBar" + "//" + healthTextureNames[i] , true);
++                gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[i]);
++                new GLU().gluBuild2DMipmaps(
++                        GL.GL_TEXTURE_2D,
++                        GL.GL_RGBA,
++                        healthTexture[i].getWidth(), healthTexture[i].getHeight(),
++                        GL.GL_RGBA,
++                        GL.GL_UNSIGNED_BYTE,
++                        healthTexture[i].getPixels()
++                );
++            } catch( IOException e ) {
++                System.out.println(e);
++            }
++        }
++
++        //-----------------------------Belal All Objects Taking-------------------------------------------
++        allObjects.clear();
++
++
++
++
++
++
++
+         player = new PlayerCar((int) curX, (int) curY);
+ 
+         obstaclesList.clear();
+@@ -129,16 +194,18 @@
+             Obstacles obs = new Obstacles(randomX, startY);
+             obstaclesList.add(obs);
+         }
++
++
++
++
++
+     }
+ 
+     @Override
+     public void display(GLAutoDrawable glAutoDrawable) {
+         double gameSpeed = GameController.gameSpeed;
+ 
+-//        if(!UserNameEntered) {
+-//            TakeUserName();
+-//            UserNameEntered = true;
+-//        }
++
+         GL gl = glAutoDrawable.getGL();
+         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+         gl.glLoadIdentity();
+@@ -158,7 +225,9 @@
+             updateMovement();
+             drawBullets(gl);
+ 
++            //-------Score---HealthBar  Related
+             score(gl , xScore , yScore);
++            healthBarPlayer(gl, 75,xHealthBar,yHealthBar );
+ 
+ 
+         }else if(GameState == Pause) {
+@@ -327,15 +396,6 @@
+         gl.glDisable(GL.GL_BLEND);
+     }
+ 
+-    public void TakeUserName(){
+-        UserName = JOptionPane.showInputDialog(null, "Please enter your name:");
+-
+-        if (UserName != null && !UserName.trim().isEmpty()) {
+-            System.out.println("User entered: " + UserName);
+-        } else {
+-            System.out.println("User cancelled or entered nothing.");
+-        }
+-    }
+ 
+     public void updateMovement() {
+ 
+@@ -555,4 +615,252 @@
+         gl.glDisable(GL.GL_BLEND);
+     }
+ 
++
++    public void saveAndSortScore(String userName, int userScore) {
++        ArrayList<ScoreEntry> allScores = new ArrayList<>();
++        File file = new File("highscores.txt");
++
++        // 1. READ EXISTING SCORES
++        if (file.exists()) {
++            try {
++                Scanner scanner = new Scanner(file);
++                while (scanner.hasNextLine()) {
++                    String line = scanner.nextLine();
++                    // We expect format: "Name:Score"
++                    String[] parts = line.split(":");
++                    if (parts.length == 2) {
++                        String name = parts[0];
++                        int score = Integer.parseInt(parts[1]);
++                        allScores.add(new ScoreEntry(name, score));
++                    }
++                }
++                scanner.close();
++            } catch (Exception e) {
++                System.out.println("Error reading scores: " + e.getMessage());
++            }
++        }
++
++        // 2. ADD CURRENT USER
++        allScores.add(new ScoreEntry(userName, userScore));
++
++        // 3. SORT (Highest first)
++        Collections.sort(allScores);
++
++        // 4. WRITE BACK TO FILE
++        try {
++            FileWriter writer = new FileWriter(file); // Overwrite file
++            for (ScoreEntry entry : allScores) {
++                writer.write(entry.toString() + "\n");
++            }
++            writer.close();
++            System.out.println("Score saved successfully!");
++        } catch (IOException e) {
++            System.out.println("Error writing scores: " + e.getMessage());
++        }
++    }
++
++
++    public void TakeUserName() {
++        // Keep asking as long as UserName is null (Cancel) or Empty
++        while (UserName == null || UserName.trim().isEmpty()) {
++
++            UserName = JOptionPane.showInputDialog(null, "Please enter your name (Required):");
++
++            // If they try to be sneaky and click Cancel or leave it empty...
++            if (UserName == null || UserName.trim().isEmpty()) {
++                JOptionPane.showMessageDialog(null, "You must enter a name to play!");
++            }
++        }
++
++        System.out.println("User entered: " + UserName);
++    }
++
++    //----------------------------------Health Bar ----------------------------------
++
++    public void healthBarPlayer(GL gl, double currentHealth, int x, int y) {
++        // 1. Update Animation Counter
++        healthAnimCounter++;
++        if (healthAnimCounter > 20) {
++            healthAnimCounter = 0; // Reset every 20 frames
++        }
++
++        // 2. Determine Base Index (The starting image for this health level)
++        int baseIndex = -1;
++
++        if (currentHealth >= 100) {
++            baseIndex = 0; // 100% starts at index 0
++        } else if (currentHealth >= 75) {
++            baseIndex = 2; // 75% starts at index 2
++        } else if (currentHealth >= 50) {
++            baseIndex = 4; // 50% starts at index 4
++        } else if (currentHealth > 0) {
++            baseIndex = 6; // 25% starts at index 6
++        } else {
++            return; // Dead
++        }
++
++        // 3. Determine Animation Frame (0 or 1)
++        // If counter is 0-10: use Offset 0 (Normal)
++        // If counter is 11-20: use Offset 1 (Glow)
++        int animationOffset = 0;
++        if (healthAnimCounter > 10) {
++            animationOffset = 1;
++        }
++
++        // Final Texture Index = Base + Offset
++        int finalTextureIndex = baseIndex + animationOffset;
++
++        // 4. Draw
++        gl.glEnable(GL.GL_BLEND);
++        gl.glColor3f(1.0f, 1.0f, 1.0f);
++
++        gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[finalTextureIndex]);
++
++        gl.glPushMatrix();
++
++        double glX = x / 50.0 - 1.0;
++        double glY = y / 50.0 - 1.0;
++
++        gl.glTranslated(glX, glY, 0);
++        gl.glScaled(0.2, 0.2, 1);
++
++        gl.glBegin(GL.GL_QUADS);
++        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
++        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
++        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
++        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
++        gl.glEnd();
++
++        gl.glPopMatrix();
++
++        gl.glDisable(GL.GL_BLEND);
++    }
++
++
++    public void drawScoreText(GLAutoDrawable drawable) {
++        // 1. Update Score Logic (Keep your existing frame counter)
++        frameCounter++;
++        if (frameCounter > 10) {
++            score++;
++            System.out.println(score);
++            frameCounter = 0;
++        }
++
++        // 2. Prepare the text
++        String textToDraw = "Score: " + score;
++
++        // 3. Draw the text
++        // We need the width and height of the window to position text correctly
++        int width = drawable.getWidth();
++        int height = drawable.getHeight();
++
++        renderer.beginRendering(width, height);
++
++        // Set Color (R, G, B, Alpha) - This is Yellow
++        renderer.setColor(1.0f, 1.0f, 0.0f, 1.0f);
++
++        // Draw the string
++        // x = 10 pixels from left
++        // y = height - 50 pixels (Top left corner)
++        renderer.draw(textToDraw, 10, height - 50);
++
++        renderer.endRendering();
++    }
++
++
++    //------------------------------------Collisons---------------------------------
++
++    public void checkCollision(GameObject obj1, GameObject obj2) {
++        if (obj1.getBounds().intersects(obj2.getBounds())) {
++
++            // Check: Is one of them the Player?
++            if (obj1 instanceof PlayerCar || obj2 instanceof PlayerCar) {
++
++                PlayerCar player = (obj1 instanceof PlayerCar) ? (PlayerCar)obj1 : (PlayerCar)obj2;
++                GameObject other = (obj1 instanceof PlayerCar) ? obj2 : obj1;
++
++                // 1. Player hits Obstacle
++                if (other instanceof Obstacles) {
++                    Obstacles obs = (Obstacles) other;
++                    player.takeDamage(obs.damage);
++                    // Obstacle does NOT die (invincible)
++                    System.out.println("Hit Obstacle!");
++                }
++                // 2. Player hits LightCar
++                else if (other instanceof LightCar) {
++                    player.takeDamage(20);  // Less damage
++                    other.takeDamage(100);  // Enemy dies
++                    System.out.println("Hit LightCar!");
++                }
++                // 3. Player hits HeavyCar
++                else if (other instanceof HeavyCar) {
++                    player.takeDamage(50);  // MORE damage
++                    other.takeDamage(50);   // Heavy car takes damage (might not die immediately)
++                    System.out.println("Hit HeavyCar!");
++                }
++            }
++
++            // You can add Bullet collision logic here later
++        }
++    }
++
++    // Helper method to keep code clean
++    private void handlePlayerCollision(PlayerCar player, GameObject other) {
++
++        // SCENARIO A: Player hits Obstacle (Invincible)
++        if (other instanceof Obstacles) {
++            // Player takes massive damage (or dies instantly)
++            player.takeDamage(50);
++            System.out.println("Hit Obstacle! Player hurt.");
++            // We DO NOT call other.takeDamage(), so Obstacle stays alive (Invincible)
++        }
++
++        // SCENARIO B: Player hits Light Car
++        else if (other instanceof LightCar) {
++            int crashDamage = 20;
++
++            player.takeDamage(crashDamage); // Player takes normal damage
++            other.takeDamage(100);          // Light car gets destroyed (or takes damage)
++            System.out.println("Crashed into Light Car!");
++        }
++
++        // SCENARIO C: Player hits Weight Car (Assuming you have a class named WeightCar)
++        // Note: You didn't provide WeightCar class, but here is the logic:
++    /* else if (other instanceof WeightCar) {
++        int crashDamage = 50; // Player takes MORE damage
++
++        player.takeDamage(crashDamage);
++        other.takeDamage(50); // Weight car takes damage too
++        System.out.println("Crashed into Heavy Car!");
++    }
++    */
++    }
++
++    public void updateGameLogic() {
++        // --- PART 1: CHECK COLLISIONS ---
++        // Loop through every pair of objects
++        for (int i = 0; i < allObjects.size(); i++) {
++            GameObject obj1 = allObjects.get(i);
++
++            for (int j = i + 1; j < allObjects.size(); j++) {
++                GameObject obj2 = allObjects.get(j);
++
++                // Only check if both exist (are alive)
++                if (obj1.alive && obj2.alive) {
++                    checkCollision(obj1, obj2);
++                }
++            }
++        }
++
++        // --- PART 2: REMOVE DEAD OBJECTS ---
++        // Iterate backwards to safely remove items from the list
++        for (int i = allObjects.size() - 1; i >= 0; i--) {
++            if (!allObjects.get(i).alive) {
++                allObjects.remove(i);
++                // Optional: System.out.println("Object removed!");
++            }
++        }
++    }
++
++
+ }
+Index: src/GameObjects/HeavytCar.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameObjects/HeavytCar.java b/src/GameObjects/HeavyCar.java
+rename from src/GameObjects/HeavytCar.java
+rename to src/GameObjects/HeavyCar.java
+--- a/src/GameObjects/HeavytCar.java	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/src/GameObjects/HeavyCar.java	(date 1764947827627)
+@@ -1,10 +1,15 @@
+ package GameObjects;
+ 
+-public class HeavytCar extends Car{
+-    HeavytCar(int posX,int posY) {
++public class HeavyCar extends Car{
++    HeavyCar(int posX, int posY) {
+         super(posX,posY,50,50,200);
++        // Heavy cars are slightly bigger and tougher
++        this.width = 70;
++        this.height = 110;
+     }
+-    HeavytCar(int posX,int posY,int speed, int damage, int health) {
++    HeavyCar(int posX, int posY, int speed, int damage, int health) {
+         super(posX,posY,speed, damage, health);
++        this.width = 70;
++        this.height = 110;
+     }
+ }
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>IDE - IntelliJ IDEA\r\n.idea/\r\n*.iws\r\n*.iml\r\n*.ipr\r\nout/\r\n\r\nBuild Systems\r\nMaven\r\ntarget/\r\npom.xml.tag\r\npom.xml.releaseBackup\r\npom.xml.versionsBackup\r\npom.xml.next\r\nrelease.properties\r\ndependency-reduced-pom.xml\r\n\r\nGradle\r\n.gradle/\r\nbuild/\r\n!gradle/wrapper/gradle-wrapper.jar\r\n\r\nJava\r\n*.class\r\n*.log\r\n*.ctxt\r\n.mtj.tmp/\r\n\r\nOS System Files\r\n.DS_Store\r\nThumbs.db
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+--- a/.idea/.gitignore	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/.idea/.gitignore	(date 1764942803537)
+@@ -1,12 +1,12 @@
+-IDE - IntelliJ IDEA
++### IDE - IntelliJ IDEA ###
+ .idea/
+ *.iws
+ *.iml
+ *.ipr
+ out/
+ 
+-Build Systems
+-Maven
++### Build Systems ###
++# Maven
+ target/
+ pom.xml.tag
+ pom.xml.releaseBackup
+@@ -15,17 +15,17 @@
+ release.properties
+ dependency-reduced-pom.xml
+ 
+-Gradle
++# Gradle
+ .gradle/
+ build/
+ !gradle/wrapper/gradle-wrapper.jar
+ 
+-Java
++### Java ###
+ *.class
+ *.log
+ *.ctxt
+ .mtj.tmp/
+ 
+-OS System Files
++### OS System Files ###
+ .DS_Store
+ Thumbs.db
+\ No newline at end of file
+Index: .idea/CS304Project2025.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"JAVA_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\" inherit-compiler-output=\"true\">\r\n    <exclude-output />\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <sourceFolder url=\"file://$MODULE_DIR$/src\" isTestSource=\"false\" />\r\n      <sourceFolder url=\"file://$MODULE_DIR$/../Graphics Lab/src/Texture\" isTestSource=\"false\" />\r\n    </content>\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n    <orderEntry type=\"library\" name=\"lib64\" level=\"project\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/CS304Project2025.iml b/.idea/CS304Project2025.iml
+--- a/.idea/CS304Project2025.iml	(revision 12ac9015377090d15a72d38de36e7b395c3a5eb6)
++++ b/.idea/CS304Project2025.iml	(date 1764942801661)
+@@ -9,5 +9,6 @@
+     <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+     <orderEntry type="library" name="lib64" level="project" />
++    <orderEntry type="library" name="lib65" level="project" />
+   </component>
+ </module>
+\ No newline at end of file
+Index: .idea/libraries/lib65.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/lib65.xml b/.idea/libraries/lib65.xml
+new file mode 100644
+--- /dev/null	(date 1764942801665)
++++ b/.idea/libraries/lib65.xml	(date 1764942801665)
+@@ -0,0 +1,19 @@
++<component name="libraryTable">
++  <library name="lib65">
++    <CLASSES>
++      <root url="jar://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64/gluegen-rt.jar!/" />
++      <root url="jar://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64/jogl.jar!/" />
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++    </CLASSES>
++    <JAVADOC />
++    <NATIVE>
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++      <root url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" />
++    </NATIVE>
++    <SOURCES />
++    <jarDirectory url="file://$USER_HOME$/Downloads/JOGLwin/JOGLwin/lib64" recursive="false" />
++  </library>
++</component>
+\ No newline at end of file

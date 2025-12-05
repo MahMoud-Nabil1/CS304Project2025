@@ -1,0 +1,61 @@
+<changelist name="Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]" date="1764942426199" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 12/5/2025 3:47 PM [Changes]" />
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/HalfState2.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/HalfState2.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/CS304Project2025/GameObjects/Bullet.class" />
+    <option name="AFTER_PATH" value="out/production/CS304Project2025/GameObjects/Bullet.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/Bullet.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/CS304Project2025/GameObjects/Car.class" />
+    <option name="AFTER_PATH" value="out/production/CS304Project2025/GameObjects/Car.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/Car.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/3_4State1.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/3_4State1.png" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/HalfState1.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/HalfState1.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/CS304Project2025/CarGLEventListener.class" />
+    <option name="AFTER_PATH" value="out/production/CS304Project2025/CarGLEventListener.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/CarGLEventListener.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/FullState1.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/FullState1.png" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/LowState1.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/LowState1.png" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/HealthReceviedFull.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/HealthReceviedFull.png" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/LowState2.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/LowState2.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/CS304Project2025/GameObjects/Obstacles.class" />
+    <option name="AFTER_PATH" value="out/production/CS304Project2025/GameObjects/Obstacles.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/Obstacles.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="out/production/CS304Project2025/GameObjects/GameObject.class" />
+    <option name="AFTER_PATH" value="out/production/CS304Project2025/GameObjects/GameObject.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/GameObject.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="assets/HealthBar/3_4State2.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_5_2025_3_47_PM_[Changes]/3_4State2.png" />
+  </binary>
+</changelist>
