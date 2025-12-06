@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="PowerUps" />
+    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="PowerUps">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,12 +17,36 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "ShehabAbdelWahid"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MahMoud-Nabil1/CS304Project2025.git",
+    "accountId": "f5f04217-76fd-4c72-9231-dfd685945976"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="36U0hgu3PUszhR0RX9cC8nbHULA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.CarGame.executor": "Run",
-    "git-widget-placeholder": "main"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true"
   }
 }]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task id="LOCAL-00001" summary="PowerUps">
       <option name="closed" value="true" />
@@ -28,7 +56,22 @@
       <option name="project" value="LOCAL" />
       <updated>1765045819283</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="PowerUps" />
+      <created>1765045964947</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765045964947</updated>
+    </task>
+    <task id="LOCAL-00002" summary="PowerUps">
+      <option name="closed" value="true" />
+      <created>1765046031724</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1765046031724</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

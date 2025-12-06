@@ -73,7 +73,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int frameCounter = 0;
     int score = 0;
     int xScore = 10;
-    int yScore = 90;
+    int yScore = 80;
 
     // Inside Class Variables
     int healthAnimCounter = 0; // Counts frames for the health bar
@@ -301,13 +301,14 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             updateGameLogic();
 
             //-------Score---HealthBar  Related
+            score(gl, xScore, yScore);
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
             //drawScoreText(glAutoDrawable);
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
 
 
-
+            checkPlayerDeath();
 
         }else if(GameState == Pause) {
             DrawBackground(gl , 3);
@@ -703,12 +704,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
-        int score=GameController.score;
+        //int score=GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
             score++;
             System.out.println(score);
-//            System.out.println(score);
             frameCounter = 0;
         }
         // 2. Convert Score to String to get individual digits
@@ -1078,6 +1078,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             }
         }
 
+    }
+    public void checkPlayerDeath(){
+        if (player.health <= 0) {
+            GameState = End; // Switch to End Screen (State 3)
+            player.health=100;
+        }
     }
 
     @Override
