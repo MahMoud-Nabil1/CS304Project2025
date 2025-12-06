@@ -4,47 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Score System-PreHealthBar  collison pre">
+    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="PowerUps">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;ShehabAbdelWahid&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "ShehabAbdelWahid"
   }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MahMoud-Nabil1/CS304Project2025.git&quot;,
-    &quot;accountId&quot;: &quot;1bede88f-4961-4a1a-bf5b-0e0c9358aa6a&quot;
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MahMoud-Nabil1/CS304Project2025.git",
+    "accountId": "f5f04217-76fd-4c72-9231-dfd685945976"
   }
-}</component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
-}</component>
-  <component name="ProjectId" id="36NsBtfQxirxQi01dNSdDgbsg5G" />
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="36U0hgu3PUszhR0RX9cC8nbHULA" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -55,102 +43,36 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/shehab/IdeaProjects/CS304Project2025/assets/HealthBar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "vue.rearranger.settings.migration": "true"
+    "kotlin-language-version-configured": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
-      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
-      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
-      <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\Bullet" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="CarGame" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="CarGame" />
-      <module name="CS304Project2025" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="" />
-      <created>1764858230317</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1764858230317</updated>
-      <workItem from="1764960319615" duration="2373000" />
-    </task>
-    <task id="LOCAL-00001" summary="Score System">
+    <task id="LOCAL-00001" summary="PowerUps">
       <option name="closed" value="true" />
-      <created>1764859253188</created>
+      <created>1765045819283</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1764859253188</updated>
+      <updated>1765045819283</updated>
     </task>
-    <task id="LOCAL-00002" summary="Button fixed">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="PowerUps" />
+      <created>1765045964947</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765045964947</updated>
+    </task>
+    <task id="LOCAL-00002" summary="PowerUps">
       <option name="closed" value="true" />
-      <created>1764971882876</created>
+      <created>1765046031724</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1764971882876</updated>
+      <updated>1765046031724</updated>
     </task>
-    <task id="LOCAL-00003" summary="Movement Fix">
-      <option name="closed" value="true" />
-      <created>1764972914385</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1764972914385</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Score System-PreHealthBar  collison pre">
-      <option name="closed" value="true" />
-      <created>1765032879299</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1765032879299</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Score System-PreHealthBar  collison pre">
-      <option name="closed" value="true" />
-      <created>1765032915916</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1765032915916</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -164,24 +86,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Score System" />
-    <MESSAGE value="Button fixed" />
-    <MESSAGE value="Movement Fix" />
-    <MESSAGE value="Score System-PreHealthBar  collison pre" />
-    <option name="LAST_COMMIT_MESSAGE" value="Score System-PreHealthBar  collison pre" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="javax.media.opengl.GLException" package="javax.media.opengl" />
-          <option name="timeStamp" value="8" />
-        </breakpoint>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
-          <option name="timeStamp" value="9" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="PowerUps" />
+    <option name="LAST_COMMIT_MESSAGE" value="PowerUps" />
   </component>
 </project>
