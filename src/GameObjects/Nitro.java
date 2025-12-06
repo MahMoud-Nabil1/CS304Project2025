@@ -3,6 +3,9 @@ package GameObjects;
 public class Nitro extends PowerUp {
     public Nitro(float x, float y) {
         super(x, y);
+
+        this.width = 8;
+        this.height = 2;
     }
     @Override
     public void apply(PlayerCar car) {

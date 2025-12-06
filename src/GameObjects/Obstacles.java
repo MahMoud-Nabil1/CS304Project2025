@@ -7,16 +7,16 @@ public class Obstacles extends GameObject {
         super(posX, posY);
         damage = 100;
 
-        this.width = 40;
-        this.height = 40;
+        this.width = 8;
+        this.height = 2;
     }
     Obstacles(int posX, int posY,int damage){
         super(posX, posY);
         this.damage = damage;
 
         // Set size here too
-        this.width = 40;
-        this.height = 40;
+        this.width = 8;
+        this.height = 2;
     }
 
 

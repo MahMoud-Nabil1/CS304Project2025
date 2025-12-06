@@ -8,13 +8,14 @@ public abstract class PowerUp extends GameObject {
     public boolean isCollected = false; // Is it currently active on the player?
     public int durationFrames = 0;      // How long the effect lasts (0 for instant items)
     public double speed = GameController.gameSpeed;// How fast it falls down the screen
-    public float y;
-    public float x;
+   // public float y;
+   // public float x;
 
     public PowerUp(float x, float y) {
         super(x, y);
-        this.y = y;
-        this.x = x;
+        this.width = 8;
+        this.height = 2;
+
     }
 
     // --- THE UPDATE METHOD ("The Brain") ---
@@ -22,7 +23,13 @@ public abstract class PowerUp extends GameObject {
         if (!isCollected) {
             // PHASE 1: Falling
             // It moves down based on its own speed + the game speed (so it moves with the road)
-            y -= (float) GameController.gameSpeed;
+           // y -= (float) GameController.gameSpeed;
+
+            // FIX 2: Update the PARENT variables (posY/posX) so getBounds() works -- Shehab Fix
+            setPosY((float) (getPosY() - GameController.gameSpeed));
+
+            // Sync posX if needed (though it doesn't change usually)
+            // setPosX(...)
 
         } else {
             // PHASE 2: Active Effect (Counting down)
@@ -32,8 +39,9 @@ public abstract class PowerUp extends GameObject {
                 // If time runs out, remove effect
                 if (durationFrames <= 0) {
                     remove(car);
+                    alive = false; // Remove from game
                     // We will remove it from the list in the Main Class loop
-                }
+                } else {alive = false;}
             }
         }
     }

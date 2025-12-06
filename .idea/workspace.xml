@@ -5,8 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Movement Fix">
+      <change beforePath="$PROJECT_DIR$/.idea/CS304Project2025.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS304Project2025.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/3_4State1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/3_4State2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/FullState1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/HalfState1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/HalfState2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/HealthReceviedFull.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/LowState1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/HealthBar/LowState2.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/DoubleBullets.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/DoubleBullets.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Rocket.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Rocket.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/nitro.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/nitro.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/repair.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/repair.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Car.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/DoubleBullets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/DoubleBullets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/DoubleScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/DoubleScore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Nitro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Nitro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Repair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Repair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Rocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Rocket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +84,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/MAHMO/Documents/GitHub/CS304Project2025/assets",
+    "last_opened_file_path": "C:/Users/shehab/IdeaProjects/CS304Project2025/assets/HealthBar",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -68,9 +97,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets" />
-      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
