@@ -8,16 +8,22 @@ public class PlayerCar extends Car{
     public ArrayList<Bullet> bullets;
     int score=0;
     public int firerate = 0;
+    public int invincibilityTimer = 0; // For Colligions
+
     public PlayerCar(float posX, float posY) {
         super(posX,posY,.7,20,100);
         bullets=new ArrayList<>();
+
+        // FIX: Set the size here!
+        this.width = 8;
+        this.height = 10;
     }
     PlayerCar(float posX, float posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
         bullets=new ArrayList<>();
         //
-        this.width = 50;
-        this.height = 100;
+        this.width = 8;
+        this.height = 10;
     }
     private boolean nitroActive = false;
 
@@ -55,4 +61,12 @@ public class PlayerCar extends Car{
             firerate=10;
         }
     }
+    // Add this to your updateMovement or a new update() method
+    public void updateInvincibility() {
+        if (invincibilityTimer > 0) {
+            invincibilityTimer--;
+        }
+    }
+
+
 }

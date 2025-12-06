@@ -20,7 +20,7 @@ public class DoubleBullets extends PowerUp {
         GameController.doubleBulletActive = false; // deactivate
     }
 
-    public void update(PlayerCar car) {
+    /*public void update(PlayerCar car) {
         y -= (float) GameController.gameSpeed;
 
         if (durationFrames > 0) {
@@ -28,4 +28,5 @@ public class DoubleBullets extends PowerUp {
             if (durationFrames <= 0) remove(car);
         }
     }
+     */
 }

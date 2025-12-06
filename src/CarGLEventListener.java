@@ -19,6 +19,11 @@ import java.util.*;
 import java.util.List;
 import GameObjects.*;
 
+import javax.media.opengl.GLAutoDrawable;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+
 public class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
     double roadOffsetY = 0.0f;
     String UserName;
@@ -74,7 +79,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     //---------------------- For Shehab HealthBar ----------------------------------------
 
     String[] healthTextureNames = {
-            "FullState1.png" ,"HealthReceviedFull.png" //100
+             "HealthBar.png"
+            ,"FullState1.png" ,"HealthReceviedFull.png" //100
             ,"3_4State1.png","3_4State2.png"            //75
             ,"HalfState1.png","HalfState2.png"
             ,"LowState1.png","LowState2.png"
@@ -83,11 +89,19 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     TextureReader.Texture[] healthTexture = new TextureReader.Texture[healthTextureNames.length];
     int[] healthTextures = new int[healthTextureNames.length];
 
-    int xHealthBar=10;
-    int yHealthBar=90;
+    int xHealthBar=50;
+    int yHealthBar=50;
+
+    // --- Variables ---
+    private double glowTimer = 0;
+    private final double GLOW_PERIOD = 2.0;
+    private int whiteTextureId;
+
 
     //--------------------------For Shehab Collegians-----------------------------------------------------------
     public static ArrayList<GameObject> allObjects = new ArrayList<>();
+
+
     //-------------------------------------------------------------------------------------
 
 
@@ -234,16 +248,24 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 System.out.println(e);
             }
         }
+
+        whiteTextureId = createBlankTexture(gl);
+
         //-----------------------------Belal All Objects Taking-------------------------------------------
         allObjects.clear();
         player = new PlayerCar((int) curX, (int) curY);
         obstaclesList.clear();
+        allObjects.add(player);
+
         for (int i = 0; i < numberOfObstacles; i++) {
             int randomX = obstaclesPositions[(int) (Math.random() * 5)];
             int startY = maxHeight + (i * 30);
             Obstacles obs = new Obstacles(randomX, startY);
             obstaclesList.add(obs);
+
+            allObjects.add(obs);
         }
+
     }
 
     @Override
@@ -264,14 +286,22 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             background_loop(gl);
             drawAndMoveObstacles(gl);
             drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f);
-            updateMovement();
             drawBullets(gl);
+            player.updateInvincibility();
+            updateMovement();
+
+
+
+            //---------------Colligion Shehab-----------------------
+            updateGameLogic();
 
             //-------Score---HealthBar  Related
-            healthBarPlayer(gl, 100,xHealthBar,yHealthBar );
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
-            drawScoreText(glAutoDrawable);
+            //drawScoreText(glAutoDrawable);
+            drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
+
+
 
 
         }else if(GameState == Pause) {
@@ -432,22 +462,28 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         int duration = 300;
 
+        // 1. Declare a variable to hold the ONE object
+        PowerUp p = null;
+
         switch (randomizer) {
             case 0:
-                GameController.powerUpsList.add(new Nitro(spawnX, spawnY));
+                p = new Nitro(spawnX, spawnY);
                 break;
-
             case 1:
-                GameController.powerUpsList.add(new Repair(spawnX, spawnY));
+                p = new Repair(spawnX, spawnY);
                 break;
-
             case 2:
-                GameController.powerUpsList.add(new DoubleBullets((int)spawnX, (int)spawnY, duration));
+                p = new DoubleScore((int)spawnX, (int)spawnY, duration);
                 break;
-
             case 3:
-                GameController.powerUpsList.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
+                p = new DoubleBullets(spawnX, spawnY, duration);
                 break;
+        }
+
+        // 3. Add the SAME object to BOTH lists
+        if (p != null) {
+            GameController.powerUpsList.add(p); // This makes it DRAW and UPDATE
+            allObjects.add(p);                  // This makes it COLLIDE
         }
     }
     public void drawPowerUps(GL gl) {
@@ -461,28 +497,38 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 PowerUp p = GameController.powerUpsList.get(i);
 
                 p.update(player);
+                // A Shehab Collision If statement for delteing the powerup
+                if (!p.isCollected) {
 
-                int baseIndex = 0;
-                if (p instanceof Nitro) {
-                    baseIndex = 0;
-                } else if (p instanceof Repair) {
-                    baseIndex = 6;
-                } else if (p instanceof DoubleBullets) {
-                    baseIndex = 12;
-                } else if (p instanceof DoubleScore) {
-                    baseIndex = 18;
+                    int baseIndex = 0;
+                    if (p instanceof Nitro) {
+                        baseIndex = 0;
+                    } else if (p instanceof Repair) {
+                        baseIndex = 6;
+                    } else if (p instanceof DoubleBullets) {
+                        baseIndex = 12;
+                    } else if (p instanceof DoubleScore) {
+                        baseIndex = 18;
+                    }
+
+                    int animationOffset = (frameCounter / 3) % 6;
+
+                    int finalTexIndex = baseIndex + animationOffset;
+
+                    //drawSpriteTexture(gl, p.x, p.y, finalTexIndex, 0.7f, powerUpTextures);
+
+                    // NEW (Correct)
+                    // We use getPosX() and getPosY() from the parent GameObject
+                    drawSpriteTexture(gl, (float) p.getPosX(), (float) p.getPosY(), finalTexIndex, 0.7f, powerUpTextures);
+                    if (p.getPosY() <= -6) {
+                        GameController.powerUpsList.remove(i);
+                    }
                 }
-
-                int animationOffset = (frameCounter  / 3) % 6;
-
-                int finalTexIndex = baseIndex + animationOffset;
-
-                drawSpriteTexture(gl, p.x, p.y, finalTexIndex, 0.7f, powerUpTextures);
-
-                if (p.y <= -6) {
-                    GameController.powerUpsList.remove(i);
+                if (p.getPosY() <= -100 || !p.alive) {
+                    // Cleanup handled in updateGameLogic mostly, but safe to keep checks
                 }
             }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -638,7 +684,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
-        int score = GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
             score++;
@@ -740,67 +785,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
     //----------------------------------Health Bar ----------------------------------
 
-    public void healthBarPlayer(GL gl, double currentHealth, int x, int y) {
-        // 1. Update Animation Counter
-        healthAnimCounter++;
-        if (healthAnimCounter > 20) {
-            healthAnimCounter = 0; // Reset every 20 frames
-        }
-
-        // 2. Determine Base Index (The starting image for this health level)
-        int baseIndex = -1;
-
-        if (currentHealth >= 100) {
-            baseIndex = 0; // 100% starts at index 0
-        } else if (currentHealth >= 75) {
-            baseIndex = 2; // 75% starts at index 2
-        } else if (currentHealth >= 50) {
-            baseIndex = 4; // 50% starts at index 4
-        } else if (currentHealth > 0) {
-            baseIndex = 6; // 25% starts at index 6
-        } else {
-            return; // Dead
-        }
-
-        // 3. Determine Animation Frame (0 or 1)
-        // If counter is 0-10: use Offset 0 (Normal)
-        // If counter is 11-20: use Offset 1 (Glow)
-        int animationOffset = 0;
-        if (healthAnimCounter > 10) {
-            animationOffset = 1;
-        }
-
-        // Final Texture Index = Base + Offset
-        int finalTextureIndex = baseIndex + animationOffset;
-
-        // 4. Draw
-        gl.glEnable(GL.GL_BLEND);
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-
-        gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[finalTextureIndex]);
-
-        gl.glPushMatrix();
-
-        double glX = x / 50.0 - 1.0;
-        double glY = y / 50.0 - 1.0;
-
-        gl.glTranslated(glX, glY, 0);
-        gl.glScaled(0.2, 0.2, 1);
-
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f( 1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f( 1.0f,  1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,  1.0f, -1.0f);
-        gl.glEnd();
-
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-    }
-
-
     public void drawScoreText(GLAutoDrawable drawable) {
         // 1. Update Score Logic (Keep your existing frame counter)
         frameCounter++;
@@ -833,9 +817,90 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         gl.glColor3f(1.0f, 1.0f, 1.0f);
     }
 
+    private float[] getHealthColor(float healthPercent) {
+        if (healthPercent > 0.75f) return new float[]{0.2f, 1.0f, 0.2f}; // Green
+        if (healthPercent > 0.50f) return new float[]{1.0f, 1.0f, 0.2f}; // Yellow
+        if (healthPercent > 0.25f) return new float[]{1.0f, 0.6f, 0.0f}; // Orange
+        return new float[]{1.0f, 0.2f, 0.2f}; // Red
+    }
+    private int createBlankTexture(GL gl) { // Changed GL2 to GL
+        int[] textureId = new int[1];
+        gl.glGenTextures(1, textureId, 0);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]); // Changed GL2.GL_... to GL.GL_...
 
-    //------------------------------------Collisions---------------------------------
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
+        buffer.put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255); buffer.flip();
 
+        gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, 1, 1, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+
+        return textureId[0];
+    }
+
+    public void drawHealthBar(GL gl, float currentHealth, float maxHealth, int frameTextureId, float x, float y, float width, float height) {
+        // Calculate health percentage
+        float healthPercent = Math.max(0.0f, Math.min(1.0f, currentHealth / maxHealth));
+        float[] baseColor = getHealthColor(healthPercent);
+
+        // Update Glow
+        glowTimer += 1.0 / 60.0;
+        float glowIntensity = (float) (0.5 + 0.5 * Math.sin(glowTimer * Math.PI * 2 / GLOW_PERIOD));
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+        // --- COORDINATE CONVERSION ---
+        // Convert Game Coords (0..100) to OpenGL Coords (-1..1)
+        float ndcX = (x / 50.0f) - 1.0f;
+        float ndcY = (y / 50.0f) - 1.0f;
+        float ndcW = width / 50.0f;
+        float ndcH = height / 50.0f;
+
+        // =========================================================
+        // STEP 1: Draw the Metal Frame FIRST (Background)
+        // =========================================================
+        gl.glBindTexture(GL.GL_TEXTURE_2D, frameTextureId);
+        gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset color to white
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0, 0); gl.glVertex2f(ndcX,        ndcY);
+        gl.glTexCoord2f(1, 0); gl.glVertex2f(ndcX + ndcW, ndcY);
+        gl.glTexCoord2f(1, 1); gl.glVertex2f(ndcX + ndcW, ndcY + ndcH);
+        gl.glTexCoord2f(0, 1); gl.glVertex2f(ndcX,        ndcY + ndcH);
+        gl.glEnd();
+
+        // =========================================================
+        // STEP 2: Draw the Green Bar SECOND (Overlay)
+        // =========================================================
+        gl.glBindTexture(GL.GL_TEXTURE_2D, whiteTextureId);
+
+        // We make it slightly see-through (0.7f alpha) so it looks like a glass/hologram
+        gl.glColor4f(baseColor[0], baseColor[1], baseColor[2], 0.6f + 0.3f * glowIntensity);
+
+        // --- ALIGNMENT NUMBERS (Tweaked for your image) ---
+        // These percentages control where the green bar sits inside the frame
+        float offX = ndcW * 0.32f;      // Push right by 22%
+        float offY = ndcH * 0.47f;      // Push up by 40%
+        float maxFillW = ndcW * 0.55f;  // Width is 73% of the frame
+        float fillH = ndcH * 0.08f;     // Height is 25% of the frame
+
+        float currentFillW = maxFillW * healthPercent;
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0, 0); gl.glVertex2f(ndcX + offX,                ndcY + offY);
+        gl.glTexCoord2f(1, 0); gl.glVertex2f(ndcX + offX + currentFillW, ndcY + offY);
+        gl.glTexCoord2f(1, 1); gl.glVertex2f(ndcX + offX + currentFillW, ndcY + offY + fillH);
+        gl.glTexCoord2f(0, 1); gl.glVertex2f(ndcX + offX,                ndcY + offY + fillH);
+        gl.glEnd();
+
+        gl.glDisable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+    }    //------------------------------------Collisions---------------------------------
+
+
+    //--------------------------For Shehab Collision--------------------------------------
     public void checkCollision(GameObject obj1, GameObject obj2) {
         if (obj1.getBounds().intersects(obj2.getBounds())) {
 
@@ -903,31 +968,96 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
     public void updateGameLogic() {
-        // --- PART 1: CHECK COLLISIONS ---
-        // Loop through every pair of objects
-        for (int i = 0; i < allObjects.size(); i++) {
-            GameObject obj1 = allObjects.get(i);
+        for (GameObject obj : allObjects) {
+            if (obj instanceof PlayerCar) continue;
 
-            for (int j = i + 1; j < allObjects.size(); j++) {
-                GameObject obj2 = allObjects.get(j);
+            // --- NEW DEBUG RADAR ---
+            // Only print for PowerUps so we don't spam the console too much
+            if (obj instanceof PowerUp) {
+                PowerUp p = (PowerUp) obj;
+                //System.out.println("RADAR: PowerUp Y=" + p.getPosY() + " | Player Y=" + player.getPosY() +
+                //        " | PowerUp Size=" + p.getWidth() + "x" + p.getHeight());
+            }
+            // ----
+        }
+        // 1. Player vs Obstacles AND PowerUps
+        for (GameObject obj : allObjects) {
+            if (obj instanceof PlayerCar) continue;
 
-                // Only check if both exist (are alive)
-                if (obj1.alive && obj2.alive) {
-                    checkCollision(obj1, obj2);
+            if (obj.alive && player.getBounds().intersects(obj.getBounds())) {
+
+                // --- CASE A: Obstacle ---
+                if (obj instanceof Obstacles) {
+                    if (player.invincibilityTimer == 0) {
+                        player.takeDamage(20);
+                        player.invincibilityTimer = 40;
+                        System.out.println("CRASH! Hit Obstacle.");
+                    }
+                }
+
+                // --- CASE B: PowerUp (THE FIX) ---
+                else if (obj instanceof PowerUp) {
+                    PowerUp p = (PowerUp) obj;
+                    System.out.println("DEBUG: Physical HIT with " + p.getClass().getSimpleName());
+                    // Only collect if we haven't already
+                    if (!p.isCollected) {
+                        System.out.println("DEBUG: >>> ACTIVATING EFFECT for " + p.getClass().getSimpleName() + " <<<");
+                        p.apply(player);       // 1. Give Effect
+                        p.isCollected = true;  // 2. Mark as collected
+
+                        // 3. Move off screen so we don't hit it again
+                        p.setPosY(-5000);
+
+                        System.out.println("COLLECTED POWERUP!");
+                    }
+                }
+            }
+
+
+        }
+
+        // 2. Bullets vs Obstacles
+        for (int i = 0; i < player.bullets.size(); i++) {
+            Bullet b = player.bullets.get(i);
+            if (b.timer <= 0) continue;
+
+            // Create a hitbox for the bullet (make it slightly larger for easier hitting)
+            Rectangle bulletRect = new Rectangle((int)b.posX, (int)b.posY, 4, 4);
+
+            for (GameObject obj : allObjects) {
+                if (obj.alive && obj instanceof Obstacles) {
+                    if (bulletRect.intersects(obj.getBounds())) {
+                        System.out.println("HIT! Bullet destroyed obstacle!");
+
+                        obj.takeDamage(100); // Kill the rock
+                        b.timer = -1; // Destroy the bullet
+                        break;
+                    }
                 }
             }
         }
 
-        // --- PART 2: REMOVE DEAD OBJECTS ---
-        // Iterate backwards to safely remove items from the list
+        // 3. Remove Dead Objects
         for (int i = allObjects.size() - 1; i >= 0; i--) {
             if (!allObjects.get(i).alive) {
                 allObjects.remove(i);
-                // Optional: System.out.println("Object removed!");
             }
         }
-    }
+        // Sync specific lists
+        for (int i = obstaclesList.size() - 1; i >= 0; i--) {
+            if (!obstaclesList.get(i).alive) {
+                obstaclesList.remove(i);
+            }
+        }
 
+        // Clean PowerUps (IMPORTANT: This fixes "ghost" powerups)
+        for (int i = GameController.powerUpsList.size() - 1; i >= 0; i--) {
+            if (!GameController.powerUpsList.get(i).alive) {
+                GameController.powerUpsList.remove(i);
+            }
+        }
+
+    }
 
     @Override
     public void mouseDragged(MouseEvent e) {}

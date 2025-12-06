@@ -3,7 +3,7 @@ package GameObjects;
 public class Car extends GameObject {
     protected double speed;
     protected int damage;
-    protected int health;
+    public int health;
     protected  double damageFactor;
 
     Car(double posX, double posY, double speed, int damage, int health) {
@@ -37,6 +37,20 @@ public class Car extends GameObject {
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
+
+
+    public void takeDamage(int amount) {
+        this.health -= amount; // <--- MAKE SURE THIS LINE EXISTS
+
+        // Safety check: Don't let health go below 0
+        if (this.health < 0) {
+            this.health = 0;
+        }
+
+        System.out.println("Damage Taken! New Health: " + this.health); // Debug print
+    }
+
 
 }
 

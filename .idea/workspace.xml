@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Movement Fix">
+    <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Score System-PreHealthBar  collison pre">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,11 +54,10 @@
     "Application.CarGame.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/MAHMO/Documents/GitHub/CS304Project2025/assets",
+    "last_opened_file_path": "C:/Users/shehab/IdeaProjects/CS304Project2025/assets/HealthBar",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -68,9 +70,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets" />
-      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
@@ -128,7 +130,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764972914385</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Score System-PreHealthBar  collison pre">
+      <option name="closed" value="true" />
+      <created>1765032879299</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1765032879299</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Score System-PreHealthBar  collison pre">
+      <option name="closed" value="true" />
+      <created>1765032915916</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1765032915916</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +167,8 @@
     <MESSAGE value="Score System" />
     <MESSAGE value="Button fixed" />
     <MESSAGE value="Movement Fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Movement Fix" />
+    <MESSAGE value="Score System-PreHealthBar  collison pre" />
+    <option name="LAST_COMMIT_MESSAGE" value="Score System-PreHealthBar  collison pre" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -8,5 +8,6 @@ public class Rocket extends GameObject
         super(posX, posY);
         speed = 150;
         damage = 200;
+
     }
 }
