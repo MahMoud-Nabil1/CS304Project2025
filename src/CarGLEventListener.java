@@ -38,12 +38,15 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     ArrayList<buttons> menuButtons = new ArrayList<>();
     ArrayList<buttons> pauseButtons = new ArrayList<>();
     buttons inGamePauseBtn;
+    ArrayList<buttons> endButtons = new ArrayList<>();
     int mx = 0, my = 0;
     boolean clicked = false;
 
 
     String[] textureNames = {"BackGroundTest.png" , "car.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
+            ,"endBackground.png", "continuebBotton.png" , "mainMenuButton.png" ,"playAgainButton.png",
+            "pauseButton.png"
     };
 
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -198,9 +201,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         menuButtons.add(new buttons(45, 45, 20, 10, 4));
         menuButtons.add(new buttons(45, 30, 20, 10, 5));
         menuButtons.add(new buttons(45, 15, 20, 10, 6));
-        inGamePauseBtn = new buttons(85, 85, 15, 10, 4);
-        pauseButtons.add(new buttons(45, 30, 20, 10, 4));
+        inGamePauseBtn = new buttons(85, 85, 15, 10, 13);
+        pauseButtons.add(new buttons(45, 30, 20, 10, 10));
         pauseButtons.add(new buttons(45, 15, 20, 10, 6));
+        endButtons.add(new buttons(65, 15, 20, 10, 12));
+        endButtons.add(new buttons(25, 15, 20, 10, 11));
 
 
         // --------------------------- Shehab Score Texture  ------------------------------------
@@ -312,8 +317,13 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
         }else if(GameState == End) {
+            DrawBackground(gl , 9);
+            for (buttons btn : endButtons) {
+                btn.draw(gl, textures, maxWidth, maxHeight);
+            }
 
         } else if (GameState == Instructions) {
+
 
         }
     }
@@ -366,6 +376,13 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         if (GameState == Game) {
             if (inGamePauseBtn.isClicked(mouseX, mouseY ,  maxWidth , maxHeight)) {
                 GameState = Pause;
+            }
+        }
+        if (GameState == End) {
+            for (int i = 0; i < endButtons.size(); i++) {
+                if (endButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
+                    handleButton(i + 6);
+                }
             }
         }
     }
@@ -677,6 +694,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             case 3: GameState = Game; break;
             case 4: System.exit(0); break;
             case 5: GameState = Pause; break;
+            case 6: GameState = Game; break;
+            case 7: GameState = Menu; break;
         }
     }
 

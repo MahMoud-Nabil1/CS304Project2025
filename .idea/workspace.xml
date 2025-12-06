@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="Score System-PreHealthBar  collison pre">
+    <list default="true" id="c02c7179-150e-4eba-8563-f6a78cad6c1f" name="Changes" comment="edited the butons">
+      <change afterPath="$PROJECT_DIR$/assets/continuebBotton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/endBackground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/mainMenuButton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/pauseButton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/playAgainButton.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CS304Project2025.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS304Project2025.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib64.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib64.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PowerUp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,13 +59,15 @@
     "Application.CarGame.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/shehab/IdeaProjects/CS304Project2025/assets/HealthBar",
+    "last_opened_file_path": "C:/Users/VICTUS/Documents/GitHub/CS304Project2025/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -70,9 +77,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\VICTUS\Documents\GitHub\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
       <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets" />
+      <recent name="C:\Users\shehab\IdeaProjects\CS304Project2025\assets\HealthBar" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\MAHMO\Documents\GitHub\CS304Project2025\assets" />
@@ -104,7 +113,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1764858230317</updated>
-      <workItem from="1764960319615" duration="2373000" />
+      <workItem from="1764960319615" duration="2417000" />
     </task>
     <task id="LOCAL-00001" summary="Score System">
       <option name="closed" value="true" />
@@ -146,7 +155,7 @@
       <option name="project" value="LOCAL" />
       <updated>1765032915916</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,10 +174,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Score System" />
+    <MESSAGE value="edited the butons" />
     <MESSAGE value="Button fixed" />
     <MESSAGE value="Movement Fix" />
     <MESSAGE value="Score System-PreHealthBar  collison pre" />
-    <option name="LAST_COMMIT_MESSAGE" value="Score System-PreHealthBar  collison pre" />
+    <option name="LAST_COMMIT_MESSAGE" value="edited the butons" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
