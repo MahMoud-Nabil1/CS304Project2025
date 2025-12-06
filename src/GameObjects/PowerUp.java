@@ -4,60 +4,39 @@ import GameController.GameController;
 
 public abstract class PowerUp extends GameObject {
 
-    // Fields to track state
-    public boolean isCollected = false; // Is it currently active on the player?
-    public int durationFrames = 0;      // How long the effect lasts (0 for instant items)
-    public double speed = GameController.gameSpeed;// How fast it falls down the screen
-   // public float y;
-   // public float x;
+    public boolean isCollected = false;
+    public int durationFrames = 0;
+    public double speed = GameController.gameSpeed;
 
     public PowerUp(float x, float y) {
         super(x, y);
         this.width = 8;
         this.height = 2;
-
     }
 
-    // --- THE UPDATE METHOD ("The Brain") ---
+    // --- THE UPDATE METHOD ---
     public void update(PlayerCar car) {
         if (!isCollected) {
-            // PHASE 1: Falling
-            // It moves down based on its own speed + the game speed (so it moves with the road)
-           // y -= (float) GameController.gameSpeed;
-
-            // FIX 2: Update the PARENT variables (posY/posX) so getBounds() works -- Shehab Fix
+            // PHASE 1: Falling down the screen
             setPosY((float) (getPosY() - GameController.gameSpeed));
-
-            // Sync posX if needed (though it doesn't change usually)
-            // setPosX(...)
-
-        } else {
-            // PHASE 2: Active Effect (Counting down)
+        }
+        else {
+            // PHASE 2: Collected & Active (In Inventory/Effect active)
             if (durationFrames > 0) {
                 durationFrames--;
-
-                // If time runs out, remove effect
-                if (durationFrames <= 0) {
-                    remove(car);
-                    alive = false; // Remove from game
-                    // We will remove it from the list in the Main Class loop
-                } else {alive = false;}
+            } else {
+                // Time is up!
+                remove(car);   // Deactivate effect
+                alive = false; // Mark for deletion by GameController
             }
         }
     }
 
-
-    // Shehab Hit box
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    // Abstract methods children must implement
+    // This ensures children implement these
     public abstract void apply(PlayerCar car);
     public abstract void remove(PlayerCar car);
 
+    // Getters for hitbox
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
 }

@@ -4,14 +4,14 @@ import GameController.GameController;
 import java.util.ArrayList;
 
 public class PlayerCar extends Car{
-    protected int nitro=100;
+    protected int nitro=200;
     public ArrayList<Bullet> bullets;
     int score=0;
     public int firerate = 0;
     public int invincibilityTimer = 0; // For Colligions
 
     public PlayerCar(float posX, float posY) {
-        super(posX,posY,.7,20,100);
+        super(posX,posY,1,20,100);
         bullets=new ArrayList<>();
 
         // FIX: Set the size here!
@@ -27,27 +27,48 @@ public class PlayerCar extends Car{
     }
     private boolean nitroActive = false;
 
-    public void nitroOn() {
-        if(nitro > 0 && !nitroActive) {
-            this.damage += 50;
-            GameController.gameSpeed = 2 ;
-            damageFactor = 1.5;
-            nitro--;
-            nitroActive = true;
+    // Add a variable to remember normal speed
+    private double normalGameSpeed = 1.0;
+
+    public void update() {
+        // --- NITRO DRAIN LOGIC ---
+        // If nitro is on, drain fuel
+        if (nitroActive) {
+            nitro--; // Drain 1 unit per frame (adjust as needed)
+
+            // If fuel runs out, force it off
+            if (nitro <= 0) {
+                nitroOff();
+            }
         }
-        if (nitro<=0&&!nitroActive) {
-            GameController.gameSpeed =1;
-            nitroOff();
-            System.out.println("nitroOff");
+    }
+
+    public void nitroOn() {
+        // Only activate if we have fuel and aren't already boosting
+        if (nitro > 0 && !nitroActive) {
+            nitroActive = true;
+
+            // 1. Save current speed so we can restore it later
+            normalGameSpeed = GameController.gameSpeed;
+
+            // 2. Set Boost Speed
+            GameController.gameSpeed = normalGameSpeed * 2; // Double the current speed
+
+            // 3. Buff Damage
+            this.damage += 50;
+            // damageFactor = 1.5; // Optional, depends on your logic
         }
     }
 
     public void nitroOff() {
-        if(nitroActive) {
-            this.speed -= 50;   // Be careful, you are modifying speed here, but speed is 0.7 above?
-            this.damage -= 50;
+        if (nitroActive) {
             nitroActive = false;
 
+            // 1. Restore the speed we had before boosting
+            GameController.gameSpeed = normalGameSpeed;
+
+            // 2. Remove Damage Buff
+            this.damage -= 50;
         }
     }
     public void shoot() {

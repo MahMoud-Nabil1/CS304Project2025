@@ -3,25 +3,30 @@ package GameObjects;
 import GameController.GameController;
 
 public class DoubleScore extends PowerUp {
-    private int durationFrames;
-    public DoubleScore(int x, int y, int durationFrames) {
+
+    public DoubleScore(float x, float y, int durationFrames) {
         super(x, y);
+        // FIX: Assign to the PARENT's durationFrames.
+        // Do NOT declare "private int durationFrames" here.
         this.durationFrames = durationFrames;
     }
+
+    @Override
     public void apply(PlayerCar car) {
-        car.score += 1; // activate the double bullet
+        isCollected = true; // Tells the parent update() to start the timer
+
+        // Activate the logic
+        // You need to create this boolean in your GameController!
+        GameController.doubleScoreActive = true;
+
+        // Hide the visual sprite, but keep the object "alive" so the timer runs
+        setPosY(-100);
     }
-    public void remove(PlayerCar car) {}
 
-    // It is already inside PowerUp.java --- Shehab Fix
-    /*public void update(PlayerCar car) {
-        y -= (float) GameController.gameSpeed;
-        if (durationFrames > 0) {
-            durationFrames--;
-            if (durationFrames <= 0) remove(car);
-        }
+    @Override
+    public void remove(PlayerCar car) {
+        // Deactivate the logic when time is up
+        GameController.doubleScoreActive = false;
+        System.out.println("Double Score Expired");
     }
-    */
-
-
 }

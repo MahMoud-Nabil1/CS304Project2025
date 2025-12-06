@@ -73,7 +73,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int frameCounter = 0;
     int score = 0;
     int xScore = 10;
-    int yScore = 80;
+    int yScore = 85;
 
     // Inside Class Variables
     int healthAnimCounter = 0; // Counts frames for the health bar
@@ -300,15 +300,16 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             //---------------Colligion Shehab-----------------------
             updateGameLogic();
 
+
             //-------Score---HealthBar  Related
             score(gl, xScore, yScore);
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
             //drawScoreText(glAutoDrawable);
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
-            score(gl,50,90);
 
             checkPlayerDeath();
+            System.out.println(GameController.gameSpeed);
 
         }else if(GameState == Pause) {
             DrawBackground(gl , 3);
@@ -341,9 +342,13 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         int keyCode = e.getKeyCode();
         keyBits.clear(keyCode);
         angle = 0;
+
     }
 
     public boolean isKeyPressed(final int keyCode) {
+        return keyBits.get(keyCode);
+    }
+    public boolean isKeyReleased(final int keyCode) {
         return keyBits.get(keyCode);
     }
 
@@ -507,8 +512,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     public void drawPowerUps(GL gl) {
         if (GameController.powerUpsList.size() < 6 && PowerUPTimer <= 0) {
             powerUpsSpawn(gl);
-            PowerUPTimer = 500;
+            PowerUPTimer = 50;
         }
+        player.update();
 
         try {
             for (int i = 0; i < GameController.powerUpsList.size(); i++) {
@@ -538,7 +544,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                     // NEW (Correct)
                     // We use getPosX() and getPosY() from the parent GameObject
                     drawSpriteTexture(gl, (float) p.getPosX(), (float) p.getPosY(), finalTexIndex, 0.7f, powerUpTextures);
-                    if (p.getPosY() <= -6) {
+                    if (p.getPosY() <= -50) {
                         GameController.powerUpsList.remove(i);
                     }
                 }
@@ -561,7 +567,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
             obs.setPosY(((int) ((obs.getPosY() - GameController.gameSpeed))));
 
-            if (obs.getPosY() < -2) {
+            if (obs.getPosY() < -50) {
                 obs.setPosY(maxHeight + 10);
 
                 int newXPos = (int)(Math.random() * 5);
@@ -707,12 +713,16 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         //int score=GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
-            score++;
-            System.out.println(score);
+            if (GameController.doubleScoreActive) {
+                GameController.score+= (int) (2*GameController.gameSpeed);
+            } else {
+                GameController.score += 1;
+            }
+            System.out.println(GameController.score);
             frameCounter = 0;
         }
         // 2. Convert Score to String to get individual digits
-        String scoreString = Integer.toString(score);
+        String scoreString = Integer.toString(GameController.score);
         // 3. Drawing Logic
         gl.glEnable(GL.GL_BLEND);
         gl.glColor3f(1.0f, 1.0f, 1.0f);

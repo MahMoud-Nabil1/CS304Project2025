@@ -10,6 +10,7 @@ public class GameController {
     public static ArrayList<PowerUp> powerUpsList = new ArrayList<>();
     public int powerUpTimer= 500;
     public static boolean doubleBulletActive= false;
+    public static boolean doubleScoreActive = false;
 
 
 }
