@@ -21,7 +21,7 @@ public class CarGame extends JFrame  {
         glcanvas.addGLEventListener(listener);
         animator = new FPSAnimator(glcanvas, 60);
         add(glcanvas, BorderLayout.CENTER);
-        glcanvas.setPreferredSize(new Dimension(800, 600));
+        glcanvas.setPreferredSize(new Dimension(800, 700));
         pack();
         setLocationRelativeTo(this);
         setVisible(true);
