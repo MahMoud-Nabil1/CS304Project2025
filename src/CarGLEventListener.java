@@ -417,7 +417,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         }
 
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY > 0 && curX > 0) {
+        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY > 0 && curX > 7) {
             curY -= currentSpeed;
             curX -= currentSpeed;
             angle = -10;
@@ -1083,6 +1083,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         if (player.health <= 0) {
             GameState = End; // Switch to End Screen (State 3)
             player.health=100;
+            score = 0;
         }
     }
 
