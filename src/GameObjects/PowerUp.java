@@ -46,7 +46,18 @@ public abstract class PowerUp extends GameObject {
         }
     }
 
+
+    // Shehab Hit box
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     // Abstract methods children must implement
     public abstract void apply(PlayerCar car);
     public abstract void remove(PlayerCar car);
+
 }

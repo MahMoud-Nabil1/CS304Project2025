@@ -462,27 +462,28 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         int duration = 300;
 
+        // 1. Declare a variable to hold the ONE object
+        PowerUp p = null;
+
         switch (randomizer) {
             case 0:
-                GameController.powerUpsList.add(new Nitro(spawnX, spawnY));
-                allObjects.add(new Nitro(spawnX,spawnY));
+                p = new Nitro(spawnX, spawnY);
                 break;
-
             case 1:
-                GameController.powerUpsList.add(new Repair(spawnX, spawnY));
-                allObjects.add(new Repair(spawnX,spawnY));
+                p = new Repair(spawnX, spawnY);
                 break;
-
             case 2:
-                GameController.powerUpsList.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
-                allObjects.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
-
+                p = new DoubleScore((int)spawnX, (int)spawnY, duration);
                 break;
-
             case 3:
-                GameController.powerUpsList.add(new DoubleBullets(spawnX, spawnY, duration));
-                allObjects.add(new DoubleBullets(spawnX, spawnY, duration));
+                p = new DoubleBullets(spawnX, spawnY, duration);
                 break;
+        }
+
+        // 3. Add the SAME object to BOTH lists
+        if (p != null) {
+            GameController.powerUpsList.add(p); // This makes it DRAW and UPDATE
+            allObjects.add(p);                  // This makes it COLLIDE
         }
     }
     public void drawPowerUps(GL gl) {
@@ -967,7 +968,18 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
     public void updateGameLogic() {
+        for (GameObject obj : allObjects) {
+            if (obj instanceof PlayerCar) continue;
 
+            // --- NEW DEBUG RADAR ---
+            // Only print for PowerUps so we don't spam the console too much
+            if (obj instanceof PowerUp) {
+                PowerUp p = (PowerUp) obj;
+                //System.out.println("RADAR: PowerUp Y=" + p.getPosY() + " | Player Y=" + player.getPosY() +
+                //        " | PowerUp Size=" + p.getWidth() + "x" + p.getHeight());
+            }
+            // ----
+        }
         // 1. Player vs Obstacles AND PowerUps
         for (GameObject obj : allObjects) {
             if (obj instanceof PlayerCar) continue;
@@ -979,16 +991,17 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);
                         player.invincibilityTimer = 40;
-                        System.out.println("CRASH!");
+                        System.out.println("CRASH! Hit Obstacle.");
                     }
                 }
 
                 // --- CASE B: PowerUp (THE FIX) ---
                 else if (obj instanceof PowerUp) {
                     PowerUp p = (PowerUp) obj;
-
+                    System.out.println("DEBUG: Physical HIT with " + p.getClass().getSimpleName());
                     // Only collect if we haven't already
                     if (!p.isCollected) {
+                        System.out.println("DEBUG: >>> ACTIVATING EFFECT for " + p.getClass().getSimpleName() + " <<<");
                         p.apply(player);       // 1. Give Effect
                         p.isCollected = true;  // 2. Mark as collected
 
