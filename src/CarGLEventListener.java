@@ -442,11 +442,11 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 break;
 
             case 2:
-                GameController.powerUpsList.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
+                GameController.powerUpsList.add(new DoubleBullets((int)spawnX, (int)spawnY, duration));
                 break;
 
             case 3:
-                GameController.powerUpsList.add(new DoubleBullets(spawnX, spawnY, duration));
+                GameController.powerUpsList.add(new DoubleScore((int)spawnX, (int)spawnY, duration));
                 break;
         }
     }
@@ -638,6 +638,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
+        int score = GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
             score++;
