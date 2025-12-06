@@ -300,7 +300,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             //drawScoreText(glAutoDrawable);
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
-
+            score(gl,50,90);
 
 
 
