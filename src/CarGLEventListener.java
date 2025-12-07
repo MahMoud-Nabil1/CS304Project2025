@@ -17,17 +17,19 @@ import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
-import GameObjects.*;
+//import GameObjects.*;
 
 import javax.media.opengl.GLAutoDrawable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+//import GameObjects.Nitro;
+
 
 
 public class CarGLEventListener extends CarListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
     double roadOffsetY = 0.0f;
     String UserName;
-    int GameState = 0;
+    int GameState = 3;
     final int Menu = 0;
     final int Game = 1;
     final int Pause = 2;
@@ -46,7 +48,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     String[] textureNames = {"BackGroundTest.png" , "car.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
             ,"endBackground.png", "continuebBotton.png" , "mainMenuButton.png" ,"playAgainButton.png",
-            "pauseButton.png" , "Lightcar.png"
+            "pauseButton.png" , "Lightcar.png","pauseButton2.png" ,"loseMenu2.png"
     };
 
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -209,7 +211,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         menuButtons.add(new buttons(45, 45, 20, 10, 4));
         menuButtons.add(new buttons(45, 30, 20, 10, 5));
         menuButtons.add(new buttons(45, 15, 20, 10, 6));
-        inGamePauseBtn = new buttons(85, 85, 15, 10, 13);
+        inGamePauseBtn = new buttons(85, 90, 9, 9, 15);
         pauseButtons.add(new buttons(45, 30, 20, 10, 10));
         pauseButtons.add(new buttons(45, 15, 20, 10, 6));
         endButtons.add(new buttons(65, 15, 20, 10, 12));
@@ -333,7 +335,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
         }else if(GameState == End) {
-            DrawBackground(gl , 9);
+            DrawBackground(gl , 16);
             for (buttons btn : endButtons) {
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
