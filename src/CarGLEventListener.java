@@ -75,6 +75,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int xScore = 10;
     int yScore = 85;
 
+    // Stats Sexy
+    int lightCarsKilled = 0;
+
     // Inside Class Variables
     int healthAnimCounter = 0; // Counts frames for the health bar
     TextRenderer renderer;
@@ -320,7 +323,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
             checkPlayerDeath();
-            System.out.println(GameController.gameSpeed);
+            //System.out.println(GameController.gameSpeed);
 
         }else if(GameState == Pause) {
             DrawBackground(gl , 3);
@@ -579,6 +582,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         float spawnY = 100;
         LightCar p = new LightCar(spawnX, spawnY);
         GameController.LightCars.add(p);
+        allObjects.add(p);
 
     }
     public void drawPowerLightCar(GL gl) {
@@ -590,6 +594,9 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         for (LightCar car : GameController.LightCars) {
             DrawSpriteWall(gl, (float)car.getPosX(), (float)car.getPosY(), 14, 1.4f);
+
+            // DeBug Collision
+            drawHitboxDebug(gl, car.getBounds());
 
             if (car.getPosY() < -10) {
                 toRemove.add(car);
@@ -752,7 +759,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
-        //int score=GameController.score;
+        int score=GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
             if (GameController.doubleScoreActive) {
@@ -974,39 +981,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
 
     //--------------------------For Shehab Collision--------------------------------------
-    public void checkCollision(GameObject obj1, GameObject obj2) {
-        if (obj1.getBounds().intersects(obj2.getBounds())) {
-
-            // Check: Is one of them the Player?
-            if (obj1 instanceof PlayerCar || obj2 instanceof PlayerCar) {
-
-                PlayerCar player = (obj1 instanceof PlayerCar) ? (PlayerCar)obj1 : (PlayerCar)obj2;
-                GameObject other = (obj1 instanceof PlayerCar) ? obj2 : obj1;
-
-                // 1. Player hits Obstacle
-                if (other instanceof Obstacles) {
-                    Obstacles obs = (Obstacles) other;
-                    player.takeDamage(obs.damage);
-                    // Obstacle does NOT die (invincible)
-                    System.out.println("Hit Obstacle!");
-                }
-                // 2. Player hits LightCar
-                else if (other instanceof LightCar) {
-                    player.takeDamage(20);  // Less damage
-                    other.takeDamage(100);  // Enemy dies
-                    System.out.println("Hit LightCar!");
-                }
-                // 3. Player hits HeavyCar
-                else if (other instanceof HeavyCar) {
-                    player.takeDamage(50);  // MORE damage
-                    other.takeDamage(50);   // Heavy car takes damage (might not die immediately)
-                    System.out.println("Hit HeavyCar!");
-                }
-            }
-
-            // You can add Bullet collision logic here later
-        }
-    }
 
     // Helper method to keep code clean
     private void handlePlayerCollision(PlayerCar player, GameObject other) {
@@ -1041,19 +1015,96 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     }
 
     public void updateGameLogic() {
-        for (GameObject obj : allObjects) {
-            if (obj instanceof PlayerCar) continue;
+        // ------For player hit Game Objects-----
+        checkCollision();
 
-            // --- NEW DEBUG RADAR ---
-            // Only print for PowerUps so we don't spam the console too much
-            if (obj instanceof PowerUp) {
-                PowerUp p = (PowerUp) obj;
-                //System.out.println("RADAR: PowerUp Y=" + p.getPosY() + " | Player Y=" + player.getPosY() +
-                //        " | PowerUp Size=" + p.getWidth() + "x" + p.getHeight());
+        // 2. Bullets vs Obstacles
+        for (int i = 0; i < player.bullets.size(); i++) {
+            Bullet b = player.bullets.get(i);
+            if (b.timer <= 0) continue;
+
+            // Create a hitbox for the bullet (make it slightly larger for easier hitting)
+            Rectangle bulletRect = new Rectangle((int)b.posX, (int)b.posY, 4, 4);
+
+            for (GameObject obj : allObjects) {
+                if (obj.alive && obj instanceof Obstacles) {
+                    if (bulletRect.intersects(obj.getBounds())) {
+                        System.out.println("HIT! Bullet destroyed obstacle!");
+                        b.timer = -1; // Destroy the bullet
+                        break;
+                    }
+                }
+                if (obj.alive && obj instanceof LightCar){
+                    if (bulletRect.intersects(obj.getBounds())) {
+                        System.out.println("HIT! Bullet destroyed Car");
+                        obj.takeDamage(40);
+                        b.timer = -1;
+                        break;
+                    }
+                }
+
             }
-            // ----
+
         }
-        // 1. Player vs Obstacles AND PowerUps
+        // =========================================================
+        // 3. STATE UPDATE: Map Health to Alive
+        // =========================================================
+
+        for (LightCar car : GameController.LightCars) {
+            // Check if health is 0 BUT it is still marked as alive
+            // This ensures we only give points ONCE per car
+            if (car.health <= 0 && car.alive) {
+                // 1. Change State
+                car.alive = false;
+                // 2. Add Score
+                GameController.score += 100; // Add 100 points (Change this value as needed)
+                // 3. Increment Kill Counter
+                lightCarsKilled++;
+                System.out.println("Enemy Destroyed! Total Kills: " + lightCarsKilled);
+            }
+        }
+
+        // (Optional: Do the same for general objects if they have health)
+        for (GameObject obj : allObjects) {
+            if (obj instanceof LightCar && obj.health <= 0) {
+                obj.alive = false;
+            }
+        }
+
+
+
+        //====================================================================
+        // 4. Remove Dead Objects
+        //====================================================================
+        for (int i = allObjects.size() - 1; i >= 0; i--) {
+            if (!allObjects.get(i).alive) {
+                allObjects.remove(i);
+            }
+        }
+        //---------- Sync specific lists----------------
+        for (int i = obstaclesList.size() - 1; i >= 0; i--) {
+            if (!obstaclesList.get(i).alive) {
+                obstaclesList.remove(i);
+            }
+        }
+
+        // ------------------Light Cars Removing-----------------------
+        for (int i = GameController.LightCars.size()-1 ; i>=0 ; i--){
+            if (!GameController.LightCars.get(i).alive){
+                GameController.LightCars.remove(i);
+            }
+        }
+
+        // Clean PowerUps (IMPORTANT: This fixes "ghost" powerups)
+        for (int i = GameController.powerUpsList.size() - 1; i >= 0; i--) {
+            if (!GameController.powerUpsList.get(i).alive) {
+                GameController.powerUpsList.remove(i);
+            }
+        }
+
+    }
+    public void checkCollision() {
+        //  Player vs GameObjects
         for (GameObject obj : allObjects) {
             if (obj instanceof PlayerCar) continue;
 
@@ -1084,52 +1135,20 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
                         System.out.println("COLLECTED POWERUP!");
                     }
                 }
-            }
 
-
-        }
-
-        // 2. Bullets vs Obstacles
-        for (int i = 0; i < player.bullets.size(); i++) {
-            Bullet b = player.bullets.get(i);
-            if (b.timer <= 0) continue;
-
-            // Create a hitbox for the bullet (make it slightly larger for easier hitting)
-            Rectangle bulletRect = new Rectangle((int)b.posX, (int)b.posY, 4, 4);
-
-            for (GameObject obj : allObjects) {
-                if (obj.alive && obj instanceof Obstacles) {
-                    if (bulletRect.intersects(obj.getBounds())) {
-                        System.out.println("HIT! Bullet destroyed obstacle!");
-
-                        obj.takeDamage(100); // Kill the rock
-                        b.timer = -1; // Destroy the bullet
-                        break;
+                //--- Case C: Player Hit a LightCar ---
+                else if(obj instanceof LightCar){
+                    if (player.invincibilityTimer == 0) {
+                        player.takeDamage(20);  // Less damage
+                        player.invincibilityTimer = 40;
+                        obj.takeDamage(100);  // Enemy dies
+                        System.out.println("Hit LightCar!");
                     }
                 }
             }
-        }
 
-        // 3. Remove Dead Objects
-        for (int i = allObjects.size() - 1; i >= 0; i--) {
-            if (!allObjects.get(i).alive) {
-                allObjects.remove(i);
-            }
+            // You can add Bullet collision logic here later
         }
-        // Sync specific lists
-        for (int i = obstaclesList.size() - 1; i >= 0; i--) {
-            if (!obstaclesList.get(i).alive) {
-                obstaclesList.remove(i);
-            }
-        }
-
-        // Clean PowerUps (IMPORTANT: This fixes "ghost" powerups)
-        for (int i = GameController.powerUpsList.size() - 1; i >= 0; i--) {
-            if (!GameController.powerUpsList.get(i).alive) {
-                GameController.powerUpsList.remove(i);
-            }
-        }
-
     }
     public void checkPlayerDeath(){
         if (player.health <= 0) {
@@ -1137,6 +1156,44 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             player.health=100;
             score = 0;
         }
+    }
+    /*public void debugingPowerups(){
+        for (GameObject obj : allObjects) {
+            if (obj instanceof PlayerCar) continue;
+
+            // --- NEW DEBUG RADAR ---
+            // Only print for PowerUps so we don't spam the console too much
+            if (obj instanceof PowerUp) {
+                PowerUp p = (PowerUp) obj;
+                //System.out.println("RADAR: PowerUp Y=" + p.getPosY() + " | Player Y=" + player.getPosY() +
+                //        " | PowerUp Size=" + p.getWidth() + "x" + p.getHeight());
+            }
+            // ----
+        }
+    }*/
+    public void drawHitboxDebug(GL gl, Rectangle rect) {
+        gl.glDisable(GL.GL_TEXTURE_2D); // Turn off textures to draw lines
+        gl.glColor3f(1.0f, 0.0f, 0.0f); // Set color to RED
+
+        gl.glPushMatrix();
+
+        // Convert Game Coords (0..100) to OpenGL Coords (-1..1)
+        double x = rect.x / 50.0 - 1.0;
+        double y = rect.y / 50.0 - 1.0;
+        double w = rect.width / 50.0;
+        double h = rect.height / 50.0;
+
+        gl.glBegin(GL.GL_LINE_LOOP);
+        gl.glVertex2d(x, y);
+        gl.glVertex2d(x + w, y);
+        gl.glVertex2d(x + w, y + h);
+        gl.glVertex2d(x, y + h);
+        gl.glEnd();
+
+        gl.glPopMatrix();
+
+        gl.glColor3f(1.0f, 1.0f, 1.0f); // Reset color to White
+        gl.glEnable(GL.GL_TEXTURE_2D);  // Turn textures back on
     }
 
     @Override
