@@ -46,7 +46,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     String[] textureNames = {"BackGroundTest.png" , "car.png" , "MenuBackGround.png" , "PauseMenu.png"
             , "StartButton.png" , "InstructionsButton.png" , "QuitButton.png" , "obstacle.png","bullet.png"
             ,"endBackground.png", "continuebBotton.png" , "mainMenuButton.png" ,"playAgainButton.png",
-            "pauseButton.png"
+            "pauseButton.png" , "Lightcar.png"
     };
 
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -127,7 +127,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
     int obstacleTextureIndex = 7;
     int[] obstaclesPositions = {13, 29, 45, 62, 79};
 
-
+    //---------Light car----------
+    int numberOfLightCar = 4;
+    int LightCarTextureIndex = 14;
+    int[] LightCarPositions = {13, 29, 45, 62, 79};
+    
+    
     int PowerUPTimer=0;
 
 
@@ -208,6 +213,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         endButtons.add(new buttons(25, 15, 20, 10, 11));
 
 
+        //----------------------------- LighCars initialization ----------------------------------------
+
+
+
+
+
         // --------------------------- Shehab Score Texture  ------------------------------------
         gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);
         for (int i = 0; i < scoreTextureNames.length; i++) {
@@ -275,9 +286,12 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
     @Override
     public void display(GLAutoDrawable glAutoDrawable) {
+
         GL gl = glAutoDrawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
+
+
         if (GameState == Menu) {
             DrawBackground(gl,2);
 
@@ -289,17 +303,15 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         } else if (GameState == Game) {
             background_loop(gl);
-            drawAndMoveObstacles(gl);
+            drawAndMoveObstacles(gl , obstacleTextureIndex);
+            drawPowerLightCar(gl);
             drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f);
             drawBullets(gl);
             player.updateInvincibility();
             updateMovement();
 
-
-
             //---------------Colligion Shehab-----------------------
             updateGameLogic();
-
 
             //-------Score---HealthBar  Related
             score(gl, xScore, yScore);
@@ -307,7 +319,6 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             //drawScoreText(glAutoDrawable);
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawPowerUps(gl);
-
             checkPlayerDeath();
             System.out.println(GameController.gameSpeed);
 
@@ -561,9 +572,38 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
         PowerUPTimer--;
     }
 
-    public void drawAndMoveObstacles(GL gl) {
+
+    public void LightCarSpawn(GL gl) {
+        int randomizer = (int) (Math.random()*5);
+        float spawnX = obstaclesPositions[randomizer];
+        float spawnY = 100;
+        LightCar p = new LightCar(spawnX, spawnY);
+        GameController.LightCars.add(p);
+
+    }
+    public void drawPowerLightCar(GL gl) {
+        if (GameController.LightCars.size() < 2) {
+            LightCarSpawn(gl);
+        }
+
+        List<LightCar> toRemove = new ArrayList<>();
+
+        for (LightCar car : GameController.LightCars) {
+            DrawSpriteWall(gl, (float)car.getPosX(), (float)car.getPosY(), 14, 1.4f);
+
+            if (car.getPosY() < -10) {
+                toRemove.add(car);
+            } else {
+                car.posY = car.posY - GameController.gameSpeed - car.getSpeed();
+            }
+        }
+
+        GameController.LightCars.removeAll(toRemove);
+    }
+
+    public void drawAndMoveObstacles(GL gl , int index) {
         for (Obstacles obs : obstaclesList) {
-            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), obstacleTextureIndex, 1.3f);
+            DrawSpriteWall(gl, (float) obs.getPosX(), (float) obs.getPosY(), index, 1.3f);
 
             obs.setPosY(((int) ((obs.getPosY() - GameController.gameSpeed))));
 
@@ -575,6 +615,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             }
         }
     }
+
+
 
     public void DrawBackground(GL gl , int index){
         gl.glEnable(GL.GL_BLEND);

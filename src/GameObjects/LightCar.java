@@ -3,10 +3,8 @@ package GameObjects;
 public class LightCar extends Car{
 
     //--------------!!!!!!!!!!!!!!!!DONT ADD X AND Y USE posx posy!!!!!!!!!!!!!!!!!!!!!!!--------------------------
-    //int x;
-    //int y;
-    LightCar(int posX, int posY) {
-        super(posX,posY,100,20,100);
+    public LightCar(float posX, float posY) {
+        super(posX,posY,.1,20,100);
 
         // Set specific size for Light Car
         this.width = 50;
