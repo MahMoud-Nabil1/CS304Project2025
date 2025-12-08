@@ -9,28 +9,25 @@ public class LightCar extends Car{
         super(posX,posY,.1,20,100);
 
         // Set specific size for Light Car
-        this.width = 8;
-        this.height = 10;
+        this.width = 12;
+        this.height = 12;
     }
     LightCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
-        this.width = 8;
-        this.height = 10;
+        this.width = 12;
+        this.height = 12;
 
     }
 
     //-----Hit Box--------
 
-    public Rectangle getBounds(){
-        // TWEAK THESE NUMBERS
-        int xOffset = -1;   // Change this to move Left(-) or Right(+)
-        int yOffset = -1;  // Change this to move Down(-) or Up(+)
-
-        // Reduce width/height if the box is too big
-        int hitboxWidth = 12;
-        int hitboxHeight = 12;
-
-        return new Rectangle((int)posX + xOffset, (int)posY + yOffset, hitboxWidth, hitboxHeight);
-
+    public Rectangle getBounds() {
+        // FIXED: Subtract half width/height to center the box on posX, posY
+        return new Rectangle(
+                (int)(posX - width / 2),
+                (int)(posY - height / 2),
+                width,
+                height
+        );
     }
 }

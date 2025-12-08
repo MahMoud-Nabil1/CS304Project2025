@@ -38,17 +38,14 @@ public class GameObject {
     // Helper to get the rectangle for collision math
 
     public Rectangle getBounds() {
-        // TWEAK THESE NUMBERS
-        int xOffset = 0;   // Change this to move Left(-) or Right(+)
-        int yOffset = 0;  // Change this to move Down(-) or Up(+)
-
-        // Reduce width/height if the box is too big
-        int hitboxWidth = 13;
-        int hitboxHeight = 10;
-
-        return new Rectangle((int)posX + xOffset, (int)posY + yOffset, hitboxWidth, hitboxHeight);
+        // FIXED: Subtract half width/height to center the box on posX, posY
+        return new Rectangle(
+                (int)(posX - width / 2),
+                (int)(posY - height / 2),
+                width,
+                height
+        );
     }
-
     // General method to take damage
     public void takeDamage(int amount) {
         this.health -= amount;

@@ -311,6 +311,7 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             drawAndMoveObstacles(gl , obstacleTextureIndex);
             drawPowerLightCar(gl);
             drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f);
+            drawHitboxDebug(gl, player.getBounds());
             drawBullets(gl);
             player.updateInvincibility();
             updateMovement();
@@ -1173,15 +1174,18 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
             // ----
         }
     }*/
+// In CarGLEventListener.java
+
     public void drawHitboxDebug(GL gl, Rectangle rect) {
-        gl.glDisable(GL.GL_TEXTURE_2D); // Turn off textures to draw lines
-        gl.glColor3f(1.0f, 0.0f, 0.0f); // Set color to RED
+        gl.glDisable(GL.GL_TEXTURE_2D);
+        gl.glColor3f(1.0f, 0.0f, 0.0f);
 
         gl.glPushMatrix();
 
-        // Convert Game Coords (0..100) to OpenGL Coords (-1..1)
-        double x = rect.x / 50.0 - 1.0;
-        double y = rect.y / 50.0 - 1.0;
+        // FIXED: Changed -1.0 to -0.9 to match your drawSprite logic
+        double x = rect.x / 50.0 - 0.9;
+        double y = rect.y / 50.0 - 0.9;
+
         double w = rect.width / 50.0;
         double h = rect.height / 50.0;
 
@@ -1194,8 +1198,8 @@ public class CarGLEventListener extends CarListener implements MouseListener, GL
 
         gl.glPopMatrix();
 
-        gl.glColor3f(1.0f, 1.0f, 1.0f); // Reset color to White
-        gl.glEnable(GL.GL_TEXTURE_2D);  // Turn textures back on
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+        gl.glEnable(GL.GL_TEXTURE_2D);
     }
 
     @Override
