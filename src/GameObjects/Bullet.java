@@ -5,7 +5,7 @@ public class Bullet extends GameObject {
     public int damage;
     public int timer=1000;
 
-    public Bullet(double posX,double posY,int damage) {
+    public Bullet(float posX, float posY, int damage) {
         super(posX,posY);
         this.posX = posX;
         this.posY = posY;

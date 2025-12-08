@@ -1,6 +1,7 @@
 package GameObjects;
-import GameController.GameController;
+import GameController.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class PlayerCar extends Car{
@@ -71,15 +72,24 @@ public class PlayerCar extends Car{
             this.damage -= 50;
         }
     }
+    // Inside PlayerCar.java
     public void shoot() {
-        if (firerate<=0) {
-            if(GameController.doubleBulletActive) {
-                bullets.add(new Bullet(posX - 2, posY, damage));
-                bullets.add(new Bullet(posX + 2, posY, damage));
+        if (firerate <= 0) {
+            // Recycle a bullet instead of making a new one
+            if (GameController.doubleBulletActive) {
+                // Grab two from the pool
+                Bullet b1 = BulletPool.getBullet((float) (posX - 2), posY, damage);
+                Bullet b2 = BulletPool.getBullet(posX + 2, posY, damage);
+
+                // Add them to your active list ONLY if pool returned something
+                if (b1 != null) bullets.add(b1);
+                if (b2 != null) bullets.add(b2);
+
             } else {
-                bullets.add(new Bullet(posX, posY, damage));
+                Bullet b = BulletPool.getBullet(posX, posY, damage);
+                if (b != null) bullets.add(b);
             }
-            firerate=10;
+            firerate = 15;
         }
     }
     // Add this to your updateMovement or a new update() method
@@ -88,6 +98,16 @@ public class PlayerCar extends Car{
             invincibilityTimer--;
         }
     }
+    public Rectangle getBounds() {
+        // TWEAK THESE NUMBERS
+        int xOffset = 0;   // Change this to move Left(-) or Right(+)
+        int yOffset = 0;  // Change this to move Down(-) or Up(+)
 
+        // Reduce width/height if the box is too big
+        int hitboxWidth = 8;
+        int hitboxHeight = 8;
+
+        return new Rectangle((int)posX + xOffset, (int)posY + yOffset, hitboxWidth, hitboxHeight);
+    }
 
 }

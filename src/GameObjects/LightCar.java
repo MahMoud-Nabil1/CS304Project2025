@@ -6,7 +6,7 @@ public class LightCar extends Car{
 
     //--------------!!!!!!!!!!!!!!!!DONT ADD X AND Y USE posx posy!!!!!!!!!!!!!!!!!!!!!!!--------------------------
     public LightCar(float posX, float posY) {
-        super(posX,posY,.1,20,100);
+        super(posX,posY,.3,20,100);
 
         // Set specific size for Light Car
         this.width = 12;

@@ -104,7 +104,7 @@ public class drawClass {
             if (obs.getPosY() < -10) {
                 toRemove.add(obs);
             } else {
-                obs.posY = obs.posY - GameController.gameSpeed;
+                obs.posY = (float) (obs.posY - GameController.gameSpeed);
             }
         }
         obstaclesList.removeAll(toRemove);
@@ -121,19 +121,31 @@ public class drawClass {
     }
 
     public static void drawBullets(GL gl, PlayerCar player, int[] textures) {
+        // 1. Create a "Trash Can" list
+        List<Bullet> deadBullets = new ArrayList<>();
+
         for (Bullet bullet : player.bullets) {
             if (bullet != null) {
-                if (bullet.timer>=0) {
-                    DrawSpriteWall(gl, (float) bullet.posX, (float) (bullet.posY+10), 8, 1.0f ,textures );
+                // Check if bullet is alive
+                if (bullet.timer >= 0) {
+                    // Draw and Move
+                    DrawSpriteWall(gl, (float) bullet.posX, (float) (bullet.posY + 10), 8, 1.0f, textures);
                     bullet.posY += 2 + GameController.gameSpeed;
                     bullet.timer--;
+                } else {
+                    // If it's dead, add to trash can
+                    deadBullets.add(bullet);
                 }
             }
         }
-        if (player.firerate>0)
+
+        // 2. Empty the trash (Remove dead bullets from the player's list)
+        player.bullets.removeAll(deadBullets);
+
+        // 3. Handle Fire Rate
+        if (player.firerate > 0)
             player.firerate--;
     }
-
     public static void LightCarSpawn(GL gl) {
         int randomizer = (int) (Math.random()*5);
         float spawnX = obstaclesPositions[randomizer];
@@ -157,7 +169,7 @@ public class drawClass {
             if (car.getPosY() < -10) {
                 toRemove.add(car);
             } else {
-                car.posY = car.posY - GameController.gameSpeed - car.getSpeed();
+                car.posY = (float) (car.posY - GameController.gameSpeed - car.getSpeed());
             }
         }
 

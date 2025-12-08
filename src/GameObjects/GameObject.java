@@ -2,8 +2,8 @@ package GameObjects;
 import java.awt.Rectangle;
 
 public class GameObject {
-    public double posX;
-    public double posY;
+    public float posX;
+    public float posY;
 
     // --------------------Shehab Colligion Related-------------------------------
     public int width = 10;
@@ -13,12 +13,12 @@ public class GameObject {
     public boolean alive=true;
 
     //Constructor
-    GameObject(double posX, double posY){
+    GameObject(float posX, float posY){
         this.posX = posX;
         this.posY = posY;
     }
 
-    public double getPosX() {
+    public float getPosX() {
         return posX;
     }
 
@@ -26,7 +26,7 @@ public class GameObject {
         this.posX = posX;
     }
 
-    public double getPosY() {
+    public float getPosY() {
         return posY;
     }
 

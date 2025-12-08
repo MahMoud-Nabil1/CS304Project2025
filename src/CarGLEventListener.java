@@ -1,7 +1,7 @@
 import GameObjects.*;
 import ScoreRelated.ScoreEntry;
 import Texture.TextureReader;
-import GameController.GameController;
+import GameController.*;
 import com.sun.opengl.util.j2d.TextRenderer;
 
 import javax.media.opengl.GL;
@@ -99,6 +99,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+        BulletPool.init(20);
         //---------------------------- MainGame TextureHandling ---------------------------
         MainTextures(gld);
         //--------------------For PowerUps Textures---------------------------------------
