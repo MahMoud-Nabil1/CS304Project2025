@@ -99,70 +99,52 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-        BulletPool.init(20);
-        //---------------------------- MainGame TextureHandling ---------------------------
-        MainTextures(gld);
-        //--------------------For PowerUps Textures---------------------------------------
+        // Disable Depth Test (Crucial for 2D games so layers stack correctly)
+        // If your images are flickering or disappearing, UNCOMMENT this:
+        // gl.glDisable(GL.GL_DEPTH_TEST);
 
-        PowerUpTextures(gld);
-        //---------------------------- Mostafa Button-initialization ----------------------------------
-//        GameController.TakeUserName();
+        // -------------------------------------------------------------------------------------
+        // 1. TEXTURE LOADING (The Clean Way)
+        // -------------------------------------------------------------------------------------
+        // This single line now loads: Backgrounds, Cars, Buttons, Score Numbers, AND Health Bars.
+        TextureHandling.MainTextures(gld);
+
+        // This loads the colored powerups
+        TextureHandling.PowerUpTextures(gld);
+
+        // -------------------------------------------------------------------------------------
+        // 2. OBJECT INITIALIZATION
+        // -------------------------------------------------------------------------------------
+        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
+        whiteTextureId = createBlankTexture(gl); // Keep this, it's specific to the Health Bar logic
+
+        // Mostafa Button-initialization
+        menuButtons.clear(); // Good habit to clear lists in init
         menuButtons.add(new buttons(45, 45, 20, 10, 4));
         menuButtons.add(new buttons(45, 30, 20, 10, 5));
         menuButtons.add(new buttons(45, 15, 20, 10, 6));
+
         inGamePauseBtn = new buttons(85, 90, 9, 9, 15);
+
+        pauseButtons.clear();
         pauseButtons.add(new buttons(45, 30, 20, 10, 10));
         pauseButtons.add(new buttons(45, 15, 20, 10, 6));
+
+        endButtons.clear();
         endButtons.add(new buttons(65, 15, 20, 10, 12));
         endButtons.add(new buttons(25, 15, 20, 10, 11));
 
-        // --------------------------- Shehab Score Texture  ------------------------------------
-        gl.glGenTextures(scoreTextureNames.length, scoreTextures, 0);
-        for (int i = 0; i < scoreTextureNames.length; i++) {
-            try {
-                scoreTexture[i] = TextureReader.readTexture(assetsFolderName + "//Score" + "//" + scoreTextureNames[i], true);
-                gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[i]);
-                new GLU().gluBuild2DMipmaps(
-                        GL.GL_TEXTURE_2D,
-                        GL.GL_RGBA,
-                        scoreTexture[i].getWidth(), scoreTexture[i].getHeight(),
-                        GL.GL_RGBA,
-                        GL.GL_UNSIGNED_BYTE,
-                        scoreTexture[i].getPixels()
-                );
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-        }
-        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
-
-        //---------------------------- For Shehab Health Bar   ---------------------------------
-
-        gl.glGenTextures(healthTextureNames.length, healthTextures, 0);
-        for(int i = 0; i < healthTextureNames.length; i++){
-            try {
-                healthTexture[i] = TextureReader.readTexture(assetsFolderName + "//HealthBar" + "//" + healthTextureNames[i] , true);
-                gl.glBindTexture(GL.GL_TEXTURE_2D, healthTextures[i]);
-                new GLU().gluBuild2DMipmaps(
-                        GL.GL_TEXTURE_2D,
-                        GL.GL_RGBA,
-                        healthTexture[i].getWidth(), healthTexture[i].getHeight(),
-                        GL.GL_RGBA,
-                        GL.GL_UNSIGNED_BYTE,
-                        healthTexture[i].getPixels()
-                );
-            } catch( IOException e ) {
-                System.out.println(e);
-            }
-        }
-        whiteTextureId = createBlankTexture(gl);
-
-        //-----------------------------Belal All Objects Taking-------------------------------------------
+        // Belal All Objects Taking
         allObjects.clear();
-        player = new PlayerCar((int) curX, (int) curY);
         obstaclesList.clear();
-        allObjects.add(player);
+        GameController.LightCars.clear(); // Don't forget to clear enemies too!
+        GameController.powerUpsList.clear(); // And powerups!
 
+        // Initialize the Bullet Pool (The Optimization we made earlier)
+        BulletPool.init(100);
+
+        player = new PlayerCar((int) curX, (int) curY);
+        allObjects.add(player);
     }
 
     @Override
@@ -188,7 +170,9 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
-
+            drawClass.drawHitboxDebug(gl,player.getBounds());
+            for (LightCar cars:GameController.LightCars )
+                drawClass.drawHitboxDebug(gl,cars.getBounds());
             //---------------Collision Shehab-----------------------
             updateGameLogic();
 
