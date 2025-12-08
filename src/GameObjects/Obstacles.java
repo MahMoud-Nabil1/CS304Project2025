@@ -3,7 +3,7 @@ package GameObjects;
 public class Obstacles extends GameObject {
     public int damage;
     public int timer=1000;
-    public Obstacles(int posX, int posY) {
+    public Obstacles(float posX, float posY) {
         super(posX, posY);
         damage = 100;
 
