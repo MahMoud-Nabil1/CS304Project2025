@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class GameController {
     public static int score = 0;
+    public static int finalScore = 0;
     public static double gameSpeed = 1;
     static String UserName;
     public static ArrayList<PowerUp> powerUpsList = new ArrayList<>();

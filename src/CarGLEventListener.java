@@ -189,6 +189,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             }
         }else if(GameState == End) {
             drawClass.DrawBackground(gl , 16 ,textures);
+            drawFrozenScore(gl,50,43);
             for (buttons btn : endButtons) {
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
@@ -745,9 +746,11 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     public void checkPlayerDeath(){
         if (player.health <= 0) {
             GameState = End; // Switch to End Screen (State 3)
+            GameController.finalScore = GameController.score;
             Music.playMusic("MusicAssets/GameOverMusic.wav");
             player.health=100;
             score = 0;
+            GameController.score = 0;
         }
     }
 
@@ -791,6 +794,42 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
         gl.glColor3f(1.0f, 1.0f, 1.0f);
         gl.glEnable(GL.GL_TEXTURE_2D);
+    }
+    public void drawFrozenScore(GL gl, int x, int y) {
+
+        String scoreString = Integer.toString(GameController.finalScore);
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+        for (int i = 0; i < scoreString.length(); i++) {
+
+            int digit = Character.getNumericValue(scoreString.charAt(i));
+
+            gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);
+            gl.glPushMatrix();
+
+            int digitWidth = 6;
+            int currentX = x + (i * digitWidth);
+
+
+            double glX = (currentX / 50.0) - 1.0;
+            double glY = 1.0 - (y / 50.0);
+
+            gl.glTranslated(glX, glY, 0);
+            gl.glScaled(0.10, 0.10, 1);
+
+            gl.glBegin(GL.GL_QUADS);
+            gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
+            gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+            gl.glEnd();
+
+            gl.glPopMatrix();
+        }
+
+        gl.glDisable(GL.GL_BLEND);
     }
 
     @Override
