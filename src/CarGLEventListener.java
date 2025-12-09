@@ -20,6 +20,7 @@ import java.nio.ByteOrder;
 import GameController.TextureHandling.*;
 
 import static GameController.GameController.obstaclesList;
+import static GameController.GameController.powerUpsList;
 import static GameController.TextureHandling.*;
 
 
@@ -160,6 +161,13 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             for (LightCar car : GameController.LightCars) {
                 drawHitboxDebug(gl, car.getBounds());
             }
+            for (Obstacles o : GameController.obstaclesList) {
+                drawHitboxDebug(gl, o.getBounds());
+            }
+            for (PowerUp p : GameController.powerUpsList) {
+                drawHitboxDebug(gl, p.getBounds());
+            }
+
             for (HeavyCar car : GameController.HeavyCars) {
                 drawHitboxDebug(gl, car.getBounds());
             }

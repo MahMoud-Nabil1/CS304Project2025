@@ -1,5 +1,7 @@
 package GameObjects;
 
+import java.awt.*;
+
 public class Obstacles extends GameObject {
     public int damage;
     public int timer=1000;
@@ -24,5 +26,7 @@ public class Obstacles extends GameObject {
     public void takeDamage(int amount) {
         // Do nothing. I am a rock. I cannot die.
     }
+
+
 
 }

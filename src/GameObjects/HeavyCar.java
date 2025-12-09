@@ -7,12 +7,12 @@ public class HeavyCar extends Car{
         super(posX,posY,.3,50,200);
         // Heavy cars are slightly bigger and tougher
         this.width = 8;
-        this.height = 11;
+        this.height = 13;
     }
     HeavyCar(float posX, float posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
         this.width = 8;
-        this.height = 11;
+        this.height = 13;
     }
 
     public Rectangle getBounds() {
