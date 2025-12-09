@@ -38,10 +38,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     ArrayList<buttons> endButtons = new ArrayList<>();
     int mx = 0, my = 0;
     boolean clicked = false;
-    static String assetsFolderName = "Assets/";
-
-
-
 
     // Score Variables
     public static int frameCounter = 0;

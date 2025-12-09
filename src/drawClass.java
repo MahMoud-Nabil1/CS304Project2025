@@ -17,7 +17,7 @@ import static GameController.TextureHandling.textures;
 public class drawClass {
     static int maxWidth = 100;
     static int maxHeight = 100;
-    static int[] obstaclesPositions = {13, 29, 45, 62, 79};
+    static int[] obstaclesPositions = {11, 29, 45, 62, 79};
     static double roadOffsetY = 0.0f;
     static int PowerUPTimer = 0;
     static final int MAX_CARS_ON_SCREEN = 3;
