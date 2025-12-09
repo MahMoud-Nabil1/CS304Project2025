@@ -1,10 +1,15 @@
 import GameObjects.*;
 import javax.media.opengl.GL;
 import GameController.GameController;
+
 import java.awt.*;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+
 import static GameController.GameController.obstaclesList;
 import static GameController.TextureHandling.powerUpTextures;
 import static GameController.TextureHandling.textures;
@@ -15,9 +20,15 @@ public class drawClass {
     static int[] obstaclesPositions = {13, 29, 45, 62, 79};
     static double roadOffsetY = 0.0f;
     static int PowerUPTimer = 0;
+    static final int MAX_CARS_ON_SCREEN = 3;
+    static final int MAX_OBSTACLES_ON_SCREEN = 2;
+    static final float CAR_BUFFER_DISTANCE = 60f;
 
-    // --- OPTIMIZATION 1: The Master Draw Helper ---
-    // All other methods now call this. Less code = Less bugs.
+    static float[] lastCarSpawnY = new float[obstaclesPositions.length];
+    static boolean[] laneHasObstacle = new boolean[obstaclesPositions.length];
+
+
+
     private static void drawStandardQuad(GL gl) {
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
@@ -62,9 +73,6 @@ public class drawClass {
         gl.glDisable(GL.GL_BLEND);
     }
 
-    // --- OPTIMIZATION 2: Single Method for Sprites ---
-    // I merged DrawSpriteWall and drawSpriteTexture because they were identical.
-    // Use this for anything that doesn't rotate.
     public static void DrawSpriteNoRotation(GL gl, float x, float y, int index, float scale, int[] textures){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
@@ -76,7 +84,6 @@ public class drawClass {
         gl.glDisable(GL.GL_BLEND);
     }
 
-    // Use this for the Player (supports rotation)
     public static void drawSprite(GL gl, float x, float y, int index, float scale , int[] textures){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
@@ -88,17 +95,12 @@ public class drawClass {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_BLEND);
     }
-    public static void drawBullets(GL gl, PlayerCar player, int[] textures) {
-        // Use an Iterator to safely remove items while looping
-        // This prevents "ConcurrentModificationException" and fixes the "Zombie Bullet" bug
-        Iterator<Bullet> iter = player.bullets.iterator();
 
+    public static void drawBullets(GL gl, PlayerCar player, int[] textures) {
+        Iterator<Bullet> iter = player.bullets.iterator();
         while (iter.hasNext()) {
             Bullet bullet = iter.next();
-
-            // If bullet is alive (timer >= 0)
             if (bullet.timer >= 0) {
-                // Draw it (using the optimized helper method)
                 DrawSpriteNoRotation(gl, (float) bullet.posX, (float) (bullet.posY + 10), 8, 1.0f, textures);
 
                 // Move it
@@ -107,8 +109,6 @@ public class drawClass {
                 // Decrease life
                 bullet.timer--;
             } else {
-                // If bullet is dead, remove it from the active list immediately!
-                // This stops the "Stacking/Laser" bug.
                 iter.remove();
             }
         }
@@ -119,72 +119,12 @@ public class drawClass {
         }
     }
 
-    // --- OPTIMIZATION 3: Iterators instead of "toRemove" lists ---
-    public static void drawAndMoveObstacles(GL gl , int index , int[] textures) {
-        if (obstaclesList.size() < 2) {
-            spawnObstacle();
-        }
-
-        // Iterator lets us remove items safely WHILE looping.
-        // No need to create a "toRemove" list anymore!
-        Iterator<Obstacles> iter = obstaclesList.iterator();
-        while (iter.hasNext()) {
-            Obstacles obs = iter.next();
-            DrawSpriteNoRotation(gl, (float)obs.getPosX(), (float)obs.getPosY(), 7, 1.4f , textures);
-
-            if (obs.getPosY() < -10) {
-                iter.remove(); // Safely deletes from the list
-            } else {
-                obs.posY = (float) (obs.posY - GameController.gameSpeed);
-            }
-        }
-    }
-
-    public static void drawLightCar(GL gl, int[] texture) {
-        Iterator<LightCar> iter = GameController.LightCars.iterator();
-
-        while (iter.hasNext()) {
-            LightCar car = iter.next();
-
-            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 14, 1.4f, texture);
-            int lane = indexOfLane(car.getPosX());
-            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
-            if (car.getPosY() < -10) {
-                iter.remove();
-                GameController.LightCars.remove(car);
-            } else {
-                car.posY -= (GameController.gameSpeed + car.getSpeed());
-            }
-        }
-    }
-
-    public static void drawHeavyCar(GL gl, int[] texture) {
-        Iterator<HeavyCar> iter = GameController.HeavyCars.iterator();
-
-        while (iter.hasNext()) {
-            HeavyCar car = iter.next();
-
-            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 17, 1.4f, texture);
-            int lane = indexOfLane(car.getPosX());
-            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
-            if (car.getPosY() < -10) {
-                iter.remove();
-                GameController.HeavyCars.remove(car);
-            } else {
-                car.posY -= (float) (GameController.gameSpeed + car.getSpeed());
-            }
-        }
-    }
-
     public static void drawPowerUps(GL gl, PlayerCar player) {
         if (GameController.powerUpsList.size() < 6 && PowerUPTimer <= 0) {
             powerUpsSpawn();
             PowerUPTimer = 50;
         }
         player.update();
-
-        // Using standard loop here because we remove by index in your logic,
-        // but backwards loop is safer for removal if not using Iterator.
         for (int i = GameController.powerUpsList.size() - 1; i >= 0; i--) {
             PowerUp p = GameController.powerUpsList.get(i);
             p.update(player);
@@ -208,151 +148,6 @@ public class drawClass {
         }
         PowerUPTimer--;
     }
-
-    // --- Spawning Logic (Kept simple) ---
-//    private static void obstaclesSpawn() {
-//        int randomizer = (int) (Math.random()*5);
-//        float spawnX = obstaclesPositions[randomizer];
-//        Obstacles p = new Obstacles(spawnX, 100);
-//        obstaclesList.add(p);
-//        CarGLEventListener.allObjects.add(p);
-//    }
-//
-//    public static void LightCarSpawn() {
-//        int randomizer = (int) (Math.random()*5);
-//        float spawnX = obstaclesPositions[randomizer];
-//        LightCar p = new LightCar(spawnX, 100);
-//        GameController.LightCars.add(p);
-//        CarGLEventListener.allObjects.add(p);
-//    }
-//
-//     public static void HeavyCarSpawn() {
-//            int randomizer = (int) (Math.random()*5);
-//            float spawnX = obstaclesPositions[randomizer];
-//            HeavyCar p = new HeavyCar(spawnX, 100);
-//            GameController.HeavyCars.add(p);
-//            CarGLEventListener.allObjects.add(p);
-//        }
-
-
-    // ===================== CONFIGURATION ==========================
-    static final float CAR_BUFFER = 60f; // minimum distance between cars in same lane
-    static float[] lastCarSpawnY = new float[obstaclesPositions.length];
-    static boolean[] obstacleActive = new boolean[obstaclesPositions.length];
-
-    // Call this ONCE in init()
-    public static void initLaneState() {
-        Arrays.fill(lastCarSpawnY, -1000);
-        Arrays.fill(obstacleActive, false);
-    }
-
-// ===============================================================
-
-
-    // ===================== CAR SPAWN ===============================
-    public static void spawnCar() {
-        int lane = (int)(Math.random() * obstaclesPositions.length);
-
-        // Skip lane if obstacle present
-        if (obstacleActive[lane]) return;
-
-        // Skip lane if another car too close
-        if (100 - lastCarSpawnY[lane] < CAR_BUFFER) return;
-
-        float spawnX = obstaclesPositions[lane];
-
-        // Random 50/50 Light or Heavy
-        boolean isLight = Math.random() < 0.5;
-
-        if (isLight) {
-            LightCar c = new LightCar(spawnX, 100);
-            GameController.LightCars.add(c);
-            CarGLEventListener.allObjects.add(c);
-        } else {
-            HeavyCar c = new HeavyCar(spawnX, 100);
-            GameController.HeavyCars.add(c);
-            CarGLEventListener.allObjects.add(c);
-        }
-
-        lastCarSpawnY[lane] = 100; // mark last car Y
-    }
-// ===============================================================
-
-
-    // ===================== OBSTACLE SPAWN ==========================
-    public static void spawnObstacle() {
-        int lane = (int)(Math.random() * obstaclesPositions.length);
-
-        // Cannot spawn if lane is blocked
-        if (obstacleActive[lane]) return;
-
-        float spawnX = obstaclesPositions[lane];
-
-        Obstacles o = new Obstacles(spawnX, 100);
-        obstaclesList.add(o);
-        CarGLEventListener.allObjects.add(o);
-
-        obstacleActive[lane] = true;
-    }
-// ===============================================================
-
-
-    // ===================== OBSTACLE REMOVAL ========================
-    public static void updateObstacles() {
-        Iterator<Obstacles> it = obstaclesList.iterator();
-
-        while (it.hasNext()) {
-            Obstacles o = it.next();
-            o.posY -= (float) (GameController.gameSpeed -.7);
-
-            // Once obstacle goes off-screen -> unlock lane
-            if (o.getPosY() < -10) {
-                int lane = indexOfLane(o.getPosX());
-                if (lane != -1) obstacleActive[lane] = false;
-
-                it.remove();
-                CarGLEventListener.allObjects.remove(o);
-            }
-        }
-    }
-// ===============================================================
-
-
-    // ===================== HELPER ==================================
-    private static int indexOfLane(float x) {
-        for (int i = 0; i < obstaclesPositions.length; i++) {
-            if (Math.abs(obstaclesPositions[i] - x) < 0.01f)
-                return i;
-        }
-        return -1;
-    }
-// ===============================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public static void powerUpsSpawn() {
         float minX = 15; float maxX = 85;
@@ -398,6 +193,185 @@ public class drawClass {
         gl.glEnable(GL.GL_TEXTURE_2D);
     }
 
-    // --- Helper for Bullets (The one we fixed earlier) ---
-    // You can paste the "Zombie Bullet Fix" version I gave you earlier here.
+    public static void initGameLogic() {
+        Arrays.fill(lastCarSpawnY, -1000);
+        Arrays.fill(laneHasObstacle, false);
+        obstaclesList.clear();
+        GameController.LightCars.clear();
+        GameController.HeavyCars.clear();
+    }
+
+    public static void renderAndLogic(GL gl, int[] textures) {
+        handleSpawningLogic();
+        drawAndMoveObstacles(gl, textures);
+        drawAndMoveCars(gl, textures);
+    }
+
+    private static void handleSpawningLogic() {
+        int currentTotalCars = GameController.LightCars.size() + GameController.HeavyCars.size();
+        int currentTotalObs = obstaclesList.size();
+
+        if (currentTotalObs < MAX_OBSTACLES_ON_SCREEN) {
+            trySpawnEntity(true);
+        }
+
+        if (currentTotalCars < MAX_CARS_ON_SCREEN) {
+            trySpawnEntity(false);
+        }
+    }
+
+    private static void trySpawnEntity(boolean isObstacle) {
+        List<Integer> lanes = new ArrayList<>();
+        for (int i = 0; i < obstaclesPositions.length; i++) lanes.add(i);
+        Collections.shuffle(lanes);
+
+        for (int laneIndex : lanes) {
+            if (laneHasObstacle[laneIndex]) continue;
+
+            if (!isObstacle) {
+                if (100 - lastCarSpawnY[laneIndex] < CAR_BUFFER_DISTANCE) continue;
+            }
+
+            if (!isMapPassableIfWeBlock(laneIndex)) continue;
+
+            if (isObstacle) {
+                performSpawnObstacle(laneIndex);
+            } else {
+                performSpawnCar(laneIndex);
+            }
+            return;
+        }
+    }
+
+    private static boolean isMapPassableIfWeBlock(int candidateLane) {
+        int blockedLanesCount = 0;
+
+        for (int i = 0; i < obstaclesPositions.length; i++) {
+            boolean isBlocked = false;
+
+            if (laneHasObstacle[i]) isBlocked = true;
+            if (i == candidateLane) isBlocked = true;
+            if (lastCarSpawnY[i] > 80) isBlocked = true;
+
+            if (isBlocked) blockedLanesCount++;
+        }
+
+        return blockedLanesCount < obstaclesPositions.length;
+    }
+
+    private static void performSpawnObstacle(int lane) {
+        float x = obstaclesPositions[lane];
+        Obstacles o = new Obstacles(x, 100);
+        obstaclesList.add(o);
+        CarGLEventListener.allObjects.add(o);
+        laneHasObstacle[lane] = true;
+    }
+
+    private static void performSpawnCar(int lane) {
+        float x = obstaclesPositions[lane];
+        boolean isLight = Math.random() < 0.5;
+
+        if (isLight) {
+            LightCar c = new LightCar(x, 100);
+            GameController.LightCars.add(c);
+            CarGLEventListener.allObjects.add(c);
+        } else {
+            HeavyCar c = new HeavyCar(x, 100);
+            GameController.HeavyCars.add(c);
+            CarGLEventListener.allObjects.add(c);
+        }
+
+        lastCarSpawnY[lane] = 100;
+    }
+
+    public static void drawAndMoveObstacles(GL gl, int[] textures) {
+        Iterator<Obstacles> iter = obstaclesList.iterator();
+        while (iter.hasNext()) {
+            Obstacles obs = iter.next();
+            DrawSpriteNoRotation(gl, (float) obs.getPosX(), (float) obs.getPosY(), 7, 1.4f, textures);
+
+            obs.posY -= (float) GameController.gameSpeed;
+
+            if (obs.getPosY() < -10) {
+                int lane = indexOfLane(obs.getPosX());
+                if (lane != -1) laneHasObstacle[lane] = false;
+
+                iter.remove();
+                CarGLEventListener.allObjects.remove(obs);
+            }
+        }
+    }
+
+    public static void drawAndMoveCars(GL gl, int[] textures) {
+        Iterator<LightCar> iterLight = GameController.LightCars.iterator();
+        while (iterLight.hasNext()) {
+            LightCar car = iterLight.next();
+            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 14, 1.4f, textures);
+            updateCarPhysics(car, iterLight);
+        }
+
+        Iterator<HeavyCar> iterHeavy = GameController.HeavyCars.iterator();
+        while (iterHeavy.hasNext()) {
+            HeavyCar car = iterHeavy.next();
+            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 17, 1.7f, textures);
+            updateCarPhysics(car, iterHeavy);
+        }
+    }
+
+    private static void updateCarPhysics(Object carObj, Iterator<?> iter) {
+        float posX, posY, speed;
+        if (carObj instanceof LightCar) {
+            LightCar c = (LightCar) carObj;
+            posX = c.getPosX(); posY = c.getPosY(); speed = (float) c.getSpeed();
+            c.posY -= (GameController.gameSpeed + speed);
+            int lane = indexOfLane(posX);
+            if (lane != -1) lastCarSpawnY[lane] = c.getPosY();
+        } else {
+            HeavyCar c = (HeavyCar) carObj;
+            posX = c.getPosX(); posY = c.getPosY(); speed = (float) c.getSpeed();
+            c.posY -= (float)(GameController.gameSpeed + speed);
+            int lane = indexOfLane(posX);
+            if (lane != -1) lastCarSpawnY[lane] = c.getPosY();
+        }
+
+        if (posY < -10) {
+            iter.remove();
+            CarGLEventListener.allObjects.remove(carObj);
+        }
+    }
+
+    private static int indexOfLane(float x) {
+        for (int i = 0; i < obstaclesPositions.length; i++) {
+            if (Math.abs(obstaclesPositions[i] - x) < 0.01f) return i;
+        }
+        return -1;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

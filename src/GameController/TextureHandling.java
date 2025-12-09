@@ -16,7 +16,7 @@ public class TextureHandling {
             "StartButton.png", "InstructionsButton.png", "QuitButton.png", "obstacle.png",
             "bullet.png", "endBackground.png", "continuebBotton.png", "mainMenuButton.png",
             "playAgainButton.png", "pauseButton.png", "Lightcar.png", "pauseButton2.png", "loseMenu2.png"
-            , "Man1.png"
+            , "HeavyCar.png"
     };
 
     public static String[] powerUpTextureNames = {

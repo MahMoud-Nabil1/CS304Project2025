@@ -24,7 +24,7 @@ import static GameController.TextureHandling.*;
 
 
 public class CarGLEventListener implements MouseListener, GLEventListener, KeyListener, ActionListener, MouseMotionListener {
-    int GameState = 1;
+    int GameState = 0;
     final int Menu = 0;
     final int Game = 1;
     final int Pause = 2;
@@ -98,7 +98,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        drawClass.initLaneState();
+        drawClass.initGameLogic();
+
 
         // Disable Depth Test (Crucial for 2D games so layers stack correctly)
         // If your images are flickering or disappearing, UNCOMMENT this:
@@ -165,28 +166,13 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
         } else if (GameState == Game) {
             drawClass.background_loop(gl , textures);
-            drawClass.drawAndMoveObstacles(gl , 7 , textures);
-            drawClass.updateObstacles();
-            if (GameController.LightCars.isEmpty()) {
-                 drawClass.spawnCar();
-            }
-
-            if (GameController.HeavyCars.size() < 2) {
-                 drawClass.spawnCar();
-            }
-            drawClass.drawLightCar(gl, textures);
-            drawClass.drawHeavyCar(gl, textures);
-
+            drawClass.renderAndLogic(gl, textures);
             drawClass.drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f , textures);
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
-            drawClass.drawHitboxDebug(gl,player.getBounds());
-            for (LightCar cars:GameController.LightCars )
-                drawClass.drawHitboxDebug(gl,cars.getBounds());
             //---------------Collision Shehab-----------------------
             updateGameLogic();
-
             //-------Score---HealthBar  Related
             score(gl, xScore, yScore);
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
@@ -194,8 +180,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
             drawClass.drawPowerUps(gl , player);
             checkPlayerDeath();
-            //System.out.println(GameController.gameSpeed);
-
         }else if(GameState == Pause) {
             drawClass.DrawBackground(gl , 3 , textures);
 
