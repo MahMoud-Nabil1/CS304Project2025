@@ -170,25 +170,34 @@ public class drawClass {
     }
 
     public static void drawHitboxDebug(GL gl, Rectangle rect) {
+        // 1. Disable textures so we draw solid colored lines
         gl.glDisable(GL.GL_TEXTURE_2D);
+
+        // 2. Set color to RED (R=1, G=0, B=0)
         gl.glColor3f(1.0f, 0.0f, 0.0f);
 
         gl.glPushMatrix();
 
-        double x = rect.x / 50.0 - 1.0;
-        double y = rect.y / 50.0 - 1.0;
+        // 3. CONVERT COORDINATES
+        // We map the Game Grid (0-100) to OpenGL Screen (-1 to 1)
+        // CRITICAL: We use -0.9 offset here to match your drawSprite logic
+        double x = rect.x / 50.0 - 0.9;
+        double y = rect.y / 50.0 - 0.9;
+
         double w = rect.width / 50.0;
         double h = rect.height / 50.0;
 
+        // 4. Draw the square outline
         gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex2d(x, y);
-        gl.glVertex2d(x + w, y);
-        gl.glVertex2d(x + w, y + h);
-        gl.glVertex2d(x, y + h);
+        gl.glVertex2d(x, y);            // Bottom-Left
+        gl.glVertex2d(x + w, y);        // Bottom-Right
+        gl.glVertex2d(x + w, y + h);    // Top-Right
+        gl.glVertex2d(x, y + h);        // Top-Left
         gl.glEnd();
 
         gl.glPopMatrix();
 
+        // 5. Reset: Turn textures back on and color to White
         gl.glColor3f(1.0f, 1.0f, 1.0f);
         gl.glEnable(GL.GL_TEXTURE_2D);
     }

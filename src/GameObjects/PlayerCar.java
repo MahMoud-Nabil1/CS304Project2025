@@ -99,15 +99,32 @@ public class PlayerCar extends Car{
         }
     }
     public Rectangle getBounds() {
-        // TWEAK THESE NUMBERS
-        int xOffset = 0;   // Change this to move Left(-) or Right(+)
-        int yOffset = 0;  // Change this to move Down(-) or Up(+)
+        // -----------------------------------------------------------
+        // 1. SIZE ADJUSTMENTS (Make hitbox smaller than the image for better gameplay)
+        // -----------------------------------------------------------
+        int hitboxWidth =  width ;   // Make it 2 pixels narrower than the image
+        int hitboxHeight = height ;  // Make it 4 pixels shorter than the image
 
-        // Reduce width/height if the box is too big
-        int hitboxWidth = 8;
-        int hitboxHeight = 8;
+        // -----------------------------------------------------------
+        // 2. POSITION OFFSETS (Shift the box relative to the sprite center)
+        // -----------------------------------------------------------
+        // Remember: posX and posY are the CENTER of the sprite.
 
-        return new Rectangle((int)posX + xOffset, (int)posY + yOffset, hitboxWidth, hitboxHeight);
+        // To center the box, we start at (posX - hitboxWidth/2).
+        // Then we add 'manualShiftX' to move it Left (-) or Right (+)
+        int manualShiftX = 0;
+
+        // To center the box, we start at (posY - hitboxHeight/2).
+        // Then we add 'manualShiftY' to move it Down (-) or Up (+)
+        int manualShiftY = 0;
+
+        // -----------------------------------------------------------
+        // 3. CALCULATE FINAL COORDINATES
+        // -----------------------------------------------------------
+        int finalX = (int)(posX - (hitboxWidth / 2)) + manualShiftX;
+        int finalY = (int)(posY - (hitboxHeight / 2)) + manualShiftY;
+
+        return new Rectangle(finalX, finalY, hitboxWidth, hitboxHeight);
     }
 
 }

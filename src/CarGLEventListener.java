@@ -142,6 +142,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             for (buttons btn : menuButtons){
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
+
             gl.glEnable(GL.GL_TEXTURE_2D);
             gl.glDisable(GL.GL_BLEND);
 
@@ -149,6 +150,13 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             drawClass.background_loop(gl , textures);
             drawClass.renderAndLogic(gl, textures);
             drawClass.drawSprite(gl, player.getPosX(), player.getPosY(), 1, 1.8f , textures);
+            drawClass.drawHitboxDebug(gl , player.getBounds());
+            for (LightCar car : GameController.LightCars) {
+                drawHitboxDebug(gl, car.getBounds());
+            }
+            for (HeavyCar car : GameController.HeavyCars) {
+                drawHitboxDebug(gl, car.getBounds());
+            }
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
@@ -610,6 +618,14 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                         break;
                     }
                 }
+                if (obj.alive && obj instanceof HeavyCar){
+                    if (bulletRect.intersects(obj.getBounds())) {
+                        System.out.println("HIT! Bullet destroyed Car");
+                        obj.takeDamage(40);
+                        b.timer = -1;
+                        break;
+                    }
+                }
 
             }
 
@@ -632,9 +648,28 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             }
         }
 
+        for (HeavyCar car : GameController.HeavyCars) {
+            // Check if health is 0 BUT it is still marked as alive
+            // This ensures we only give points ONCE per car
+            if (car.health <= 0 && car.alive) {
+                // 1. Change State
+                car.alive = false;
+                // 2. Add Score
+                GameController.score += 100; // Add 100 points (Change this value as needed)
+                // 3. Increment Kill Counter
+                lightCarsKilled++;
+                System.out.println("Enemy Destroyed! Total Kills: " + lightCarsKilled);
+            }
+        }
+
         // (Optional: Do the same for general objects if they have health)
         for (GameObject obj : allObjects) {
             if (obj instanceof LightCar && obj.health <= 0) {
+                obj.alive = false;
+            }
+        }
+        for (GameObject obj : allObjects) {
+            if (obj instanceof HeavyCar && obj.health <= 0) {
                 obj.alive = false;
             }
         }
@@ -660,6 +695,12 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         for (int i = GameController.LightCars.size()-1 ; i>=0 ; i--){
             if (!GameController.LightCars.get(i).alive){
                 GameController.LightCars.remove(i);
+            }
+        }
+
+        for (int i = GameController.HeavyCars.size()-1 ; i>=0 ; i--){
+            if (!GameController.HeavyCars.get(i).alive){
+                GameController.HeavyCars.remove(i);
             }
         }
 
@@ -712,6 +753,16 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                         player.invincibilityTimer = 40;
                         obj.takeDamage(100);  // Enemy dies
                         System.out.println("Hit LightCar!");
+                    }
+                }
+                //--- Case D: Player Hit a HeavyCar ---
+
+                else if(obj instanceof HeavyCar){
+                    if (player.invincibilityTimer == 0) {
+                        player.takeDamage(20);  // Less damage
+                        player.invincibilityTimer = 40;
+                        obj.takeDamage(100);  // Enemy dies
+                        System.out.println("Hit HeavyCar!");
                     }
                 }
             }

@@ -9,12 +9,12 @@ public class LightCar extends Car{
         super(posX,posY,.3,20,100);
 
         // Set specific size for Light Car
-        this.width = 12;
+        this.width = 8;
         this.height = 12;
     }
     LightCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
-        this.width = 12;
+        this.width = 8;
         this.height = 12;
 
     }
@@ -22,12 +22,31 @@ public class LightCar extends Car{
     //-----Hit Box--------
 
     public Rectangle getBounds() {
-        // FIXED: Subtract half width/height to center the box on posX, posY
-        return new Rectangle(
-                (int)(posX - width / 2),
-                (int)(posY - height / 2),
-                width,
-                height
-        );
+        // -----------------------------------------------------------
+        // 1. SIZE ADJUSTMENTS (Make hitbox smaller than the image for better gameplay)
+        // -----------------------------------------------------------
+        int hitboxWidth =  width ;   // Make it 2 pixels narrower than the image
+        int hitboxHeight = height ;  // Make it 4 pixels shorter than the image
+
+        // -----------------------------------------------------------
+        // 2. POSITION OFFSETS (Shift the box relative to the sprite center)
+        // -----------------------------------------------------------
+        // Remember: posX and posY are the CENTER of the sprite.
+
+        // To center the box, we start at (posX - hitboxWidth/2).
+        // Then we add 'manualShiftX' to move it Left (-) or Right (+)
+        int manualShiftX = 0;
+
+        // To center the box, we start at (posY - hitboxHeight/2).
+        // Then we add 'manualShiftY' to move it Down (-) or Up (+)
+        int manualShiftY = 0;
+
+        // -----------------------------------------------------------
+        // 3. CALCULATE FINAL COORDINATES
+        // -----------------------------------------------------------
+        int finalX = (int)(posX - (hitboxWidth / 2)) + manualShiftX;
+        int finalY = (int)(posY - (hitboxHeight / 2)) + manualShiftY;
+
+        return new Rectangle(finalX, finalY, hitboxWidth, hitboxHeight);
     }
 }

@@ -4,24 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="edited the last buttons and the lose menu">
+    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="Collisions working (Power Ups / Obsticals)-- Score Working &#10;// End For Today">
       <change beforePath="$PROJECT_DIR$/.idea/CS304Project2025.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS304Project2025.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib64.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib64.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Bullet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Bullet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/GameObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/GameObject.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/HeavyCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/HeavyCar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/LightCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/LightCar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PowerUp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Rocket.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Rocket.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/Music.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/Music.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameController/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameController/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/HeavyCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/HeavyCar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/LightCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/LightCar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/drawClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/drawClass.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +28,12 @@
     &quot;assignee&quot;: &quot;ShehabAbdelWahid&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MahMoud-Nabil1/CS304Project2025.git&quot;,
-    &quot;accountId&quot;: &quot;1bede88f-4961-4a1a-bf5b-0e0c9358aa6a&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MahMoud-Nabil1/CS304Project2025.git",
+    "accountId": "f5f04217-76fd-4c72-9231-dfd685945976"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -51,37 +42,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.CarGame.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/VICTUS/Documents/GitHub/CS304Project2025/assets&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CarGame.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/shehab/Downloads/JOGLwin/JOGLwin/lib64/jogl_cg.dll",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\VICTUS\Documents\GitHub\CS304Project2025\assets" />
     </key>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -101,11 +83,7 @@
       <updated>1765045964947</updated>
       <workItem from="1765121754779" duration="90000" />
       <workItem from="1765121990942" duration="4000" />
-      <workItem from="1765126171374" duration="745000" />
-      <workItem from="1765231421700" duration="410000" />
-      <workItem from="1765236367884" duration="1283000" />
-      <workItem from="1765291628828" duration="997000" />
-      <workItem from="1765301354630" duration="1701000" />
+      <workItem from="1765126171374" duration="645000" />
     </task>
     <task id="LOCAL-00002" summary="PowerUps">
       <option name="closed" value="true" />
@@ -123,15 +101,7 @@
       <option name="project" value="LOCAL" />
       <updated>1765047596136</updated>
     </task>
-    <task id="LOCAL-00004" summary="edited the last buttons and the lose menu">
-      <option name="closed" value="true" />
-      <created>1765126882647</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1765126882647</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,7 +121,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="PowerUps" />
     <MESSAGE value="Collisions working (Power Ups / Obsticals)-- Score Working &#10;// End For Today" />
-    <MESSAGE value="edited the last buttons and the lose menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="edited the last buttons and the lose menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Collisions working (Power Ups / Obsticals)-- Score Working &#10;// End For Today" />
   </component>
 </project>
