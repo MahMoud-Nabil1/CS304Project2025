@@ -257,7 +257,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     }
 
     // Player Movement
-    public void updateMovement() {
+    private void updateMovement() {
 
         if(isKeyPressed(KeyEvent.VK_Z)){
             player.nitroOn();

@@ -119,63 +119,6 @@ public class drawClass {
         }
     }
 
-    // --- OPTIMIZATION 3: Iterators instead of "toRemove" lists ---
-//    public static void drawAndMoveObstacles(GL gl , int index , int[] textures) {
-//        if (obstaclesList.size() < 2) {
-//            spawnObstacle();
-//        }
-//
-//        // Iterator lets us remove items safely WHILE looping.
-//        // No need to create a "toRemove" list anymore!
-//        Iterator<Obstacles> iter = obstaclesList.iterator();
-//        while (iter.hasNext()) {
-//            Obstacles obs = iter.next();
-//            DrawSpriteNoRotation(gl, (float)obs.getPosX(), (float)obs.getPosY(), 7, 1.4f , textures);
-//
-//            if (obs.getPosY() < -10) {
-//                iter.remove(); // Safely deletes from the list
-//            } else {
-//                obs.posY = (float) (obs.posY - GameController.gameSpeed);
-//            }
-//        }
-//    }
-
-    public static void drawLightCar(GL gl, int[] texture) {
-        Iterator<LightCar> iter = GameController.LightCars.iterator();
-
-        while (iter.hasNext()) {
-            LightCar car = iter.next();
-
-            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 14, 1.7f, texture);
-            int lane = indexOfLane(car.getPosX());
-            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
-            if (car.getPosY() < -10) {
-                iter.remove();
-                GameController.LightCars.remove(car);
-            } else {
-                car.posY -= (GameController.gameSpeed + car.getSpeed());
-            }
-        }
-    }
-
-    public static void drawHeavyCar(GL gl, int[] texture) {
-        Iterator<HeavyCar> iter = GameController.HeavyCars.iterator();
-
-        while (iter.hasNext()) {
-            HeavyCar car = iter.next();
-
-            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 17, 2.2f, texture);
-            int lane = indexOfLane(car.getPosX());
-            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
-            if (car.getPosY() < -10) {
-                iter.remove();
-                GameController.HeavyCars.remove(car);
-            } else {
-                car.posY -= (float) (GameController.gameSpeed + car.getSpeed());
-            }
-        }
-    }
-
     public static void drawPowerUps(GL gl, PlayerCar player) {
         if (GameController.powerUpsList.size() < 6 && PowerUPTimer <= 0) {
             powerUpsSpawn();
@@ -351,8 +294,10 @@ public class drawClass {
 
             if (obs.getPosY() < -10) {
                 int lane = indexOfLane(obs.getPosX());
-                if (lane != -1) laneHasObstacle[lane] = false;
-
+                if (lane != -1) {
+                    laneHasObstacle[lane] = false;
+                    lastCarSpawnY[lane] = -1000;  // <-- ADD THIS
+                }
                 iter.remove();
                 CarGLEventListener.allObjects.remove(obs);
             }
@@ -392,6 +337,10 @@ public class drawClass {
         }
 
         if (posY < -10) {
+            int lane = indexOfLane(posX);
+            if (lane != -1) {
+                lastCarSpawnY[lane] = -1000; // <-- ADD THIS
+            }
             iter.remove();
             CarGLEventListener.allObjects.remove(carObj);
         }
