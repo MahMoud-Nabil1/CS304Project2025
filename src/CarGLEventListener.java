@@ -167,7 +167,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         } else if (GameState == Game) {
             drawClass.background_loop(gl , textures);
             drawClass.renderAndLogic(gl, textures);
-            drawClass.drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f , textures);
+            drawClass.drawSprite(gl, player.getPosX(), player.getPosY(), 1, 1.8f , textures);
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();

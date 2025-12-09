@@ -12,11 +12,11 @@ public class TextureHandling {
 
     // --- TEXTURE LISTS ---
     public static String[] textureNames = {
-            "BackGroundTest.png", "car.png", "MenuBackGround.png", "PauseMenu.png",
+            "Back.png", "Playercar.png", "MenuBackGround.png", "PauseMenu.png",
             "StartButton.png", "InstructionsButton.png", "QuitButton.png", "obstacle.png",
             "bullet.png", "endBackground.png", "continuebBotton.png", "mainMenuButton.png",
             "playAgainButton.png", "pauseButton.png", "Lightcar.png", "pauseButton2.png", "loseMenu2.png"
-            , "HeavyCar.png"
+            , "Heavycar.png"
     };
 
     public static String[] powerUpTextureNames = {
