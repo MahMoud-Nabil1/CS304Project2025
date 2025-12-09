@@ -37,11 +37,16 @@ public class TextureHandling {
             "LowState1.png", "LowState2.png"
     };
 
+    public static String[] effectsTextureNames = {
+            "nitro.png"
+    };
+
     // --- OPENGL ID ARRAYS (We only need these!) ---
     public static int[] textures = new int[textureNames.length];
     public static int[] powerUpTextures = new int[powerUpTextureNames.length];
     public static int[] scoreTextures = new int[scoreTextureNames.length];
     public static int[] healthTextures = new int[healthTextureNames.length];
+    public static int[] effectsTextures = new int[effectsTextureNames.length];
 
 
     // --- MAIN INIT METHOD ---
@@ -59,6 +64,7 @@ public class TextureHandling {
 
         // 3. Load Health
         loadTextureBatch(gl, healthTextureNames, healthTextures, assetsFolderName + "//HealthBar//");
+        loadTextureBatch(gl,effectsTextureNames, effectsTextures, assetsFolderName + "//Effects///");
     }
 
     public static void PowerUpTextures(GLAutoDrawable gld) {

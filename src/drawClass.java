@@ -328,6 +328,63 @@ public class drawClass {
             updateCarPhysics(car, iterHeavy);
         }
     }
+    public static void drawPlayerWithNitro(GL gl, PlayerCar player, int[] carTextures, int[] effectTextures) {
+        gl.glEnable(GL.GL_BLEND);
+
+        // 1. START CAR MATRIX
+        gl.glPushMatrix();
+
+        // Move to Car Position (Using your math)
+        gl.glTranslated(player.getPosX()/(maxWidth/2.0) - 0.9, player.getPosY()/(maxHeight/2.0) - 0.9, 0);
+
+        // Rotate the whole system (Car + Nitro)
+        gl.glRotated(CarGLEventListener.angle, 0, 0, 1);
+
+        // 2. DRAW CAR
+        gl.glBindTexture(GL.GL_TEXTURE_2D, carTextures[1]); // Index 1 is the Player Car
+        gl.glPushMatrix();
+        gl.glScaled(0.1 * 1.8, 0.1 * 1.8, 1); // Scale for Car
+        drawStandardQuad(gl);
+        gl.glPopMatrix();
+
+        // 3. DRAW NITRO (If active)
+        if (player.nitroActive) {
+            // --- FLAME 1 (Left Exhaust) ---
+            gl.glPushMatrix();
+            // Move "Behind" the car (negative Y) and slightly Left (negative X)
+            // Adjust these numbers (0.04, -0.15) to fit your specific car image
+            gl.glTranslated(-0.04, -0.15, 0);
+
+            // Rotate flame 180 so it points backward
+            gl.glRotated(180, 0, 0, 1);
+
+            // Animation: Random flicker size
+            double flicker = 0.8 + (Math.random() * 0.2);
+            gl.glScaled(0.1 * flicker, 0.1 * flicker, 1);
+
+            gl.glBindTexture(GL.GL_TEXTURE_2D, effectTextures[0]); // Nitro texture
+            drawStandardQuad(gl);
+            gl.glPopMatrix();
+
+            // --- FLAME 2 (Right Exhaust) ---
+            gl.glPushMatrix();
+            // Move "Behind" the car and slightly Right (positive X)
+            gl.glTranslated(0.04, -0.15, 0);
+
+            gl.glRotated(180, 0, 0, 1);
+
+            // Re-calculate flicker so the two flames look different
+            flicker = 0.8 + (Math.random() * 0.2);
+            gl.glScaled(0.1 * flicker, 0.1 * flicker, 1);
+
+            drawStandardQuad(gl);
+            gl.glPopMatrix();
+        }
+
+        // 4. END CAR MATRIX
+        gl.glPopMatrix();
+        gl.glDisable(GL.GL_BLEND);
+    }
 
     private static void updateCarPhysics(Object carObj, Iterator<?> iter) {
         float posX, posY, speed;
@@ -361,32 +418,4 @@ public class drawClass {
         }
         return -1;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
