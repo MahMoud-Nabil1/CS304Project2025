@@ -97,6 +97,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         drawClass.initGameLogic();
         TextureHandling.MainTextures(gld);
         TextureHandling.PowerUpTextures(gld);
+
+
         Music.playMusic("MusicAssets/MainMenuMusic.wav");
         renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
         whiteTextureId = createBlankTexture(gl); // Keep this, it's specific to the Health Bar logic
@@ -148,7 +150,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         } else if (GameState == Game) {
             drawClass.background_loop(gl , textures);
             drawClass.renderAndLogic(gl, textures);
-            drawClass.drawSprite(gl, player.getPosX(), player.getPosY(), 1, 1.8f , textures);
+            if(player.invincibilityTimer % 5 == 0) {
+                // This handles the Car, Rotation, AND Nitro all in one go
+                drawClass.drawPlayerWithNitro(gl, player, textures, effectsTextures);
+            }
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
@@ -683,7 +688,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 if (obj instanceof Obstacles) {
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);
-                        player.invincibilityTimer = 40;
+                        player.invincibilityTimer = 60;
                         System.out.println("CRASH! Hit Obstacle.");
                     }
                 }

@@ -10,6 +10,9 @@ public class PlayerCar extends Car{
     int score=0;
     public int firerate = 0;
     public int invincibilityTimer = 0; // For Colligions
+    public double nitro1PositionX=1000;
+    public double nitro2PositionX=1000;
+    public double nitroPositionY=1000;
 
     public PlayerCar(float posX, float posY) {
         super(posX,posY,1,20,100);
@@ -26,7 +29,7 @@ public class PlayerCar extends Car{
         this.width = 8;
         this.height = 10;
     }
-    private boolean nitroActive = false;
+    public boolean nitroActive = false;
 
     // Add a variable to remember normal speed
     private double normalGameSpeed = 1.0;
@@ -70,6 +73,9 @@ public class PlayerCar extends Car{
 
             // 2. Remove Damage Buff
             this.damage -= 50;
+            nitro1PositionX=1000;
+            nitro2PositionX=1000;
+            nitroPositionY=1000;
         }
     }
     // Inside PlayerCar.java
