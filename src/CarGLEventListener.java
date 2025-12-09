@@ -95,28 +95,9 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         drawClass.initGameLogic();
-
-
-        // Disable Depth Test (Crucial for 2D games so layers stack correctly)
-        // If your images are flickering or disappearing, UNCOMMENT this:
-        // gl.glDisable(GL.GL_DEPTH_TEST);
-
-        // -------------------------------------------------------------------------------------
-        // 1. TEXTURE LOADING (The Clean Way)
-        // -------------------------------------------------------------------------------------
-        // This single line now loads: Backgrounds, Cars, Buttons, Score Numbers, AND Health Bars.
         TextureHandling.MainTextures(gld);
-
-        // This loads the colored powerups
         TextureHandling.PowerUpTextures(gld);
-
-
         Music.playMusic("MusicAssets/MainMenuMusic.wav");
-
-
-        // -------------------------------------------------------------------------------------
-        // 2. OBJECT INITIALIZATION
-        // -------------------------------------------------------------------------------------
         renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
         whiteTextureId = createBlankTexture(gl); // Keep this, it's specific to the Health Bar logic
 
@@ -334,9 +315,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     }
 
 
-
     // button handling
-
     private void handleButton(int id) {
 
         switch (id) {
@@ -360,8 +339,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             }break;
             }
     }
-
-
 
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
@@ -753,22 +730,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             GameController.score = 0;
         }
     }
-
-    /*public void debugingPowerups(){
-        for (GameObject obj : allObjects) {
-            if (obj instanceof PlayerCar) continue;
-
-            // --- NEW DEBUG RADAR ---
-            // Only print for PowerUps so we don't spam the console too much
-            if (obj instanceof PowerUp) {
-                PowerUp p = (PowerUp) obj;
-                //System.out.println("RADAR: PowerUp Y=" + p.getPosY() + " | Player Y=" + player.getPosY() +
-                //        " | PowerUp Size=" + p.getWidth() + "x" + p.getHeight());
-            }
-            // ----
-        }
-    }*/
-// In CarGLEventListener.java+-`
 
     public void drawHitboxDebug(GL gl, Rectangle rect) {
         gl.glDisable(GL.GL_TEXTURE_2D);
