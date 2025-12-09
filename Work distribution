@@ -13,28 +13,22 @@
 			1.Heavy
 			2.Normal
 	2. obstacles
-	3. antiBullet rocket-
 4.  Bullet shooting (Mostafa)
 		1.number of bullets
 5.  Power ups (Belal)
-	1.Magnet
-	2.Double bullet
-	3.nitro(optional)
-	4.repair
-	5. 2X score
+	1.Double bullet
+	2.nitro(optional)
+	3.repair
+	4. 2X score
 6.  Randomizer (Mahmoud)
 7.  Score (Shehab) #Done
 8.  Health (Shehab)
 9.  Collisions (Shehab , Belal)
 	1.with obstacles
-		1. 50% front
-		2. 25% side
-	2.with antibullet rocket
 10.Background game music (Mahmoud)
 11.Pause button (Mostafa)
 12.Save highest score(Shehab)
 13.Animation (All)
-
 4.End Game menu -> (Mahmoud , Mostafa)
         losers
         1.lose sounds

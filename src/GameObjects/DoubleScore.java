@@ -4,7 +4,9 @@ import GameController.GameController;
 
 public class DoubleScore extends PowerUp {
 
-    public DoubleScore(float x, float y, int durationFrames) {
+    public
+
+    DoubleScore(float x, float y, int durationFrames) {
         super(x, y);
         // FIX: Assign to the PARENT's durationFrames.
         // Do NOT declare "private int durationFrames" here.

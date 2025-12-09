@@ -114,6 +114,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         // This loads the colored powerups
         TextureHandling.PowerUpTextures(gld);
 
+
+        Music.playMusic("MusicAssets/MainMenuMusic.wav");
+
+
         // -------------------------------------------------------------------------------------
         // 2. OBJECT INITIALIZATION
         // -------------------------------------------------------------------------------------
@@ -339,16 +343,27 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     private void handleButton(int id) {
 
         switch (id) {
-            case 0: GameState = Game; break;
+            case 0:
+            case 6:
+            case 3: {
+                GameState = Game;
+                Music.playMusic("MusicAssets/GameBackGround.wav");
+            }break;
             case 1: GameState = Instructions; break;
-            case 2: System.exit(0); break;
-            case 3: GameState = Game; break;
-            case 4: System.exit(0); break;
-            case 5: GameState = Pause; break;
-            case 6: GameState = Game; break;
-            case 7: GameState = Menu; break;
-        }
+            case 2:
+            case 4:
+                System.exit(0); break;
+            case 5: {
+                GameState = Pause;
+                Music.stopMusic();
+            }break;
+            case 7: {
+                GameState = Menu;
+                Music.playMusic("MusicAssets/MainMenuMusic.wav");
+            }break;
+            }
     }
+
 
 
     // ----------------------------------Score-----------------------
@@ -394,7 +409,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
             gl.glPopMatrix();
         }
-
         gl.glDisable(GL.GL_BLEND);
     }
 
@@ -735,6 +749,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     public void checkPlayerDeath(){
         if (player.health <= 0) {
             GameState = End; // Switch to End Screen (State 3)
+            Music.playMusic("MusicAssets/GameOverMusic.wav");
             player.health=100;
             score = 0;
         }
@@ -754,7 +769,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             // ----
         }
     }*/
-// In CarGLEventListener.java
+// In CarGLEventListener.java+-`
 
     public void drawHitboxDebug(GL gl, Rectangle rect) {
         gl.glDisable(GL.GL_TEXTURE_2D);
