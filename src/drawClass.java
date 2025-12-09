@@ -3,6 +3,7 @@ import javax.media.opengl.GL;
 import GameController.GameController;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import static GameController.GameController.obstaclesList;
 import static GameController.TextureHandling.powerUpTextures;
@@ -121,7 +122,7 @@ public class drawClass {
     // --- OPTIMIZATION 3: Iterators instead of "toRemove" lists ---
     public static void drawAndMoveObstacles(GL gl , int index , int[] textures) {
         if (obstaclesList.size() < 2) {
-            obstaclesSpawn();
+            spawnObstacle();
         }
 
         // Iterator lets us remove items safely WHILE looping.
@@ -139,22 +140,38 @@ public class drawClass {
         }
     }
 
-    public static void drawLightCar(GL gl , int[] texture) {
-        if (GameController.LightCars.size() < 2) {
-            LightCarSpawn();
-        }
-
+    public static void drawLightCar(GL gl, int[] texture) {
         Iterator<LightCar> iter = GameController.LightCars.iterator();
+
         while (iter.hasNext()) {
             LightCar car = iter.next();
 
-            DrawSpriteNoRotation(gl, (float)car.getPosX(), (float)car.getPosY(), 14, 1.4f ,  texture);
-            // drawHitboxDebug(gl, car.getBounds()); // Uncomment if debugging
-
+            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 14, 1.4f, texture);
+            int lane = indexOfLane(car.getPosX());
+            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
             if (car.getPosY() < -10) {
                 iter.remove();
+                GameController.LightCars.remove(car);
             } else {
-                car.posY = (float) (car.posY - GameController.gameSpeed - car.getSpeed());
+                car.posY -= (GameController.gameSpeed + car.getSpeed());
+            }
+        }
+    }
+
+    public static void drawHeavyCar(GL gl, int[] texture) {
+        Iterator<HeavyCar> iter = GameController.HeavyCars.iterator();
+
+        while (iter.hasNext()) {
+            HeavyCar car = iter.next();
+
+            DrawSpriteNoRotation(gl, car.getPosX(), car.getPosY(), 17, 1.4f, texture);
+            int lane = indexOfLane(car.getPosX());
+            if (lane != -1) lastCarSpawnY[lane] = car.getPosY();
+            if (car.getPosY() < -10) {
+                iter.remove();
+                GameController.HeavyCars.remove(car);
+            } else {
+                car.posY -= (float) (GameController.gameSpeed + car.getSpeed());
             }
         }
     }
@@ -193,21 +210,149 @@ public class drawClass {
     }
 
     // --- Spawning Logic (Kept simple) ---
-    private static void obstaclesSpawn() {
-        int randomizer = (int) (Math.random()*5);
-        float spawnX = obstaclesPositions[randomizer];
-        Obstacles p = new Obstacles(spawnX, 100);
-        obstaclesList.add(p);
-        CarGLEventListener.allObjects.add(p);
+//    private static void obstaclesSpawn() {
+//        int randomizer = (int) (Math.random()*5);
+//        float spawnX = obstaclesPositions[randomizer];
+//        Obstacles p = new Obstacles(spawnX, 100);
+//        obstaclesList.add(p);
+//        CarGLEventListener.allObjects.add(p);
+//    }
+//
+//    public static void LightCarSpawn() {
+//        int randomizer = (int) (Math.random()*5);
+//        float spawnX = obstaclesPositions[randomizer];
+//        LightCar p = new LightCar(spawnX, 100);
+//        GameController.LightCars.add(p);
+//        CarGLEventListener.allObjects.add(p);
+//    }
+//
+//     public static void HeavyCarSpawn() {
+//            int randomizer = (int) (Math.random()*5);
+//            float spawnX = obstaclesPositions[randomizer];
+//            HeavyCar p = new HeavyCar(spawnX, 100);
+//            GameController.HeavyCars.add(p);
+//            CarGLEventListener.allObjects.add(p);
+//        }
+
+
+    // ===================== CONFIGURATION ==========================
+    static final float CAR_BUFFER = 60f; // minimum distance between cars in same lane
+    static float[] lastCarSpawnY = new float[obstaclesPositions.length];
+    static boolean[] obstacleActive = new boolean[obstaclesPositions.length];
+
+    // Call this ONCE in init()
+    public static void initLaneState() {
+        Arrays.fill(lastCarSpawnY, -1000);
+        Arrays.fill(obstacleActive, false);
     }
 
-    public static void LightCarSpawn() {
-        int randomizer = (int) (Math.random()*5);
-        float spawnX = obstaclesPositions[randomizer];
-        LightCar p = new LightCar(spawnX, 100);
-        GameController.LightCars.add(p);
-        CarGLEventListener.allObjects.add(p);
+// ===============================================================
+
+
+    // ===================== CAR SPAWN ===============================
+    public static void spawnCar() {
+        int lane = (int)(Math.random() * obstaclesPositions.length);
+
+        // Skip lane if obstacle present
+        if (obstacleActive[lane]) return;
+
+        // Skip lane if another car too close
+        if (100 - lastCarSpawnY[lane] < CAR_BUFFER) return;
+
+        float spawnX = obstaclesPositions[lane];
+
+        // Random 50/50 Light or Heavy
+        boolean isLight = Math.random() < 0.5;
+
+        if (isLight) {
+            LightCar c = new LightCar(spawnX, 100);
+            GameController.LightCars.add(c);
+            CarGLEventListener.allObjects.add(c);
+        } else {
+            HeavyCar c = new HeavyCar(spawnX, 100);
+            GameController.HeavyCars.add(c);
+            CarGLEventListener.allObjects.add(c);
+        }
+
+        lastCarSpawnY[lane] = 100; // mark last car Y
     }
+// ===============================================================
+
+
+    // ===================== OBSTACLE SPAWN ==========================
+    public static void spawnObstacle() {
+        int lane = (int)(Math.random() * obstaclesPositions.length);
+
+        // Cannot spawn if lane is blocked
+        if (obstacleActive[lane]) return;
+
+        float spawnX = obstaclesPositions[lane];
+
+        Obstacles o = new Obstacles(spawnX, 100);
+        obstaclesList.add(o);
+        CarGLEventListener.allObjects.add(o);
+
+        obstacleActive[lane] = true;
+    }
+// ===============================================================
+
+
+    // ===================== OBSTACLE REMOVAL ========================
+    public static void updateObstacles() {
+        Iterator<Obstacles> it = obstaclesList.iterator();
+
+        while (it.hasNext()) {
+            Obstacles o = it.next();
+            o.posY -= (float) (GameController.gameSpeed -.7);
+
+            // Once obstacle goes off-screen -> unlock lane
+            if (o.getPosY() < -10) {
+                int lane = indexOfLane(o.getPosX());
+                if (lane != -1) obstacleActive[lane] = false;
+
+                it.remove();
+                CarGLEventListener.allObjects.remove(o);
+            }
+        }
+    }
+// ===============================================================
+
+
+    // ===================== HELPER ==================================
+    private static int indexOfLane(float x) {
+        for (int i = 0; i < obstaclesPositions.length; i++) {
+            if (Math.abs(obstaclesPositions[i] - x) < 0.01f)
+                return i;
+        }
+        return -1;
+    }
+// ===============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void powerUpsSpawn() {
         float minX = 15; float maxX = 85;

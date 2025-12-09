@@ -98,6 +98,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     public void init(GLAutoDrawable gld) {
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        drawClass.initLaneState();
 
         // Disable Depth Test (Crucial for 2D games so layers stack correctly)
         // If your images are flickering or disappearing, UNCOMMENT this:
@@ -165,7 +166,17 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         } else if (GameState == Game) {
             drawClass.background_loop(gl , textures);
             drawClass.drawAndMoveObstacles(gl , 7 , textures);
-            drawClass.drawLightCar(gl ,textures);
+            drawClass.updateObstacles();
+            if (GameController.LightCars.isEmpty()) {
+                 drawClass.spawnCar();
+            }
+
+            if (GameController.HeavyCars.size() < 2) {
+                 drawClass.spawnCar();
+            }
+            drawClass.drawLightCar(gl, textures);
+            drawClass.drawHeavyCar(gl, textures);
+
             drawClass.drawSprite(gl, (float) player.getPosX(), (float) player.getPosY(), 1, 1.4f , textures);
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
