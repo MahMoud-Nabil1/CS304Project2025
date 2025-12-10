@@ -4,24 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="Collisions working &#10;// End For Today">
+    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="HIGH SCORE SYSTEM SAVING">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Car.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/DoubleBullets.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/DoubleBullets.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/PlayerCar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/doubleScore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/nitro.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/nitro.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameController/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameController/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Car.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/DoubleBullets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/DoubleBullets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/DoubleScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/DoubleScore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Nitro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Nitro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Obstacles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerCar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/LightCar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/LightCar.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765315066201</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="HIGH SCORE SYSTEM SAVING">
+      <option name="closed" value="true" />
+      <created>1765400837378</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1765400837378</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +158,7 @@
     <MESSAGE value="PowerUps" />
     <MESSAGE value="Collisions working (Power Ups / Obsticals)-- Score Working &#10;// End For Today" />
     <MESSAGE value="Collisions working &#10;// End For Today" />
-    <option name="LAST_COMMIT_MESSAGE" value="Collisions working &#10;// End For Today" />
+    <MESSAGE value="HIGH SCORE SYSTEM SAVING" />
+    <option name="LAST_COMMIT_MESSAGE" value="HIGH SCORE SYSTEM SAVING" />
   </component>
 </project>

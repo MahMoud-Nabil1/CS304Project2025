@@ -31,13 +31,17 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     final int Pause = 2;
     final int End = 3;
     final int Instructions = 4;
+    final int HighScoreState = 5;
     int windowWidth = 1;
     int windowHeight = 1;
     ArrayList<buttons> menuButtons = new ArrayList<>();
     ArrayList<buttons> pauseButtons = new ArrayList<>();
+    ArrayList<String> highScoreStrings = new ArrayList<>();
     buttons inGamePauseBtn;
     ArrayList<buttons> endButtons = new ArrayList<>();
     buttons instructionsBtn;
+    buttons highScoreBtn = new buttons(80, 80, 25, 8, 20);
+    buttons backBtn = new buttons(10, 90, 15, 8, 19); // Top Left Back Button
 
     int mx = 0, my = 0;
     boolean clicked = false;
@@ -112,9 +116,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
         // Mostafa Button-initialization
         menuButtons.clear(); // Good habit to clear lists in init
-        menuButtons.add(new buttons(45, 45, 20, 10, 4));
-        menuButtons.add(new buttons(45, 30, 20, 10, 5));
-        menuButtons.add(new buttons(45, 15, 20, 10, 6));
+        menuButtons.add(new buttons(45, 45, 20, 10, 4)); //Play
+        menuButtons.add(new buttons(45, 30, 20, 10, 5)); //Instructions
+        menuButtons.add(new buttons(45, 15, 20, 10, 6)); // Quit
+        menuButtons.add(highScoreBtn);
 
         inGamePauseBtn = new buttons(85, 90, 9, 9, 15);
 
@@ -127,7 +132,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         endButtons.add(new buttons(25, 15, 20, 10, 11));
 
         instructionsBtn  = new buttons(85, 85, 7, 7, 19);
-        menuButtons.add( new buttons(77, 80, 20, 10, 20));
 
         // Belal All Objects Taking
         allObjects.clear();
@@ -197,6 +201,16 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             drawClass.DrawBackground(gl , 18 ,textures);
             instructionsBtn.draw(gl, textures, maxWidth, maxHeight);
         }
+        else if (GameState == HighScoreState) {
+            // 1. Draw Background (Reuse Menu or End background)
+            drawClass.DrawBackground(gl, 2, textures);
+
+            // 2. Draw Text
+            drawHighScoresText(glAutoDrawable);
+
+            // 3. Draw Back Button
+            backBtn.draw(gl, textures, maxWidth, maxHeight);
+        }
     }
 
     //---------------------------- KeyBoardHandling ---------------------------
@@ -229,42 +243,48 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         double mouseX = ((double) e.getX() / windowWidth) * maxWidth;
         double mouseY = ((double) (windowHeight - e.getY()) / windowHeight) * maxHeight;
 
-
         if (GameState == Menu) {
             for (int i = 0; i < menuButtons.size(); i++) {
-                if (menuButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
-                    handleButton(i);
+                if (menuButtons.get(i).isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
+                    // FIX IS HERE:
+                    if (i == 3) {
+                        handleButton(8); // Force High Score button to use ID 8
+                    } else {
+                        handleButton(i); // Use normal IDs (0, 1, 2) for others
+                    }
                     return;
                 }
             }
         }
-
-        else
-        if (GameState == Pause) {
+        else if (GameState == Pause) {
             for (int i = 0; i < pauseButtons.size(); i++) {
-                if (pauseButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
-                    handleButton(i + 3);// Resume أو Quit
+                if (pauseButtons.get(i).isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
+                    handleButton(i + 3); // Resume or Quit
                     return;
                 }
             }
         }
-
-        else
-        if (GameState == Game) {
-            if (inGamePauseBtn.isClicked(mouseX, mouseY ,  maxWidth , maxHeight)) {
+        else if (GameState == Game) {
+            if (inGamePauseBtn.isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
                 GameState = Pause;
             }
         }
-        if (GameState == End) {
+        else if (GameState == End) {
             for (int i = 0; i < endButtons.size(); i++) {
-                if (endButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
+                if (endButtons.get(i).isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
                     handleButton(i + 6);
                 }
             }
         }
-        if (GameState == Instructions) {
-            if(instructionsBtn.isClicked(mouseX, mouseY ,  maxWidth , maxHeight)) {
+        else if (GameState == Instructions) {
+            if (instructionsBtn.isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
                 GameState = Menu;
+            }
+        }
+        // ADD THIS for the High Score Screen Back Button
+        else if (GameState == HighScoreState) {
+            if (backBtn.isClicked(mouseX, mouseY, maxWidth, maxHeight)) {
+                handleButton(9); // ID 9 = Back to Menu
             }
         }
     }
@@ -282,7 +302,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
     // Player Movement
     private void updateMovement() {
-
+        // 1. Actions
         if(isKeyPressed(KeyEvent.VK_Z)){
             player.nitroOn();
         }
@@ -291,53 +311,47 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         }
 
         float currentSpeed = (float) player.getSpeed();
-        if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_RIGHT) && curY > 0 && curX < maxWidth - 18) {
-            curY -= currentSpeed;
-            curX += currentSpeed;
-            angle = 10;
 
+        // 2. Default Rotation (Fixes "stuck" angles)
+        // We reset the angle to 0 every frame.
+        // If a key is pressed below, it will override this to 10 or -10.
+        angle = 0;
+
+        // 3. Horizontal Logic (Left / Right)
+        // We use "&& !isKeyPressed..." to prevent jitter if you hold both Left + Right
+        if (isKeyPressed(KeyEvent.VK_LEFT) && !isKeyPressed(KeyEvent.VK_RIGHT)) {
+            if (curX > 7) {
+                curX -= currentSpeed;
+            }
+            angle = 10; // Tilt Left
         }
 
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && isKeyPressed(KeyEvent.VK_LEFT) && curY > 0 && curX > 7) {
-            curY -= currentSpeed;
-            curX -= currentSpeed;
-            angle = -10;
-
-        }
-        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_RIGHT) && curY < maxHeight - 10 && curX < maxWidth - 18) {
-            curY += currentSpeed;
-            curX += currentSpeed;
-            angle = -10;
+        if (isKeyPressed(KeyEvent.VK_RIGHT) && !isKeyPressed(KeyEvent.VK_LEFT)) {
+            if (curX < maxWidth - 18) {
+                curX += currentSpeed;
+            }
+            angle = -10; // Tilt Right
         }
 
-        else if (isKeyPressed(KeyEvent.VK_UP) && isKeyPressed(KeyEvent.VK_LEFT) && curY < maxHeight - 18 && curX > 7) {
-            curY += currentSpeed;
-            curX -= currentSpeed;
-            angle = 10;
+        // 4. Vertical Logic (Up / Down)
+        // Independent of X, allowing smooth diagonals
+        if (isKeyPressed(KeyEvent.VK_UP) && !isKeyPressed(KeyEvent.VK_DOWN)) {
+            if (curY < maxHeight - 10) {
+                curY += currentSpeed;
+            }
         }
 
-        else if (isKeyPressed(KeyEvent.VK_UP) && curY < maxHeight - 10){
-            curY += currentSpeed;
+        if (isKeyPressed(KeyEvent.VK_DOWN) && !isKeyPressed(KeyEvent.VK_UP)) {
+            if (curY > 0) {
+                // I kept your logic where reversing is slightly faster (+0.2)
+                curY -= (currentSpeed + 0.2f);
+            }
         }
 
-        else if (isKeyPressed(KeyEvent.VK_DOWN) && curY > 0){
-            curY -= (float) (currentSpeed+.2);
-        }
-
-        else if (isKeyPressed(KeyEvent.VK_LEFT) && curX > 7){
-            curX -= currentSpeed;
-            angle = 10;
-        }
-
-        else if (isKeyPressed(KeyEvent.VK_RIGHT) && curX < maxWidth - 18) {
-            curX += currentSpeed;
-            angle = -10;
-        }
-
+        // 5. Update Player Position
         player.setPosY(curY);
         player.setPosX(curX);
     }
-
 
     // 1. UPDATE BUTTON HANDLING TO RESET THE SAVE FLAG
     private void handleButton(int id) {
@@ -403,6 +417,18 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 GameState = Menu;
                 Music.playMusic("MusicAssets/MainMenuMusic.wav");
             } break;
+
+            case 8: // OPEN HIGH SCORES
+            {
+                loadHighScores(); // Read file now
+                GameState = HighScoreState;
+            } break;
+
+            case 9: // BACK TO MENU
+            {
+                GameState = Menu;
+            } break;
+
         }
     }
     // ----------------------------------Score-----------------------
@@ -510,38 +536,130 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             });
         }
     }
-    //----------------------------------Health Bar ----------------------------------
+    // --- HELPER 1: READ FILE ---
+    public void loadHighScores() {
+        highScoreStrings.clear();
+        File file = new File("highscores.txt");
 
-    public void drawScoreText(GLAutoDrawable drawable) {
-        // 1. Update Score Logic (Keep your existing frame counter)
-        frameCounter++;
-        if (frameCounter > 10) {
-            score++;
-            frameCounter = 0;
+        if (!file.exists()) {
+            highScoreStrings.add("No Scores Yet!");
+            return;
         }
 
-        // 2. Prepare the text
-        String textToDraw = "Score: " + score;
+        try {
+            Scanner scanner = new Scanner(file);
+            // Read only top 10 lines
+            int count = 0;
+            while (scanner.hasNextLine() && count < 10) {
+                String line = scanner.nextLine();
+                // Format: "Name:Score" -> "1. Name - Score"
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    highScoreStrings.add((count + 1) + ". " + parts[0] + " - " + parts[1]);
+                }
+                count++;
+            }
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println("Error loading scores");
+        }
+    }
 
-        // 3. Draw the text
-        // We need the width and height of the window to position text correctly
+    // --- HELPER 2: DRAW TEXT ---
+    public void drawHighScoresText(GLAutoDrawable drawable) {
         int width = drawable.getWidth();
         int height = drawable.getHeight();
 
         renderer.beginRendering(width, height);
+        renderer.setColor(1.0f, 0.8f, 0.0f, 1.0f); // Gold Color
 
-        // Set Color (R, G, B, Alpha) - This is Yellow
-        renderer.setColor(1.0f, 1.0f, 0.0f, 1.0f);
+        // Title
+        renderer.draw("TOP 10 PLAYERS", width / 2-100 , height - 100);
 
-        // Draw the string
-        // x = 10 pixels from left
-        // y = height - 50 pixels (Top left corner)
-        renderer.draw(textToDraw, 10, height - 50);
+        renderer.setColor(1.0f, 1.0f, 1.0f, 1.0f); // White Color
+
+        // Draw each score line
+        int y = height - 150;
+        for (String s : highScoreStrings) {
+            renderer.draw(s, width / 2 - 250, y);
+            y -= 40; // Move down for next line
+        }
 
         renderer.endRendering();
-        GL gl = drawable.getGL();
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
     }
+
+    public void drawFrozenScore(GL gl, int x, int y) {
+        // 1. Draw Current Score (at x, y)
+        drawNumber(gl, GameController.finalScore, x, y);
+
+        // 2. Get the High Score from file
+        int bestScore = getHighScoreFromFile();
+
+        // 3. Check if we just beat the high score!
+        if (GameController.finalScore > bestScore) {
+            bestScore = GameController.finalScore;
+        }
+
+        int xOffset = 5;   // Change to 5 to move right, -5 to move left
+        int yOffset = 11;  // Change to 20 to move down more, 10 to move up
+        // 4. Draw High Score (Shifted down by 12 units)
+        // We assume Y increases downwards.
+        drawNumber(gl, bestScore, x+xOffset, y +yOffset);
+    }
+    public void drawNumber(GL gl, int number, int x, int y) {
+        String scoreString = Integer.toString(number);
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f);
+
+        for (int i = 0; i < scoreString.length(); i++) {
+            int digit = Character.getNumericValue(scoreString.charAt(i));
+
+            gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);
+            gl.glPushMatrix();
+
+            int digitWidth = 6;
+            int currentX = x + (i * digitWidth);
+
+            // Coordinate conversion (0..100 to -1..1)
+            double glX = (currentX / 50.0) - 1.0;
+            double glY = 1.0 - (y / 50.0);
+
+            gl.glTranslated(glX, glY, 0);
+            gl.glScaled(0.10, 0.10, 1);
+
+            gl.glBegin(GL.GL_QUADS);
+            gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
+            gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
+            gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+            gl.glEnd();
+
+            gl.glPopMatrix();
+        }
+        gl.glDisable(GL.GL_BLEND);
+    }
+    public int getHighScoreFromFile() {
+        File file = new File("highscores.txt");
+        if (!file.exists()) return 0;
+
+        try {
+            Scanner scanner = new Scanner(file);
+            if (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                // Format is "Name:Score". We split by ":"
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    return Integer.parseInt(parts[1]); // Return the score part
+                }
+            }
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println("Error reading high score: " + e.getMessage());
+        }
+        return 0; // Default if error
+    }
+    //----------------------------------Health Bar ----------------------------------
 
     private float[] getHealthColor(float healthPercent) {
         if (healthPercent > 0.75f) return new float[]{0.2f, 1.0f, 0.2f}; // Green
@@ -875,42 +993,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         }
     }
 
-    public void drawFrozenScore(GL gl, int x, int y) {
-
-        String scoreString = Integer.toString(GameController.finalScore);
-
-        gl.glEnable(GL.GL_BLEND);
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-
-        for (int i = 0; i < scoreString.length(); i++) {
-
-            int digit = Character.getNumericValue(scoreString.charAt(i));
-
-            gl.glBindTexture(GL.GL_TEXTURE_2D, scoreTextures[digit]);
-            gl.glPushMatrix();
-
-            int digitWidth = 6;
-            int currentX = x + (i * digitWidth);
-
-
-            double glX = (currentX / 50.0) - 1.0;
-            double glY = 1.0 - (y / 50.0);
-
-            gl.glTranslated(glX, glY, 0);
-            gl.glScaled(0.10, 0.10, 1);
-
-            gl.glBegin(GL.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-            gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f, -1.0f, -1.0f);
-            gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f, 1.0f, -1.0f);
-            gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f, 1.0f, -1.0f);
-            gl.glEnd();
-
-            gl.glPopMatrix();
-        }
-
-        gl.glDisable(GL.GL_BLEND);
-    }
 
     @Override
     public void mouseDragged(MouseEvent e) {}

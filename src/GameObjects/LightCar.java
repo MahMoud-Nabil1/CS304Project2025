@@ -9,12 +9,12 @@ public class LightCar extends Car{
         super(posX,posY,.3,20,100);
 
         // Set specific size for Light Car
-        this.width = 6;
+        this.width = 8;
         this.height = 10;
     }
     LightCar(int posX, int posY, int speed, int damage, int health) {
         super(posX,posY,speed, damage, health);
-        this.width = 6;
+        this.width = 8;
         this.height = 10;
 
     }
