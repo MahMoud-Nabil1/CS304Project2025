@@ -38,6 +38,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     buttons inGamePauseBtn;
     ArrayList<buttons> endButtons = new ArrayList<>();
     buttons instructionsBtn;
+
     int mx = 0, my = 0;
     boolean clicked = false;
 
@@ -100,8 +101,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         TextureHandling.MainTextures(gld);
         TextureHandling.PowerUpTextures(gld);
 
-
+        Music.setVolume(50);
         Music.playMusic("MusicAssets/MainMenuMusic.wav");
+
+
         renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
         whiteTextureId = createBlankTexture(gl); // Keep this, it's specific to the Health Bar logic
 
@@ -121,7 +124,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         endButtons.add(new buttons(65, 15, 20, 10, 12));
         endButtons.add(new buttons(25, 15, 20, 10, 11));
 
-        instructionsBtn  = new buttons(45, 10, 20, 15, 11);
+        instructionsBtn  = new buttons(85, 85, 7, 7, 19);
+        menuButtons.add( new buttons(77, 80, 20, 10, 20));
 
         // Belal All Objects Taking
         allObjects.clear();
@@ -188,7 +192,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             }
 
         } else if (GameState == Instructions) {
-            drawClass.DrawBackground(gl , 16 ,textures);
+            drawClass.DrawBackground(gl , 18 ,textures);
             instructionsBtn.draw(gl, textures, maxWidth, maxHeight);
         }
     }
