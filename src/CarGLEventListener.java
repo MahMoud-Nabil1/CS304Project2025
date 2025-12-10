@@ -157,20 +157,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 drawClass.drawPlayerWithNitro(gl, player, textures, effectsTextures);
             }
             drawClass.drawSprite(gl, player.getPosX(), player.getPosY(), 1, 1.8f , textures);
-            drawClass.drawHitboxDebug(gl , player.getBounds());
-            for (LightCar car : GameController.LightCars) {
-                drawHitboxDebug(gl, car.getBounds());
-            }
-            for (Obstacles o : GameController.obstaclesList) {
-                drawHitboxDebug(gl, o.getBounds());
-            }
-            for (PowerUp p : GameController.powerUpsList) {
-                drawHitboxDebug(gl, p.getBounds());
-            }
-
-            for (HeavyCar car : GameController.HeavyCars) {
-                drawHitboxDebug(gl, car.getBounds());
-            }
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
@@ -181,6 +167,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             inGamePauseBtn.draw(gl, textures, maxWidth, maxHeight);
             //drawScoreText(glAutoDrawable);
             drawHealthBar(gl, player.health, 100.0f, healthTextures[0], 3, 85, 40, 20);
+            drawBlueBarPowerUp( gl);
             drawClass.drawPowerUps(gl , player);
             checkPlayerDeath();
         }else if(GameState == Pause) {
@@ -567,43 +554,69 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         gl.glDisable(GL.GL_BLEND);
         gl.glColor3f(1.0f, 1.0f, 1.0f);
 
-    }    //------------------------------------Collisions---------------------------------
+    }
+    public void drawBlueBar(GL gl, float currentInfo, float maxInfo, int frameTextureId, float x, float y, float width, float height) {
+
+        // 1. Safety Check: If no time left, don't draw anything
+        if (currentInfo <= 0) return;
+
+        // 2. Calculate Percentage (0.0 to 1.0)
+        float percent = currentInfo / maxInfo;
+        if (percent < 0) percent = 0;
+        if (percent > 1) percent = 1;
+
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+        // --- COORDINATE CONVERSION ---
+        float ndcX = (x / 50.0f) - 1.0f;
+        float ndcY = (y / 50.0f) - 1.0f;
+        float ndcW = width / 50.0f;
+        float ndcH = height / 50.0f;
 
 
+        // =========================================================
+        // STEP 2: Draw the BLUE FILL
+        // =========================================================
+        gl.glBindTexture(GL.GL_TEXTURE_2D, whiteTextureId); // Use your blank white texture
+
+        // SET COLOR TO BLUE (R=0, G=0.5, B=1.0)
+        gl.glColor4f(0.0f, 0.5f, 1.0f, 0.8f);
+
+        // --- ALIGNMENT (Matches your Health Bar offsets) ---
+        float offX = ndcW * 0.32f;
+        float offY = ndcH * 0.47f;
+        float maxFillW = ndcW * 0.55f;
+        float fillH = ndcH * 0.08f;
+
+        float currentFillW = maxFillW * percent; // Shrink width based on time
+
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2f(0, 0); gl.glVertex2f(ndcX + offX,                ndcY + offY);
+        gl.glTexCoord2f(1, 0); gl.glVertex2f(ndcX + offX + currentFillW, ndcY + offY);
+        gl.glTexCoord2f(1, 1); gl.glVertex2f(ndcX + offX + currentFillW, ndcY + offY + fillH);
+        gl.glTexCoord2f(0, 1); gl.glVertex2f(ndcX + offX,                ndcY + offY + fillH);
+        gl.glEnd();
+
+        gl.glDisable(GL.GL_BLEND);
+        gl.glColor3f(1.0f, 1.0f, 1.0f); // Reset color
+    }
+    public void drawBlueBarPowerUp(GL gl){
+        if (player.activePowerUpTimer > 0) {
+        drawBlueBar(
+                gl,
+                player.activePowerUpTimer,    // Current Time
+                player.maxPowerUpDuration,    // Max Time (e.g. 300)
+                healthTextures[0],            // Reuse the Health Frame texture
+                4,                            // X Position (Same as health)
+                85,                           // Y Position (LOWER than health)
+                37,                           // Width
+                15                            // Height
+        );
+    }}
     //--------------------------For Shehab Collision--------------------------------------
 
     // Helper method to keep code clean
-    private void handlePlayerCollision(PlayerCar player, GameObject other) {
-
-        // SCENARIO A: Player hits Obstacle (Invincible)
-        if (other instanceof Obstacles) {
-            // Player takes massive damage (or dies instantly)
-            player.takeDamage(50);
-            System.out.println("Hit Obstacle! Player hurt.");
-            // We DO NOT call other.takeDamage(), so Obstacle stays alive (Invincible)
-        }
-
-        // SCENARIO B: Player hits Light Car
-        else if (other instanceof LightCar) {
-            int crashDamage = 20;
-
-            player.takeDamage(crashDamage); // Player takes normal damage
-            other.takeDamage(100);          // Light car gets destroyed (or takes damage)
-            System.out.println("Crashed into Light Car!");
-        }
-
-        // SCENARIO C: Player hits Weight Car (Assuming you have a class named WeightCar)
-        // Note: You didn't provide WeightCar class, but here is the logic:
-    /* else if (other instanceof WeightCar) {
-        int crashDamage = 50; // Player takes MORE damage
-
-        player.takeDamage(crashDamage);
-        other.takeDamage(50); // Weight car takes damage too
-        System.out.println("Crashed into Heavy Car!");
-    }
-    */
-    }
-
     public void updateGameLogic() {
         // ------For player hit Game Objects-----
         checkCollision();
@@ -757,6 +770,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                         p.setPosY(-5000);
 
                         System.out.println("COLLECTED POWERUP!");
+                        player.activePowerUpTimer = 300; // Reset timer to full
+                        player.maxPowerUpDuration = 300; // Set max duration
                     }
                 }
 
@@ -796,31 +811,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         }
     }
 
-    public void drawHitboxDebug(GL gl, Rectangle rect) {
-        gl.glDisable(GL.GL_TEXTURE_2D);
-        gl.glColor3f(1.0f, 0.0f, 0.0f);
-
-        gl.glPushMatrix();
-
-        // FIXED: Changed -1.0 to -0.9 to match your drawSprite logic
-        double x = rect.x / 50.0 - 0.9;
-        double y = rect.y / 50.0 - 0.9;
-
-        double w = rect.width / 50.0;
-        double h = rect.height / 50.0;
-
-        gl.glBegin(GL.GL_LINE_LOOP);
-        gl.glVertex2d(x, y);
-        gl.glVertex2d(x + w, y);
-        gl.glVertex2d(x + w, y + h);
-        gl.glVertex2d(x, y + h);
-        gl.glEnd();
-
-        gl.glPopMatrix();
-
-        gl.glColor3f(1.0f, 1.0f, 1.0f);
-        gl.glEnable(GL.GL_TEXTURE_2D);
-    }
     public void drawFrozenScore(GL gl, int x, int y) {
 
         String scoreString = Integer.toString(GameController.finalScore);

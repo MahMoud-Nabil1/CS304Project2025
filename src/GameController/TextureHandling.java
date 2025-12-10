@@ -32,9 +32,7 @@ public class TextureHandling {
     };
 
     public static String[] healthTextureNames = {
-            "HealthBar.png", "FullState1.png", "HealthReceviedFull.png",
-            "3_4State1.png", "3_4State2.png", "HalfState1.png", "HalfState2.png",
-            "LowState1.png", "LowState2.png"
+            "HealthBar.png"
     };
 
     public static String[] effectsTextureNames = {

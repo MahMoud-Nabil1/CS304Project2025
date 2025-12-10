@@ -13,6 +13,9 @@ public class PlayerCar extends Car{
     public double nitro1PositionX=1000;
     public double nitro2PositionX=1000;
     public double nitroPositionY=1000;
+    // UI Variables for the Blue Bar
+    public int activePowerUpTimer = 0;   // How much time is left (e.g. 300)
+    public int maxPowerUpDuration = 300; // The total duration (e.g. 300)
 
     public PlayerCar(float posX, float posY) {
         super(posX,posY,1,20,100);
@@ -44,6 +47,9 @@ public class PlayerCar extends Car{
             if (nitro <= 0) {
                 nitroOff();
             }
+        }
+        if (activePowerUpTimer > 0) {
+            activePowerUpTimer--; // This makes the number go down!
         }
     }
 
