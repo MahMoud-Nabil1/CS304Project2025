@@ -29,6 +29,5 @@ public class DoubleScore extends PowerUp {
     public void remove(PlayerCar car) {
         // Deactivate the logic when time is up
         GameController.doubleScoreActive = false;
-        System.out.println("Double Score Expired");
     }
 }

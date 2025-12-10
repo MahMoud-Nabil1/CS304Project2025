@@ -48,7 +48,6 @@ public class Car extends GameObject {
             this.health = 0;
         }
 
-        System.out.println("Damage Taken! New Health: " + this.health); // Debug print
     }
 
 

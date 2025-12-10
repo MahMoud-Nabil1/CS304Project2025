@@ -48,6 +48,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     int xScore = 10;
     int yScore = 85;
 
+    boolean scoreSaved = false;
+
     // Stats Sexy
     int lightCarsKilled = 0;
 
@@ -187,10 +189,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         }else if(GameState == End) {
             drawClass.DrawBackground(gl , 16 ,textures);
             drawFrozenScore(gl,50,43);
+            saving();
             for (buttons btn : endButtons) {
                 btn.draw(gl, textures, maxWidth, maxHeight);
             }
-
         } else if (GameState == Instructions) {
             drawClass.DrawBackground(gl , 18 ,textures);
             instructionsBtn.draw(gl, textures, maxWidth, maxHeight);
@@ -337,31 +339,72 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     }
 
 
-    // button handling
+    // 1. UPDATE BUTTON HANDLING TO RESET THE SAVE FLAG
     private void handleButton(int id) {
-
         switch (id) {
-            case 0:
-            case 6:
-            case 3: {
+            case 0: // Menu -> Start
+            case 3: // Pause -> Resume
+            {
                 GameState = Game;
                 Music.playMusic("MusicAssets/GameBackGround.wav");
-            }break;
+            } break;
+
+            case 6: // Pause -> Restart
+            case 11: // End -> Restart
+            {
+                // 1. STOP "GHOST" MOVEMENT (Fixes "Controls Suck")
+                // We clear the keyboard memory so the car doesn't move automatically
+                keyBits.clear();
+                angle = 0; // Reset rotation so car faces up
+
+                // 2. RESET POSITION TO CENTER (Fixes "Spawn Place")
+                curX = maxWidth / 2.0f;
+                curY = maxHeight / 2.0f;
+
+                // 3. CLEAN UP OLD OBJECTS
+                allObjects.clear();
+                GameController.LightCars.clear();
+                GameController.HeavyCars.clear();
+                obstaclesList.clear();
+                powerUpsList.clear();
+
+                // 4. RESET LOGIC & SPAWNERS
+                drawClass.initGameLogic(); // Resets spawn timers
+                frameCounter = 0;
+                GameController.gameSpeed = 1.0;
+                GameController.score = 0;
+                GameController.finalScore = 0;
+                lightCarsKilled = 0;
+                scoreSaved = false;
+
+                // 5. CREATE NEW PLAYER
+                player = new PlayerCar((int) curX, (int) curY);
+                player.health = 100;
+                player.nitro = 200;
+
+                // Add player to collision list
+                allObjects.add(player);
+
+                // 6. START GAME
+                GameState = Game;
+                Music.playMusic("MusicAssets/GameBackGround.wav");
+            } break;
+
             case 1: GameState = Instructions; break;
             case 2:
             case 4:
+            case 12: // Exit
                 System.exit(0); break;
             case 5: {
                 GameState = Pause;
                 Music.stopMusic();
-            }break;
+            } break;
             case 7: {
                 GameState = Menu;
                 Music.playMusic("MusicAssets/MainMenuMusic.wav");
-            }break;
-            }
+            } break;
+        }
     }
-
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
@@ -373,7 +416,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             } else {
                 GameController.score += 1;
             }
-            System.out.println(GameController.score);
             frameCounter = 0;
         }
         // 2. Convert Score to String to get individual digits
@@ -413,45 +455,61 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         ArrayList<ScoreEntry> allScores = new ArrayList<>();
         File file = new File("highscores.txt");
 
-        // 1. READ EXISTING SCORES
-        if (file.exists()) {
-            try {
-                Scanner scanner = new Scanner(file);
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    // We expect format: "Name:Score"
-                    String[] parts = line.split(":");
-                    if (parts.length == 2) {
-                        String name = parts[0];
-                        int score = Integer.parseInt(parts[1]);
-                        allScores.add(new ScoreEntry(name, score));
-                    }
-                }
-                scanner.close();
-            } catch (Exception e) {
-                System.out.println("Error reading scores: " + e.getMessage());
-            }
-        }
-
-        // 2. ADD CURRENT USER
-        allScores.add(new ScoreEntry(userName, userScore));
-
-        // 3. SORT (Highest first)
-        Collections.sort(allScores);
-
-        // 4. WRITE BACK TO FILE
         try {
-            FileWriter writer = new FileWriter(file); // Overwrite file
+            // Create file if it doesn't exist
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // READ SCORES
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    allScores.add(new ScoreEntry(parts[0], Integer.parseInt(parts[1])));
+                }
+            }
+            scanner.close();
+
+            // ADD NEW SCORE
+            allScores.add(new ScoreEntry(userName, userScore));
+
+            // SORT
+            Collections.sort(allScores);
+
+            // WRITE BACK
+            FileWriter writer = new FileWriter(file);
             for (ScoreEntry entry : allScores) {
                 writer.write(entry.toString() + "\n");
             }
             writer.close();
-            System.out.println("Score saved successfully!");
+            System.out.println("Saved: " + userName + " -> " + userScore);
+
         } catch (IOException e) {
-            System.out.println("Error writing scores: " + e.getMessage());
+            System.out.println("Error saving score: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }    // 2. UPDATE THE SAVING LOGIC
+    public void saving() {
+        // Only run this ONCE per death
+        if (!scoreSaved) {
+            scoreSaved = true; // Lock it so it doesn't pop up 60 times a second
+
+            // Use invokeLater to show the popup smoothly over the GLCanvas
+            SwingUtilities.invokeLater(() -> {
+                String name = JOptionPane.showInputDialog(null, "Game Over! Score: " + GameController.finalScore + "\nEnter your name:");
+
+                if (name != null && !name.trim().isEmpty()) {
+                    // Save the name and score
+                    saveAndSortScore(name, GameController.finalScore);
+                } else {
+                    // Default if they click Cancel
+                    saveAndSortScore("Unknown", GameController.finalScore);
+                }
+            });
         }
     }
-
     //----------------------------------Health Bar ----------------------------------
 
     public void drawScoreText(GLAutoDrawable drawable) {
@@ -459,7 +517,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         frameCounter++;
         if (frameCounter > 10) {
             score++;
-            System.out.println(score);
             frameCounter = 0;
         }
 
@@ -615,18 +672,21 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         gl.glColor3f(1.0f, 1.0f, 1.0f); // Reset color
     }
     public void drawBlueBarPowerUp(GL gl){
-        if (player.activePowerUpTimer > 0) {
-        drawBlueBar(
-                gl,
-                player.activePowerUpTimer,    // Current Time
-                player.maxPowerUpDuration,    // Max Time (e.g. 300)
-                healthTextures[0],            // Reuse the Health Frame texture
-                4,                            // X Position (Same as health)
-                85,                           // Y Position (LOWER than health)
-                37,                           // Width
-                15                            // Height
-        );
-    }}
+        if (player.nitro > 0) {
+            drawBlueBar(
+                    gl,
+                    player.nitro, // Current Fuel (e.g. starts at 100)
+                    200,          // Max Fuel (Full bar size)
+                    healthTextures[0],
+                    4,
+                    85,
+                    37,
+                    15
+            );
+        }
+    }
+
+
     //--------------------------For Shehab Collision--------------------------------------
 
     // Helper method to keep code clean
@@ -645,14 +705,12 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             for (GameObject obj : allObjects) {
                 if (obj.alive && obj instanceof Obstacles) {
                     if (bulletRect.intersects(obj.getBounds())) {
-                        System.out.println("HIT! Bullet destroyed obstacle!");
                         b.timer = -1; // Destroy the bullet
                         break;
                     }
                 }
                 if (obj.alive && obj instanceof LightCar){
                     if (bulletRect.intersects(obj.getBounds())) {
-                        System.out.println("HIT! Bullet destroyed Car");
                         obj.takeDamage(40);
                         b.timer = -1;
                         break;
@@ -660,7 +718,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 }
                 if (obj.alive && obj instanceof HeavyCar){
                     if (bulletRect.intersects(obj.getBounds())) {
-                        System.out.println("HIT! Bullet destroyed Car");
                         obj.takeDamage(60);
                         b.timer = -1;
                         break;
@@ -684,7 +741,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 GameController.score += 100; // Add 100 points (Change this value as needed)
                 // 3. Increment Kill Counter
                 lightCarsKilled++;
-                System.out.println("Enemy Destroyed! Total Kills: " + lightCarsKilled);
             }
         }
 
@@ -764,27 +820,23 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 if (obj instanceof Obstacles) {
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);
-                        player.invincibilityTimer = 60;
-                        System.out.println("CRASH! Hit Obstacle.");
+                        player.invincibilityTimer = 20;
                     }
                 }
 
                 // --- CASE B: PowerUp (THE FIX) ---
                 else if (obj instanceof PowerUp) {
                     PowerUp p = (PowerUp) obj;
-                    System.out.println("DEBUG: Physical HIT with " + p.getClass().getSimpleName());
                     // Only collect if we haven't already
                     if (!p.isCollected) {
-                        System.out.println("DEBUG: >>> ACTIVATING EFFECT for " + p.getClass().getSimpleName() + " <<<");
                         p.apply(player);       // 1. Give Effect
                         p.isCollected = true;  // 2. Mark as collected
 
                         // 3. Move off screen so we don't hit it again
                         p.setPosY(-5000);
 
-                        System.out.println("COLLECTED POWERUP!");
-                        player.activePowerUpTimer = 300; // Reset timer to full
-                        player.maxPowerUpDuration = 300; // Set max duration
+
+
                     }
                 }
 
@@ -792,9 +844,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 else if(obj instanceof LightCar){
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);  // Less damage
-                        player.invincibilityTimer = 40;
+                        player.invincibilityTimer = 20;
                         obj.takeDamage(100);  // Enemy dies
-                        System.out.println("Hit LightCar!");
                     }
                 }
                 //--- Case D: Player Hit a HeavyCar ---
@@ -802,9 +853,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 else if(obj instanceof HeavyCar){
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);  // Less damage
-                        player.invincibilityTimer = 40;
+                        player.invincibilityTimer = 20;
                         obj.takeDamage(100);  // Enemy dies
-                        System.out.println("Hit HeavyCar!");
                     }
                 }
             }
@@ -818,9 +868,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             GameState = End; // Switch to End Screen (State 3)
             GameController.finalScore = GameController.score;
             Music.playMusic("MusicAssets/GameOverMusic.wav");
-            player.health=100;
-            score = 0;
-            GameController.score = 0;
+            //player.health=100;
+            //score = 0;
+            //GameController.score = 0;
+            scoreSaved = false;
         }
     }
 

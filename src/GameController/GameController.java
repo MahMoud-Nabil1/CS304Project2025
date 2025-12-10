@@ -8,8 +8,9 @@ import java.util.ArrayList;
 public class GameController {
     public static int score = 0;
     public static int finalScore = 0;
+    public static boolean scoreSaved = false;
     public static double gameSpeed = 1;
-    static String UserName;
+    public static String UserName;
     public static ArrayList<PowerUp> powerUpsList = new ArrayList<>();
     public int powerUpTimer= 500;
     public static boolean doubleBulletActive= false;
@@ -28,7 +29,7 @@ public class GameController {
             }
         }
 
-        System.out.println("User entered: " + UserName);
+        System.out.println("User entered: " + UserName+ ":");
     }
 
 

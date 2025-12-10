@@ -23,6 +23,5 @@ public class DoubleBullets extends PowerUp {
     @Override
     public void remove(PlayerCar car) {
         GameController.doubleBulletActive = false;
-        System.out.println("Double Bullets Expired");
     }
 }

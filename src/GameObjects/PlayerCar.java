@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class PlayerCar extends Car{
-    protected int nitro=200;
+    public int nitro=200;
     public ArrayList<Bullet> bullets;
     int score=0;
     public int firerate = 0;
