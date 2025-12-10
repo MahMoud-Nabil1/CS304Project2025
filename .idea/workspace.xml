@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="insert the score into the lose menu">
+    <list default="true" id="3b621688-ee10-40a0-98b0-d6873372b20a" name="Changes" comment="make the instruction menu and anothor fkn button">
+      <change afterPath="$PROJECT_DIR$/assets/Xbutton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/highestScoreButton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/instructions.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/CarGLEventListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameObjects/Obstacles.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/TextureHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CS304Project2025/GameController/TextureHandling.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CarGLEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CarGLEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameController/TextureHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameController/TextureHandling.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,24 +42,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.CarGame.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/shehab/Downloads/JOGLwin/JOGLwin/lib64/jogl_cg.dll&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CarGame.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/VICTUS/Documents/GitHub/CS304Project2025/assets",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\VICTUS\Documents\GitHub\CS304Project2025\assets" />
@@ -88,7 +92,8 @@
       <workItem from="1765121754779" duration="90000" />
       <workItem from="1765121990942" duration="4000" />
       <workItem from="1765126171374" duration="645000" />
-      <workItem from="1765379703653" duration="2570000" />
+      <workItem from="1765379703653" duration="2730000" />
+      <workItem from="1765384973854" duration="2986000" />
     </task>
     <task id="LOCAL-00002" summary="PowerUps">
       <option name="closed" value="true" />
@@ -130,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765314044964</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="make the instruction menu and anothor fkn button">
+      <option name="closed" value="true" />
+      <created>1765382414607</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1765382414609</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,6 +164,7 @@
     <MESSAGE value="PowerUps" />
     <MESSAGE value="Collisions working (Power Ups / Obsticals)-- Score Working &#10;// End For Today" />
     <MESSAGE value="Collisions working &#10;// End For Today" />
-    <option name="LAST_COMMIT_MESSAGE" value="Collisions working &#10;// End For Today" />
+    <MESSAGE value="make the instruction menu and anothor fkn button" />
+    <option name="LAST_COMMIT_MESSAGE" value="make the instruction menu and anothor fkn button" />
   </component>
 </project>
