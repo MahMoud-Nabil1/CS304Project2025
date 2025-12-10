@@ -100,8 +100,10 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         TextureHandling.MainTextures(gld);
         TextureHandling.PowerUpTextures(gld);
 
-
+        Music.setVolume(50);
         Music.playMusic("MusicAssets/MainMenuMusic.wav");
+
+
         renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
         whiteTextureId = createBlankTexture(gl); // Keep this, it's specific to the Health Bar logic
 
