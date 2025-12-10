@@ -635,7 +635,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 if (obj.alive && obj instanceof HeavyCar){
                     if (bulletRect.intersects(obj.getBounds())) {
                         System.out.println("HIT! Bullet destroyed Car");
-                        obj.takeDamage(40);
+                        obj.takeDamage(60);
                         b.timer = -1;
                         break;
                     }
