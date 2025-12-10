@@ -37,6 +37,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     ArrayList<buttons> pauseButtons = new ArrayList<>();
     buttons inGamePauseBtn;
     ArrayList<buttons> endButtons = new ArrayList<>();
+    buttons instructionsBtn;
     int mx = 0, my = 0;
     boolean clicked = false;
 
@@ -120,6 +121,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         endButtons.add(new buttons(65, 15, 20, 10, 12));
         endButtons.add(new buttons(25, 15, 20, 10, 11));
 
+        instructionsBtn  = new buttons(45, 10, 20, 15, 11);
+
         // Belal All Objects Taking
         allObjects.clear();
         obstaclesList.clear();
@@ -198,7 +201,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
             }
 
         } else if (GameState == Instructions) {
-
+            drawClass.DrawBackground(gl , 16 ,textures);
+            instructionsBtn.draw(gl, textures, maxWidth, maxHeight);
         }
     }
 
@@ -263,6 +267,11 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 if (endButtons.get(i).isClicked(mouseX, mouseY , maxWidth , maxHeight)) {
                     handleButton(i + 6);
                 }
+            }
+        }
+        if (GameState == Instructions) {
+            if(instructionsBtn.isClicked(mouseX, mouseY ,  maxWidth , maxHeight)) {
+                GameState = Menu;
             }
         }
     }
