@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class PlayerCar extends Car{
     public int nitro=200;
     public ArrayList<Bullet> bullets;
-    int score=0;
     public int firerate = 0;
     public int invincibilityTimer = 0; // For Colligions
     public double nitro1PositionX=1000;
@@ -15,7 +14,6 @@ public class PlayerCar extends Car{
     public double nitroPositionY=1000;
     // UI Variables for the Blue Bar
     public int activePowerUpTimer = 0;   // How much time is left (e.g. 300)
-    public int maxPowerUpDuration = 300; // The total duration (e.g. 300)
 
     public PlayerCar(float posX, float posY) {
         super(posX,posY,1,20,100);
@@ -25,13 +23,7 @@ public class PlayerCar extends Car{
         this.width = 8;
         this.height = 10;
     }
-    PlayerCar(float posX, float posY, int speed, int damage, int health) {
-        super(posX,posY,speed, damage, health);
-        bullets=new ArrayList<>();
-        //
-        this.width = 8;
-        this.height = 10;
-    }
+
     public boolean nitroActive = false;
 
     // Add a variable to remember normal speed
@@ -90,7 +82,7 @@ public class PlayerCar extends Car{
             // Recycle a bullet instead of making a new one
             if (GameController.doubleBulletActive) {
                 // Grab two from the pool
-                Bullet b1 = BulletPool.getBullet((float) (posX - 2), posY, damage);
+                Bullet b1 = BulletPool.getBullet((posX - 2), posY, damage);
                 Bullet b2 = BulletPool.getBullet(posX + 2, posY, damage);
 
                 // Add them to your active list ONLY if pool returned something
@@ -101,7 +93,8 @@ public class PlayerCar extends Car{
                 Bullet b = BulletPool.getBullet(posX, posY, damage);
                 if (b != null) bullets.add(b);
             }
-            firerate = 15;
+            // decrease it to make firerate faster
+            firerate = 10;
         }
     }
     // Add this to your updateMovement or a new update() method

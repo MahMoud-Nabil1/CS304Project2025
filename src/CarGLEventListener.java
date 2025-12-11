@@ -1,13 +1,10 @@
 import GameObjects.*;
 import ScoreRelated.ScoreEntry;
-import Texture.TextureReader;
 import GameController.*;
 import com.sun.opengl.util.j2d.TextRenderer;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -48,7 +45,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
     // Score Variables
     public static int frameCounter = 0;
-    int score = 0;
     int xScore = 10;
     int yScore = 85;
 
@@ -58,15 +54,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     int lightCarsKilled = 0;
 
     // Inside Class Variables
-    int healthAnimCounter = 0; // Counts frames for the health bar
     TextRenderer renderer;
-
-    //---------------------- For Shehab HealthBar ----------------------------------------
-
-
-
-    int xHealthBar=50;
-    int yHealthBar=50;
 
     // --- Variables ---
     private double glowTimer = 0;
@@ -107,7 +95,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
         TextureHandling.MainTextures(gld);
         TextureHandling.PowerUpTextures(gld);
 
-        Music.setVolume(50);
+        Music.setVolume(70);
         Music.playMusic("MusicAssets/MainMenuMusic.wav");
 
 
@@ -169,7 +157,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 // This handles the Car, Rotation, AND Nitro all in one go
                 drawClass.drawPlayerWithNitro(gl, player, textures, effectsTextures);
             }
-            drawClass.drawSprite(gl, player.getPosX(), player.getPosY(), 1, 1.8f , textures);
             drawClass.drawBullets(gl , player , textures);
             player.updateInvincibility();
             updateMovement();
@@ -230,10 +217,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     }
 
     public boolean isKeyPressed(final int keyCode) {
-        return keyBits.get(keyCode);
-    }
-
-    public boolean isKeyReleased(final int keyCode) {
         return keyBits.get(keyCode);
     }
 
@@ -356,13 +339,13 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     // 1. UPDATE BUTTON HANDLING TO RESET THE SAVE FLAG
     private void handleButton(int id) {
         switch (id) {
-            case 0: // Menu -> Start
             case 3: // Pause -> Resume
             {
                 GameState = Game;
                 Music.playMusic("MusicAssets/GameBackGround.wav");
             } break;
 
+            case 0: // Menu -> Start
             case 6: // Pause -> Restart
             case 11: // End -> Restart
             {
@@ -406,13 +389,13 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
             case 1: GameState = Instructions; break;
             case 2:
-            case 4:
             case 12: // Exit
                 System.exit(0); break;
             case 5: {
                 GameState = Pause;
                 Music.stopMusic();
             } break;
+            case 4:
             case 7: {
                 GameState = Menu;
                 Music.playMusic("MusicAssets/MainMenuMusic.wav");
@@ -434,7 +417,6 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
     // ----------------------------------Score-----------------------
     public void score(GL gl, int x, int y) {
         // 1. Update logic (Keep your frame counter-logic)
-        int score=GameController.score;
         frameCounter++;
         if (frameCounter > 10) {
             if (GameController.doubleScoreActive) {
@@ -938,7 +920,7 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 if (obj instanceof Obstacles) {
                     if (player.invincibilityTimer == 0) {
                         player.takeDamage(20);
-                        player.invincibilityTimer = 20;
+                        player.invincibilityTimer = 40;
                     }
                 }
 
@@ -961,8 +943,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
                 //--- Case C: Player Hit a LightCar ---
                 else if(obj instanceof LightCar){
                     if (player.invincibilityTimer == 0) {
-                        player.takeDamage(20);  // Less damage
-                        player.invincibilityTimer = 20;
+                        player.takeDamage(((LightCar) obj).getDamage());  // Less damage
+                        player.invincibilityTimer = 40;
                         obj.takeDamage(100);  // Enemy dies
                     }
                 }
@@ -970,8 +952,8 @@ public class CarGLEventListener implements MouseListener, GLEventListener, KeyLi
 
                 else if(obj instanceof HeavyCar){
                     if (player.invincibilityTimer == 0) {
-                        player.takeDamage(20);  // Less damage
-                        player.invincibilityTimer = 20;
+                        player.takeDamage(((HeavyCar) obj).getDamage());  // Less damage
+                        player.invincibilityTimer = 40;
                         obj.takeDamage(100);  // Enemy dies
                     }
                 }
